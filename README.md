@@ -2,6 +2,8 @@
 
 AlgoTools is a static JavaScript site that allows users to perform various tasks related to managing their Algorand account.
 
+The site is published here: https://algotools.org
+
 ## Overview
 
 With AlgoTools, you can:
