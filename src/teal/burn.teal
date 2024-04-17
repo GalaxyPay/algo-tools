@@ -1,0 +1,17 @@
+#pragma version 9
+txn TypeEnum
+int axfer
+==
+txn AssetReceiver
+txn Sender
+==
+&&
+txn RekeyTo
+global ZeroAddress
+==
+&&
+txn AssetCloseTo
+global ZeroAddress
+==
+&&
+return
