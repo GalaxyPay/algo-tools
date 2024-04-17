@@ -1,4 +1,4 @@
-# AlgoTools [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/GalaxyPay/algo-tools/main/LICENSE)
+# AlgoTools [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/GalaxyPay/algo-tools/blob/main/LICENSE)
 
 AlgoTools is a static JavaScript site that allows users to perform various tasks related to managing their Algorand account.
 
