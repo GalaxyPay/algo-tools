@@ -3,7 +3,14 @@
     <v-container>
       <v-row>
         <v-col cols="2" align-self="center" class="pr-0 pl-2">
-          <v-img contain max-width="60" :src="image" />
+          <v-img
+            contain
+            max-width="60"
+            :src="image"
+            @error="
+              image = `https://asa-list.tinyman.org/assets/${props.asset.assetId}/icon.png`
+            "
+          />
         </v-col>
         <v-col cols="10" class="py-1">
           <v-container>
