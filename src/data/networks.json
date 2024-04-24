@@ -12,7 +12,7 @@
       "token": ""
     },
     "networkId": "mainnet",
-    "explorer": "https://app.dappflow.org/setnetwork?name=algonode_mainnet&redirect=explorer/",
+    "explorer": "https://www.blockpack.app/#/explorer",
     "vanityId": 1093312673
   },
   {
@@ -28,7 +28,7 @@
       "token": ""
     },
     "networkId": "testnet",
-    "explorer": "https://app.dappflow.org/setnetwork?name=algonode_testnet&redirect=explorer/",
+    "explorer": "https://testnet.blockpack.app/#/explorer",
     "vanityId": 206059417
   },
   {
@@ -43,7 +43,7 @@
       "port": "8980",
       "token": ""
     },
-    "explorer": "https://app.dappflow.org/setnetwork?name=sandbox&redirect=explorer/",
+    "explorer": "https://app.dappflow.org/setnetwork?name=sandbox&redirect=explorer",
     "vanityId": 1001
   }
 ]
