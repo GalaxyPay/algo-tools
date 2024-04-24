@@ -142,10 +142,8 @@ onMounted(async () => {
 });
 
 function exploreAsset() {
-  window.open(
-    store.network.explorer + "/asset/" + props.asset.assetId,
-    "_blank"
-  );
+  const url = store.network.explorer + "/asset/" + props.asset.assetId;
+  window.open(url, "_blank");
 }
 
 function formatAmount() {

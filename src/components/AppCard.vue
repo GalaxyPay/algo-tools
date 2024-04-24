@@ -85,10 +85,8 @@ onMounted(async () => {
 });
 
 function exploreApp() {
-  window.open(
-    store.network.explorer + "/application/" + props.app.id,
-    "_blank"
-  );
+  const url = store.network.explorer + "/application/" + props.app.id;
+  window.open(url, "_blank");
 }
 
 async function closeOut(force: boolean = false) {
