@@ -10,10 +10,11 @@
           @click="generateDialog"
         />
       </v-card-title>
-      <v-container>
-        <v-card-text v-if="unauth">{{ message }}</v-card-text>
+      <v-container v-if="unauth">
+        <v-card-text>{{ message }}</v-card-text>
+      </v-container>
+      <v-container v-else>
         <v-data-table
-          v-else
           :headers="headers"
           :items="keys"
           density="comfortable"
@@ -47,7 +48,7 @@
                 text="Copy Key Details"
               />
             </span>
-            <span>
+            <span v-if="!altActive">
               <v-btn
                 variant="plain"
                 icon="mdi-handshake"
@@ -72,6 +73,29 @@
             </span>
           </template>
         </v-data-table>
+        <v-form ref="altForm" @submit.prevent="manage">
+          <v-row class="pt-3" justify="center">
+            <v-col cols="12" class="pb-0">
+              <v-checkbox
+                v-model="manageAlt"
+                label="Manage keys for an account that you don't have in your wallet
+        (e.g. Folks Escrow)"
+              />
+            </v-col>
+            <v-col v-if="manageAlt" cols="10" class="pt-0">
+              <v-text-field
+                v-model="altAddr"
+                label="Address"
+                :disabled="altActive"
+                :rules="[required, validAddress]"
+              />
+            </v-col>
+          </v-row>
+          <v-card-actions v-if="manageAlt && !altActive">
+            <v-spacer />
+            <v-btn text="Manage" type="submit" />
+          </v-card-actions>
+        </v-form>
       </v-container>
     </v-card>
     <v-dialog v-model="showGenerate" max-width="400" persistent>
@@ -129,23 +153,40 @@ const form = ref();
 const gen = ref<{ first?: number; last?: number }>({});
 const lastRound = ref();
 
-const headers: any[] = [
-  { title: "Active", key: "active", sortable: false, align: "center" },
-  {
-    title: "First Valid",
-    key: "key.voteFirstValid",
-    sortable: false,
-    align: "center",
-  },
-  {
-    title: "Last Valid",
-    key: "key.voteLastValid",
-    sortable: false,
-    align: "center",
-  },
-  { title: "Approx. Expire", key: "expire", sortable: false, align: "center" },
-  { title: "Actions", key: "actions", sortable: false, align: "center" },
-];
+const altForm = ref();
+const manageAlt = ref(false);
+const altAddr = ref<string>();
+const altActive = ref(false);
+
+const validAddress = (v: string) =>
+  algosdk.isValidAddress(v) || "Invalid Address";
+
+const headers = computed<any[]>(() => {
+  const val = [
+    { title: "Active", key: "active", sortable: false, align: "center" },
+    {
+      title: "First Valid",
+      key: "key.voteFirstValid",
+      sortable: false,
+      align: "center",
+    },
+    {
+      title: "Last Valid",
+      key: "key.voteLastValid",
+      sortable: false,
+      align: "center",
+    },
+    {
+      title: "Approx. Expire",
+      key: "expire",
+      sortable: false,
+      align: "center",
+    },
+    { title: "Actions", key: "actions", sortable: false, align: "center" },
+  ];
+  if (altActive.value) val.shift();
+  return val;
+});
 
 const required = (v: number) => !!v || v === 0 || "Required";
 
@@ -167,8 +208,9 @@ async function getKeys() {
   });
   if (response.ok) {
     const data = await response.json();
+    const addr = altAddr.value || activeAccount.value!.address;
     keys.value = data
-      .filter((p: any) => p.address === activeAccount.value!.address)
+      .filter((p: any) => p.address === addr)
       .map((p: any) => ({
         ...p,
         key: modelsv2.AccountParticipation.from_obj_for_encoding(p.key),
@@ -224,8 +266,9 @@ async function generateKey() {
   try {
     if (!activeAccount.value) throw Error("Invalid Account");
     loading.value = true;
+    const addr = altAddr.value || activeAccount.value.address;
     await fetch(
-      `${baseUrl.value}/generate/${activeAccount.value.address}` +
+      `${baseUrl.value}/generate/${addr}` +
         `?first=${gen.value.first}&last=${gen.value.last}`,
       {
         method: "POST",
@@ -341,5 +384,26 @@ watch(
 function copyToClipboard(key: modelsv2.AccountParticipation) {
   navigator.clipboard.writeText(JSON.stringify(key.get_obj_for_encoding()));
   store.setSnackbar("Key Copied", "info", 1000);
+}
+
+watch(
+  () => manageAlt.value,
+  (val) => {
+    if (!val) {
+      altActive.value = false;
+      altAddr.value = undefined;
+    }
+  }
+);
+
+watch(
+  () => altActive.value,
+  () => getKeys()
+);
+
+async function manage() {
+  const { valid } = await altForm.value.validate();
+  if (!valid) return;
+  altActive.value = true;
 }
 </script>
