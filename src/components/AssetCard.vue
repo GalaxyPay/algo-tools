@@ -3,14 +3,7 @@
     <v-container>
       <v-row>
         <v-col cols="2" align-self="center" class="pr-0 pl-2">
-          <v-img
-            contain
-            max-width="60"
-            :src="image"
-            @error="
-              image = `https://asa-list.tinyman.org/assets/${props.asset.assetId}/icon.png`
-            "
-          />
+          <v-img contain max-width="60" :src="image" />
         </v-col>
         <v-col cols="10" class="py-1">
           <v-container>
@@ -121,24 +114,13 @@ const created = computed(() =>
 );
 
 onMounted(async () => {
-  if (!props.asset.assetId) {
-    assetInfo.value = {
-      params: {
-        decimals: 6,
-        name: "Algo",
-        unitName: "Algo",
-      },
-    } as modelsv2.Asset;
-  } else {
-    assetInfo.value = await getAssetInfo(props.asset.assetId, true);
-  }
+  assetInfo.value = await getAssetInfo(props.asset.assetId, true);
   if (assetInfo.value?.params.url) {
     image.value = await resolveProtocol(
       assetInfo.value.params.url,
       assetInfo.value.params.reserve || ""
     );
-  } else
-    image.value = `https://asa-list.tinyman.org/assets/${props.asset.assetId}/icon.png`;
+  }
 });
 
 function exploreAsset() {
