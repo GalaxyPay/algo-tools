@@ -1,6 +1,6 @@
 // Utilities
 import { networks } from "@/data";
-import { Network, SnackBar } from "@/types";
+import { Network, SnackBar, TinyAsset } from "@/types";
 import { modelsv2 } from "algosdk";
 import { get } from "idb-keyval";
 import { defineStore } from "pinia";
@@ -21,6 +21,7 @@ export const useAppStore = defineStore("app", {
     network: networks[0] as Network,
     showDonate: false,
     connectMenu: false,
+    tinyman: undefined as undefined | TinyAsset[],
   }),
   getters: {},
   actions: {

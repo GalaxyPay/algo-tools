@@ -12,6 +12,7 @@
 import Algo from "@/services/Algo";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import { modelsv2 } from "algosdk";
+import { fetchAsync } from "./utils";
 
 const store = useAppStore();
 const router = useRouter();
@@ -40,6 +41,7 @@ onBeforeMount(async () => {
   store.loading++;
   await store.getCache();
   store.refresh++;
+  store.tinyman = await fetchAsync("https://asa-list.tinyman.org/assets.json");
   store.loading--;
 });
 </script>
