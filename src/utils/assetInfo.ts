@@ -11,7 +11,7 @@ export async function getAssetInfo(
     let assetInfo: modelsv2.Asset | undefined;
     const appStore = useAppStore();
     let tiny: TinyAsset | undefined;
-    if (appStore.network.networkId === "mainnet") {
+    if (appStore.network.networkId === "mainnet" || id === 0) {
       tiny = appStore.tinyman?.[Number(id)];
       if (tiny && id === 0) {
         assetInfo = modelsv2.Asset.from_obj_for_encoding({
