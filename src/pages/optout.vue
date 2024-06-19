@@ -58,7 +58,7 @@
             <v-container>
               <v-row>
                 <v-col
-                  v-for="app in store.account.appsLocalState"
+                  v-for="app in apps"
                   :key="Number(app.id)"
                   cols="12"
                   md="6"
@@ -76,6 +76,8 @@
 </template>
 
 <script lang="ts" setup>
+import { modelsv2 } from "algosdk";
+
 const store = useAppStore();
 const tab = ref();
 
@@ -99,4 +101,13 @@ const tabs = computed(() => {
     },
   ];
 });
+
+const apps = computed(() =>
+  (
+    (store.account?.appsLocalState || []) as (
+      | modelsv2.ApplicationLocalState
+      | modelsv2.Application
+    )[]
+  ).concat(store.account?.createdApps || [])
+);
 </script>
