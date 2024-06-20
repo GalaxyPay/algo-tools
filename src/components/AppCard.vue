@@ -121,9 +121,7 @@ async function closeOut(force: boolean = false) {
     } catch (err: any) {
       console.error(err);
       store.setSnackbar(err.message, "error");
-      if (err.status == 400) {
-        showClear.value = true;
-      }
+      showClear.value = true;
     }
     store.overlay = false;
   }
