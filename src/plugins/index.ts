@@ -40,10 +40,7 @@ export async function registerPlugins(app: App) {
           options: { siteName: "AlgoTools" },
         },
         WalletId.DEFLY,
-        {
-          id: WalletId.PERA,
-          options: { projectId: "da9837f105e73cdd7c54867370d0055c" },
-        },
+        WalletId.PERA,
       ],
       network: nid,
     });
