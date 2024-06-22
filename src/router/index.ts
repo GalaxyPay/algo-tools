@@ -5,13 +5,13 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from "vue-router/auto";
-import { setupLayouts } from "virtual:generated-layouts";
+import { createRouter, createWebHistory } from "vue-router";
+import { routes } from "vue-router/auto-routes";
 import { useWallet } from "@txnlab/use-wallet-vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  extendRoutes: setupLayouts,
+  routes,
 });
 
 router.beforeEach(async (to: any, _from: any, next: any) => {
