@@ -8,10 +8,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "vue-router/auto-routes";
 import { useWallet } from "@txnlab/use-wallet-vue";
+import { setupLayouts } from "virtual:generated-layouts";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes: setupLayouts(routes),
 });
 
 router.beforeEach(async (to: any, _from: any, next: any) => {
