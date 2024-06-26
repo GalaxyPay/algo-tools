@@ -60,6 +60,7 @@ export default defineConfig({
   ],
   define: {
     "process.env": {},
+    "process.version": JSON.stringify(process.version),
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
   },
   resolve: {

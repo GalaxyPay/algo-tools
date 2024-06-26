@@ -28,5 +28,11 @@
     "subtitle": "Buy and sell vanity addresses.",
     "icon": "mdi-mirror",
     "path": "/vanity"
+  },
+  {
+    "title": "Lute Badges",
+    "subtitle": "Claim governance badges issued by Lute Wallet.",
+    "icon": "lute",
+    "path": "/badge"
   }
 ]

@@ -14,9 +14,13 @@ export async function delay(ms: number) {
 }
 
 export async function fetchAsync(url: string) {
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+  } catch {
+    // console.error(err)
+  }
 }
 
 export async function execAtc(atc: AtomicTransactionComposer, success: string) {
@@ -27,4 +31,9 @@ export async function execAtc(atc: AtomicTransactionComposer, success: string) {
   await atc.execute(Algo.algod, 4);
   store.setSnackbar(success, "success");
   store.refresh++;
+}
+
+export function ipfs2http(url: string) {
+  const ipfsGateway = "https://ipfs.algonode.xyz/ipfs/";
+  return url.replace("ipfs://", ipfsGateway);
 }
