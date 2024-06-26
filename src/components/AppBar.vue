@@ -7,8 +7,18 @@
         :key="tool.title"
         :to="tool.path"
         :title="tool.title"
-        :prepend-icon="tool.icon"
-      />
+      >
+        <template #prepend>
+          <v-icon>
+            <template v-if="tool.icon === 'lute'">
+              <lute-logo color="currentColor" />
+            </template>
+            <template v-else>
+              {{ tool.icon }}
+            </template>
+          </v-icon>
+        </template>
+      </v-list-item>
       <v-list-item title="Donate" @click="store.showDonate = true">
         <template #prepend>
           <v-icon>
