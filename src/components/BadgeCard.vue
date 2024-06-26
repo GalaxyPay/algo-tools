@@ -44,8 +44,6 @@ const props = defineProps({
   badge: { type: Object as PropType<Badge>, required: true },
 });
 
-const emit = defineEmits(["claimed"]);
-
 const assetInfo = ref<algosdk.modelsv2.Asset>();
 const image = ref();
 
