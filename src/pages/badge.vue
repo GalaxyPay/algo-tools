@@ -36,7 +36,7 @@ import { getBadges } from "@/utils/badges";
 
 const store = useAppStore();
 const badges = ref<Badge[]>([]);
-const loading = ref();
+const loading = ref(false);
 
 onMounted(async () => {
   if (store.network.name === "MainNet") {
