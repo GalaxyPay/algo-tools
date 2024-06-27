@@ -32,8 +32,9 @@ export async function getBadges() {
   const assets: number[] = [];
   const badges: Badge[] = [];
   const badgeAssets = await fetchAsync(LUTE_DATA + "/badges/assets.json");
+  const periods = Object.keys(badgeAssets).length;
   // governance period loop
-  for (let i = 1; i <= 2; i++) {
+  for (let i = 1; i <= periods; i++) {
     const governor = await getGov(
       `governance-period-${i}`,
       store.account.address
