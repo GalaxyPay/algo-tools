@@ -828,12 +828,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@txnlab/use-wallet-vue@npm:next":
-  version: 3.0.0-rc.2
-  resolution: "@txnlab/use-wallet-vue@npm:3.0.0-rc.2"
+"@txnlab/use-wallet-vue@npm:^3.0.0-rc.3":
+  version: 3.0.0-rc.3
+  resolution: "@txnlab/use-wallet-vue@npm:3.0.0-rc.3"
   dependencies:
     "@tanstack/vue-store": 0.4.1
-    "@txnlab/use-wallet": 3.0.0-rc.2
+    "@txnlab/use-wallet": 3.0.0-rc.3
   peerDependencies:
     "@blockshake/defly-connect": ^1.1.6
     "@magic-ext/algorand": ^23.0.2
@@ -862,16 +862,15 @@ __metadata:
       optional: true
     magic-sdk:
       optional: true
-  checksum: 57949e34a3aae56a6d96cd945878f8bad7093d395786cff041ffce082f38db0040567cad7eaf1d68526f772090397cbbb7850ad05dbcc30d31292e3a97689035
+  checksum: dc86c9d4367c654ed303a39acd0fb2ac828d0ec201bc690bb19f68e21df0bdee2554fcf79f08479142d7d7ee418696f3de777791cfab40a7c598f8f5a5705585
   languageName: node
   linkType: hard
 
-"@txnlab/use-wallet@npm:3.0.0-rc.2":
-  version: 3.0.0-rc.2
-  resolution: "@txnlab/use-wallet@npm:3.0.0-rc.2"
+"@txnlab/use-wallet@npm:3.0.0-rc.3":
+  version: 3.0.0-rc.3
+  resolution: "@txnlab/use-wallet@npm:3.0.0-rc.3"
   dependencies:
     "@tanstack/store": 0.4.1
-    algosdk: 2.7.0
   peerDependencies:
     "@agoralabs-sh/avm-web-provider": ^1.6.2
     "@blockshake/defly-connect": ^1.1.6
@@ -879,6 +878,7 @@ __metadata:
     "@perawallet/connect-beta": ^2.0.11
     "@walletconnect/modal": ^2.6.2
     "@walletconnect/sign-client": ^2.10.2
+    algosdk: ^2.7.0
     lute-connect: ^1.2.0
   peerDependenciesMeta:
     "@agoralabs-sh/avm-web-provider":
@@ -895,7 +895,7 @@ __metadata:
       optional: true
     lute-connect:
       optional: true
-  checksum: 636fa6cae6a46c7c832446e01e08f8a9a421a687599e85b611fb00c799d9f91af3ffa06838acc4dada0461c6be2f414ad5120889d3dec215be898c3d2c794dcb
+  checksum: 44dbf4ff48b3895a1b6a97f9e4a78c3ac6eafc9fd00d78367442174b05b01c1b13c01510fea2e15257021cfb8919860e8768c7e83c2c7d846f3ad8b910b8c356
   languageName: node
   linkType: hard
 
@@ -1562,7 +1562,7 @@ __metadata:
     "@blockshake/defly-connect": ^1.1.6
     "@mdi/font": 6.2.95
     "@perawallet/connect": ^1.3.4
-    "@txnlab/use-wallet-vue": next
+    "@txnlab/use-wallet-vue": ^3.0.0-rc.3
     "@types/node": ^20.11.25
     "@vitejs/plugin-vue": ^5.0.4
     "@vue/eslint-config-typescript": ^13.0.0
@@ -1597,23 +1597,6 @@ __metadata:
     vuetify: ^3.6.10
   languageName: unknown
   linkType: soft
-
-"algosdk@npm:2.7.0":
-  version: 2.7.0
-  resolution: "algosdk@npm:2.7.0"
-  dependencies:
-    algo-msgpack-with-bigint: ^2.1.1
-    buffer: ^6.0.3
-    hi-base32: ^0.5.1
-    js-sha256: ^0.9.0
-    js-sha3: ^0.8.0
-    js-sha512: ^0.8.0
-    json-bigint: ^1.0.0
-    tweetnacl: ^1.0.3
-    vlq: ^2.0.4
-  checksum: 688fbf6f4bf18be4787fe13fa9414b7c3a98178e6ea34a925711b69535ff07f98d6b569e6d0bdb5ff38e3de2bcf5239493b1a4c693ec3c34f435599658b41fe6
-  languageName: node
-  linkType: hard
 
 "algosdk@npm:^2.8.0":
   version: 2.8.0
