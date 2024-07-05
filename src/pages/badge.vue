@@ -39,19 +39,20 @@ const badges = ref<Badge[]>([]);
 const loading = ref(false);
 
 onMounted(async () => {
-  if (store.network.name === "MainNet") {
-    const waitGetBadges = async () => {
-      if (store.loading) {
-        setTimeout(waitGetBadges, 50);
-        return;
-      }
-      loading.value = true;
-      badges.value = await getBadges();
-      loading.value = false;
-    };
-    waitGetBadges();
-  }
+  waitGetBadges();
 });
+
+async function waitGetBadges() {
+  if (store.network.name === "MainNet") {
+    if (store.loading) {
+      setTimeout(waitGetBadges, 50);
+      return;
+    }
+    loading.value = true;
+    badges.value = await getBadges();
+    loading.value = false;
+  }
+}
 
 const eligible = computed(() => {
   if (!store.account) return [];
@@ -61,4 +62,11 @@ const eligible = computed(() => {
       !store.account!.assets?.some((a) => a.amount && a.assetId === b.index)
   );
 });
+
+watch(
+  () => store.refresh,
+  () => {
+    waitGetBadges();
+  }
+);
 </script>
