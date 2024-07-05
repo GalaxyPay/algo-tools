@@ -4153,9 +4153,9 @@ __metadata:
   linkType: hard
 
 "lute-connect@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "lute-connect@npm:1.2.0"
-  checksum: 70cdc183d7c03e227694c9d6915f511b162ff7b29900dd8f7ec69f5d70e38b26420884c5007d039a83b559f9ede938e1d1fa967a783e15a7cff677284d02ba4e
+  version: 1.3.0
+  resolution: "lute-connect@npm:1.3.0"
+  checksum: 4efba5cdf75b1788baecf5114f9cc9728e5a6cf6357ded8f5fa19021a5e6ca81ffb0e53dcc9a0d726fb752b40806e81b8a91e6d244bc1c5efb2b8f48b2926b35
   languageName: node
   linkType: hard
 

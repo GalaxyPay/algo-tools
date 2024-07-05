@@ -26,34 +26,46 @@ function getTier(amount: number) {
 
 const LUTE_DATA = "https://data.lute.app/";
 
+interface BadgeAsset {
+  period: number;
+  shrimp: number;
+  fish: number;
+  dolphin: number;
+  shark: number;
+  whale: number;
+}
+
 export async function getBadges() {
   const store = useAppStore();
   if (!store.account) throw Error("Invalid Account");
   const assets: number[] = [];
   const badges: Badge[] = [];
-  const badgeAssets = await fetchAsync(LUTE_DATA + "/badges/assets.json");
-  const periods = Object.keys(badgeAssets).length;
+  const badgeAssets = (await fetchAsync(
+    LUTE_DATA + "/badges/assets.v2.json"
+  )) as BadgeAsset[];
   // governance period loop
-  for (let i = 1; i <= periods; i++) {
-    const governor = await getGov(
-      `governance-period-${i}`,
-      store.account.address
-    );
-    if (governor?.is_eligible) {
-      const tier = getTier(
-        Number(governor.committed_algo_amount) +
-          Number(governor.committed_assets_amount_in_algo)
+  await Promise.all(
+    badgeAssets.map(async (ba) => {
+      const governor = await getGov(
+        `governance-period-${ba.period}`,
+        store.account!.address
       );
-      if (tier) {
-        const period = `gov${i}`;
-        const assetId = badgeAssets[period][tier];
-        if (
-          !store.account?.assets?.some((a) => a.amount && a.assetId === assetId)
-        )
-          assets.push(assetId);
+      if (governor?.is_eligible) {
+        const tier = getTier(
+          Number(governor.committed_algo_amount) +
+            Number(governor.committed_assets_amount_in_algo)
+        );
+        if (tier) {
+          if (
+            !store.account?.assets?.some(
+              (a) => a.amount && a.assetId === ba[tier]
+            )
+          )
+            assets.push(ba[tier]);
+        }
       }
-    }
-  }
+    })
+  );
   await Promise.all(
     assets.map(async (id) => {
       const resp = await getAssetInfo(id);
