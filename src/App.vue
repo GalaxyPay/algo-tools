@@ -19,17 +19,22 @@ const router = useRouter();
 const { activeAccount } = useWallet();
 
 async function refresh() {
-  if (activeAccount.value?.address) {
+  try {
     store.loading++;
-    const account = await Algo.algod
-      .accountInformation(activeAccount.value.address)
-      .do();
-    store.account = modelsv2.Account.from_obj_for_encoding(account);
-    store.loading--;
-  } else {
-    store.account = undefined;
-    router.push("/");
+    if (activeAccount.value?.address) {
+      const account = await Algo.algod
+        .accountInformation(activeAccount.value.address)
+        .do();
+      store.account = modelsv2.Account.from_obj_for_encoding(account);
+    } else {
+      store.account = undefined;
+      router.push("/");
+    }
+  } catch (err: any) {
+    console.error(err);
+    store.setSnackbar(err.message, "error");
   }
+  store.loading--;
 }
 
 watch(
