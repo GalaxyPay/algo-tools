@@ -57,8 +57,9 @@
 </template>
 
 <script lang="ts" setup>
-import { getParams } from "@/services/Algo";
+import Algo, { getParams } from "@/services/Algo";
 import { execAtc, fetchAsync } from "@/utils";
+import { populateAppCallResources } from "@algorandfoundation/algokit-utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 
@@ -116,6 +117,7 @@ async function closeOut(force: boolean = false) {
         });
       }
       atc.addTransaction({ txn, signer: transactionSigner });
+      if (!force) await populateAppCallResources(atc, Algo.algod);
       await execAtc(atc, "Successfuly Closed Out of Application");
       showClear.value = false;
     } catch (err: any) {
