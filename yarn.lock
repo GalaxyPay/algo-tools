@@ -828,12 +828,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@txnlab/use-wallet-vue@npm:^3.0.0-rc.3":
-  version: 3.0.0-rc.3
-  resolution: "@txnlab/use-wallet-vue@npm:3.0.0-rc.3"
+"@txnlab/use-wallet-vue@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@txnlab/use-wallet-vue@npm:3.0.0"
   dependencies:
     "@tanstack/vue-store": 0.4.1
-    "@txnlab/use-wallet": 3.0.0-rc.3
+    "@txnlab/use-wallet": 3.0.0
   peerDependencies:
     "@blockshake/defly-connect": ^1.1.6
     "@magic-ext/algorand": ^23.0.2
@@ -842,7 +842,7 @@ __metadata:
     "@walletconnect/modal": ^2.6.2
     "@walletconnect/sign-client": ^2.10.2
     algosdk: ^2.7.0
-    lute-connect: ^1.2.0
+    lute-connect: ^1.3.0
     magic-sdk: ^28.0.3
     vue: ^3.0.0
   peerDependenciesMeta:
@@ -862,13 +862,13 @@ __metadata:
       optional: true
     magic-sdk:
       optional: true
-  checksum: dc86c9d4367c654ed303a39acd0fb2ac828d0ec201bc690bb19f68e21df0bdee2554fcf79f08479142d7d7ee418696f3de777791cfab40a7c598f8f5a5705585
+  checksum: 2788d10f6ae3adb9930174966999fd563000454b10ea37fe2029c0c2cafb34bcffbd937b6fe1b6732d96046425c82a8f79521c3918632f4cf941e438bf25adc5
   languageName: node
   linkType: hard
 
-"@txnlab/use-wallet@npm:3.0.0-rc.3":
-  version: 3.0.0-rc.3
-  resolution: "@txnlab/use-wallet@npm:3.0.0-rc.3"
+"@txnlab/use-wallet@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@txnlab/use-wallet@npm:3.0.0"
   dependencies:
     "@tanstack/store": 0.4.1
   peerDependencies:
@@ -879,7 +879,7 @@ __metadata:
     "@walletconnect/modal": ^2.6.2
     "@walletconnect/sign-client": ^2.10.2
     algosdk: ^2.7.0
-    lute-connect: ^1.2.0
+    lute-connect: ^1.3.0
   peerDependenciesMeta:
     "@agoralabs-sh/avm-web-provider":
       optional: true
@@ -895,7 +895,7 @@ __metadata:
       optional: true
     lute-connect:
       optional: true
-  checksum: 44dbf4ff48b3895a1b6a97f9e4a78c3ac6eafc9fd00d78367442174b05b01c1b13c01510fea2e15257021cfb8919860e8768c7e83c2c7d846f3ad8b910b8c356
+  checksum: e5454eebb185361d74a5b8f68b824845f6ed87c4d0713ccb2b9b194a77de734cc6890cc48a8babe32ea1b6af3fe913256aff6a741cba374878aee109dbc4752f
   languageName: node
   linkType: hard
 
@@ -1562,7 +1562,7 @@ __metadata:
     "@blockshake/defly-connect": ^1.1.6
     "@mdi/font": 6.2.95
     "@perawallet/connect": ^1.3.4
-    "@txnlab/use-wallet-vue": ^3.0.0-rc.3
+    "@txnlab/use-wallet-vue": ^3.0.0
     "@types/node": ^20.11.25
     "@vitejs/plugin-vue": ^5.0.4
     "@vue/eslint-config-typescript": ^13.0.0
@@ -1576,7 +1576,7 @@ __metadata:
     eslint-plugin-promise: ^6.2.0
     eslint-plugin-vue: ^9.26.0
     idb-keyval: ^6.2.1
-    lute-connect: ^1.2.0
+    lute-connect: ^1.3.0
     merkletreejs: ^0.3.11
     multiformats: ^13.1.1
     pinia: ^2.1.7
@@ -4152,7 +4152,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lute-connect@npm:^1.2.0":
+"lute-connect@npm:^1.3.0":
   version: 1.3.0
   resolution: "lute-connect@npm:1.3.0"
   checksum: 4efba5cdf75b1788baecf5114f9cc9728e5a6cf6357ded8f5fa19021a5e6ca81ffb0e53dcc9a0d726fb752b40806e81b8a91e6d244bc1c5efb2b8f48b2926b35
