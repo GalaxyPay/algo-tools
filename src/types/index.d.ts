@@ -9,19 +9,17 @@ export interface SnackBar {
 
 export interface Network {
   name: string;
-  algod: {
-    url: string;
-    port: string;
-    token: string;
-  };
-  indexer: {
-    url: string;
-    port: string;
-    token: string;
-  };
+  algod: Node;
+  indexer: Node;
   networkId: string;
   explorer: string;
   vanityId: number;
+}
+
+export interface Node {
+  url: string;
+  port: string;
+  token: string;
 }
 
 export type Address = string;
