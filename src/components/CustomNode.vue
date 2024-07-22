@@ -4,10 +4,17 @@
       <v-card-title>Custom Node</v-card-title>
       <v-form ref="form" @submit.prevent="setCustomNode">
         <v-container>
-          <v-text-field
+          <v-combobox
             v-model="algod.url"
             label="Algod URL"
+            variant="outlined"
+            density="comfortable"
             :rules="[required]"
+            :items="customs"
+            item-title="url"
+            item-value="url"
+            :return-object="false"
+            @update:model-value="selectCustom"
           />
           <v-text-field v-model="algod.port" label="Algod Port" />
           <v-text-field v-model="algod.token" label="Algod Token" />
@@ -32,10 +39,9 @@
 <script lang="ts" setup>
 import { networks, nids } from "@/data";
 import { getNetwork } from "@/services/Algo";
-import { Network } from "@/types";
+import { Network, Node } from "@/types";
 import { NetworkId, useWallet } from "@txnlab/use-wallet-vue";
-import algosdk from "algosdk";
-import { set } from "idb-keyval";
+import { get, set } from "idb-keyval";
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
@@ -59,23 +65,33 @@ const showCustomNode = computed({
 
 watch(
   () => showCustomNode.value,
-  () => {
-    algod.value = {
-      url: store.network.algod.url,
-      port: store.network.algod.port,
-      token: store.network.algod.token,
-    };
+  (val) => {
+    if (val)
+      algod.value = {
+        url: store.network.algod.url,
+        port: store.network.algod.port,
+        token: store.network.algod.token,
+      };
   }
 );
 
 const store = useAppStore();
 const { setActiveNetwork } = useWallet();
-const algod = ref<{ token: string; url: string; port: string }>({
+const algod = ref<Node>({
   token: "",
   url: "",
   port: "",
 });
-const network = ref();
+const network = ref<string>();
+const customs = ref<Node[]>([]);
+
+function selectCustom(url: string) {
+  const val = customs.value.find((x) => x.url === url);
+  if (val) {
+    algod.value.port = val.port;
+    algod.value.token = val.token;
+  }
+}
 
 async function verify() {
   try {
@@ -97,27 +113,34 @@ async function verify() {
 async function setCustomNode() {
   const { valid } = await form.value.validate();
   if (!valid) return;
-  const tempClient = new algosdk.Algodv2(
-    algod.value.token,
-    algod.value.url,
-    algod.value.port
-  );
-  const genesis = await tempClient.genesis().do();
-  const network = {
+  const custom = {
     ...networks.find(
-      (x) => x.networkId === genesis.network || x.name === "Sandbox"
+      (x) => x.networkId === network.value || x.name === "Sandbox"
     ),
   } as Network;
-  network.name = "Custom";
-  network.algod = algod.value;
-  network.networkId = genesis.network;
-  await set("network", JSON.parse(JSON.stringify(network)));
+  custom.name = "Custom";
+  custom.algod = algod.value;
+  custom.networkId = network.value!;
+  await set("network", JSON.parse(JSON.stringify(custom)));
+
+  const idx = customs.value.findIndex((a) => a.url === algod.value.url);
+  if (idx === -1) {
+    customs.value.push(JSON.parse(JSON.stringify(algod.value)));
+  } else {
+    customs.value.splice(idx, 1, JSON.parse(JSON.stringify(algod.value)));
+  }
+  await set("customs", JSON.parse(JSON.stringify(customs.value)));
+
   await store.getCache();
   const nid = (
-    nids.includes(network.networkId) ? network.networkId : "localnet"
+    nids.includes(custom.networkId) ? custom.networkId : "localnet"
   ) as NetworkId;
   setActiveNetwork(nid);
   store.refresh++;
   showCustomNode.value = false;
 }
+
+onMounted(async () => {
+  customs.value = JSON.parse(JSON.stringify((await get("customs")) || []));
+});
 </script>
