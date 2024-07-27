@@ -8,7 +8,7 @@
           <v-btn
             variant="plain"
             color="currentColor"
-            icon="mdi-content-copy"
+            :icon="mdiContentCopy"
             @click="copyToClipboard()"
           />
           <v-tooltip activator="parent" text="Copy to clipboard" />
@@ -21,6 +21,8 @@
 </template>
 
 <script lang="ts" setup>
+import { mdiContentCopy } from "@mdi/js";
+
 const props = defineProps({
   visible: { type: Boolean, default: false },
   mnemonic: { type: String, required: true },

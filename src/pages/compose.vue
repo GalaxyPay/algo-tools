@@ -61,7 +61,7 @@
             <template #label>
               Close Remainder To
               <span>
-                <v-icon size="x-small" class="ml-2" icon="mdi-information" />
+                <v-icon size="x-small" class="ml-2" :icon="mdiInformation" />
                 <v-tooltip
                   activator="parent"
                   location="bottom"
@@ -84,7 +84,7 @@
             <template #label>
               Revocation Target
               <span>
-                <v-icon size="x-small" class="ml-2" icon="mdi-information" />
+                <v-icon size="x-small" class="ml-2" :icon="mdiInformation" />
                 <v-tooltip
                   activator="parent"
                   location="bottom"
@@ -167,7 +167,7 @@
               <v-btn
                 variant="plain"
                 color="currentColor"
-                icon="mdi-content-paste"
+                :icon="mdiContentPaste"
                 @click="pasteFromClipboard()"
               />
               <v-tooltip
@@ -196,6 +196,7 @@
 import Algo, { getParams } from "@/services/Algo";
 import { KeyRegTxn } from "@/types";
 import { execAtc, getAssetInfo } from "@/utils";
+import { mdiContentPaste, mdiInformation } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 

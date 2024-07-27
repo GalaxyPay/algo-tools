@@ -5,7 +5,7 @@
         Donate to AlgoTools <v-spacer />
         <v-icon
           color="currentColor"
-          icon="mdi-close"
+          :icon="mdiClose"
           @click="store.showDonate = false"
         />
       </v-card-title>
@@ -32,6 +32,7 @@
 <script lang="ts" setup>
 import { getParams } from "@/services/Algo";
 import { execAtc } from "@/utils";
+import { mdiClose } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
 

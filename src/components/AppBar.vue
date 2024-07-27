@@ -1,24 +1,14 @@
 <template>
   <v-navigation-drawer v-model="drawer" app :order="1">
     <v-list dense nav>
-      <v-list-item to="/" title="Home" prepend-icon="mdi-home" exact />
+      <v-list-item to="/" title="Home" :prepend-icon="mdiHome" exact />
       <v-list-item
         v-for="tool in tools"
         :key="tool.title"
         :to="tool.path"
         :title="tool.title"
-      >
-        <template #prepend>
-          <v-icon>
-            <template v-if="tool.icon === 'lute'">
-              <lute-logo color="currentColor" />
-            </template>
-            <template v-else>
-              {{ tool.icon }}
-            </template>
-          </v-icon>
-        </template>
-      </v-list-item>
+        :prepend-icon="tool.icon"
+      />
       <v-list-item title="Donate" @click="store.showDonate = true">
         <template #prepend>
           <v-icon>
@@ -34,7 +24,7 @@
         :items="networkList"
         density="compact"
         variant="outlined"
-        :append-icon="network == 'Custom' ? 'mdi-pencil' : ''"
+        :append-icon="network == 'Custom' ? mdiPencil : ''"
         @click:append="showCustomNode = true"
       />
     </v-container>
@@ -60,7 +50,7 @@
         :items="networkList"
         density="compact"
         variant="outlined"
-        :append-icon="network === 'Custom' ? 'mdi-pencil' : ''"
+        :append-icon="network === 'Custom' ? mdiPencil : ''"
         @click:append="showCustomNode = true"
       />
     </div>
@@ -81,7 +71,7 @@
               <v-col class="pt-2 text-right">
                 <v-icon
                   size="x-small"
-                  icon="mdi-content-copy"
+                  :icon="mdiContentCopy"
                   @click.stop="copyToClipboard()"
                 />
               </v-col>
@@ -136,15 +126,15 @@
                 >
                   <v-icon
                     v-if="wallet.isActive"
-                    icon="mdi-minus-circle-outline"
+                    :icon="mdiMinusCircleOutline"
                     color="error"
                   />
                   <v-icon
                     v-else-if="wallet.isConnected"
-                    icon="mdi-lightning-bolt-outline"
+                    :icon="mdiLightningBoltOutline"
                     color="primary"
                   />
-                  <v-icon v-else icon="mdi-plus-circle-outline" color="vuet" />
+                  <v-icon v-else :icon="mdiPlusCircleOutline" color="vuet" />
                   <div v-if="smAndUp" class="ml-1">
                     {{
                       wallet.isActive
@@ -170,6 +160,14 @@ import { networks, nids, tools } from "@/data";
 import { getNetwork } from "@/services/Algo";
 import { Network } from "@/types";
 import { formatAddr } from "@/utils";
+import {
+  mdiContentCopy,
+  mdiHome,
+  mdiLightningBoltOutline,
+  mdiMinusCircleOutline,
+  mdiPencil,
+  mdiPlusCircleOutline,
+} from "@mdi/js";
 import {
   NetworkId,
   Wallet,

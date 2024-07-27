@@ -15,7 +15,7 @@
             <v-row>
               {{ appInfo ? appInfo.name : app.id }}
               <v-icon
-                icon="mdi-information-outline"
+                :icon="mdiInformationOutline"
                 size="x-small"
                 color="grey"
                 class="pl-2"
@@ -23,7 +23,7 @@
               />
               <v-spacer />
               <v-icon
-                icon="mdi-delete"
+                :icon="mdiDelete"
                 color="error"
                 size="x-small"
                 @click="
@@ -60,6 +60,7 @@
 import Algo, { getParams } from "@/services/Algo";
 import { execAtc, fetchAsync } from "@/utils";
 import { populateAppCallResources } from "@algorandfoundation/algokit-utils";
+import { mdiDelete, mdiInformationOutline } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 

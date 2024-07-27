@@ -2,7 +2,7 @@
   <svg
     :width="width"
     :height="height"
-    :fill="color"
+    fill="currentColor"
     :opacity="opacity"
     viewBox="0 0 1e3 1e3"
     xml:space="preserve"
@@ -20,7 +20,6 @@ export default {
   props: {
     width: { type: Number },
     height: { type: Number },
-    color: { type: String, default: null },
     opacity: { type: Number, default: 1 },
   },
 };

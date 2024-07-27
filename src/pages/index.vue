@@ -10,14 +10,7 @@
           :subtitle="tool.subtitle"
         >
           <template #prepend>
-            <v-icon color="vuet">
-              <template v-if="tool.icon === 'lute'">
-                <lute-logo color="currentColor" />
-              </template>
-              <template v-else>
-                {{ tool.icon }}
-              </template>
-            </v-icon>
+            <v-icon color="vuet" :icon="tool.icon" />
           </template>
         </v-list-item>
       </v-list>

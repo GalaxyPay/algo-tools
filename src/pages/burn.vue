@@ -88,7 +88,7 @@
         Technical Details
         <v-spacer />
         <v-icon>
-          {{ showDetails ? "mdi-chevron-up" : "mdi-chevron-down" }}
+          {{ showDetails ? mdiChevronUp : mdiChevronDown }}
         </v-icon>
       </v-card-title>
       <v-container v-show="showDetails">
@@ -118,11 +118,12 @@
 </template>
 
 <script lang="ts" setup>
-import burnTeal from "@/teal/burn.teal?raw";
-import algosdk, { modelsv2 } from "algosdk";
 import Algo, { getParams } from "@/services/Algo";
-import { useWallet } from "@txnlab/use-wallet-vue";
+import burnTeal from "@/teal/burn.teal?raw";
 import { execAtc } from "@/utils";
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
+import { useWallet } from "@txnlab/use-wallet-vue";
+import algosdk, { modelsv2 } from "algosdk";
 
 const store = useAppStore();
 const { activeAccount, transactionSigner } = useWallet();

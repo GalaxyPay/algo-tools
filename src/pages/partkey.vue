@@ -4,7 +4,7 @@
       <v-card-title class="d-flex">
         Participation Keys <v-spacer />
         <v-btn
-          icon="mdi-plus"
+          :icon="mdiPlus"
           variant="plain"
           :disabled="unauth"
           @click="generateDialog"
@@ -28,7 +28,7 @@
               v-show="isActiveKey(item.key)"
               size="small"
               color="vuet"
-              icon="mdi-check"
+              :icon="mdiCheck"
             />
           </template>
           <template #[`item.expire`]="{ item }">
@@ -38,7 +38,7 @@
             <span>
               <v-btn
                 variant="plain"
-                icon="mdi-content-copy"
+                :icon="mdiContentCopy"
                 color="currentColor"
                 @click="copyToClipboard(item.key)"
               />
@@ -51,7 +51,7 @@
             <span v-if="!altActive">
               <v-btn
                 variant="plain"
-                icon="mdi-handshake"
+                :icon="mdiHandshake"
                 color="currentColor"
                 @click="registerKey(item)"
               />
@@ -64,7 +64,7 @@
             <span>
               <v-btn
                 variant="plain"
-                icon="mdi-delete"
+                :icon="mdiDelete"
                 :disabled="isActiveKey(item.key)"
                 color="error"
                 @click="deleteKey(item.id)"
@@ -103,7 +103,7 @@
         <v-card-title class="d-flex">
           Generate Participation Key
           <v-spacer />
-          <v-icon color="currentColor" icon="mdi-close" @click="resetAll()" />
+          <v-icon color="currentColor" :icon="mdiClose" @click="resetAll()" />
         </v-card-title>
         <v-form ref="form" @submit.prevent="generateKey()">
           <v-container>
@@ -139,6 +139,14 @@
 <script lang="ts" setup>
 import Algo, { getParams } from "@/services/Algo";
 import { delay, execAtc } from "@/utils";
+import {
+  mdiCheck,
+  mdiClose,
+  mdiContentCopy,
+  mdiDelete,
+  mdiHandshake,
+  mdiPlus,
+} from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 
