@@ -11,7 +11,7 @@
               {{ assetInfo?.params?.name || asset.assetId }}
               <v-icon
                 v-if="asset.assetId"
-                icon="mdi-information-outline"
+                :icon="mdiInformationOutline"
                 size="x-small"
                 color="grey"
                 class="pl-2"
@@ -19,7 +19,7 @@
               />
               <v-spacer />
               <v-icon
-                icon="mdi-delete"
+                :icon="mdiDelete"
                 color="error"
                 size="x-small"
                 @click="created ? destroy() : setReceiver()"
@@ -46,7 +46,7 @@
           <v-spacer />
           <v-icon
             color="currentColor"
-            icon="mdi-close"
+            :icon="mdiClose"
             @click="showReceiver = false"
           />
         </v-card-title>
@@ -80,6 +80,7 @@
 <script lang="ts" setup>
 import { getParams } from "@/services/Algo";
 import { execAtc, getAssetInfo, resolveProtocol } from "@/utils";
+import { mdiClose, mdiDelete, mdiInformationOutline } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 

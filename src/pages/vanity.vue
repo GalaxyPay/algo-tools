@@ -5,7 +5,7 @@
         Instructions
         <v-spacer />
         <v-icon>
-          {{ showInstuctions ? "mdi-chevron-up" : "mdi-chevron-down" }}
+          {{ showInstuctions ? mdiChevronUp : mdiChevronDown }}
         </v-icon>
       </v-card-title>
       <v-container v-show="showInstuctions">
@@ -144,6 +144,7 @@
 import { vanityAbi } from "@/data";
 import Algo, { getParams } from "@/services/Algo";
 import { delay, execAtc } from "@/utils";
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { indexerModels } from "algosdk";
 import { useDisplay } from "vuetify";
