@@ -12,7 +12,6 @@
               <v-icon
                 v-if="asset.assetId"
                 :icon="mdiInformationOutline"
-                size="x-small"
                 color="grey"
                 class="pl-2"
                 @click="exploreAsset()"

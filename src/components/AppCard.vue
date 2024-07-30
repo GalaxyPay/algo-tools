@@ -16,7 +16,6 @@
               {{ appInfo ? appInfo.name : app.id }}
               <v-icon
                 :icon="mdiInformationOutline"
-                size="x-small"
                 color="grey"
                 class="pl-2"
                 @click="exploreApp()"
