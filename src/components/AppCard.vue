@@ -21,14 +21,46 @@
                 @click="exploreApp()"
               />
               <v-spacer />
-              <v-icon
-                :icon="mdiDelete"
-                color="error"
-                size="x-small"
-                @click="
-                  app instanceof modelsv2.Application ? deleteApp() : closeOut()
-                "
-              />
+              <template v-if="isOwned(app)">
+                <span>
+                  <v-icon
+                    :icon="mdiDelete"
+                    color="error"
+                    size="small"
+                    @click="deleteApp()"
+                  />
+                  <v-tooltip activator="parent" location="top" text="Delete" />
+                </span>
+              </template>
+              <template v-else>
+                <span>
+                  <v-icon
+                    :icon="mdiClose"
+                    color="error"
+                    size="small"
+                    class="mr-2"
+                    @click="closeOut()"
+                  />
+                  <v-tooltip
+                    activator="parent"
+                    location="top"
+                    text="Close Out"
+                  />
+                </span>
+                <span>
+                  <v-icon
+                    :icon="mdiCancel"
+                    color="error"
+                    size="small"
+                    @click="clearState()"
+                  />
+                  <v-tooltip
+                    activator="parent"
+                    location="top"
+                    text="Clear State"
+                  />
+                </span>
+              </template>
             </v-row>
             <v-row v-if="appInfo">
               {{ appInfo.description }}
@@ -42,24 +74,13 @@
         </v-col>
       </v-row>
     </v-container>
-    <!-- clear dialog -->
-    <v-dialog v-model="showClear" max-width="400">
-      <v-card title="Close Out Failed" text="Would you like to Clear State?">
-        <v-card-actions>
-          <v-spacer />
-          <v-btn text="No" color="grey" @click="showClear = false" />
-          <v-btn text="Yes" @click="closeOut(true)" />
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </v-card>
 </template>
 
 <script lang="ts" setup>
-import Algo, { getParams } from "@/services/Algo";
+import { getParams } from "@/services/Algo";
 import { execAtc, fetchAsync } from "@/utils";
-import { populateAppCallResources } from "@algorandfoundation/algokit-utils";
-import { mdiDelete, mdiInformationOutline } from "@mdi/js";
+import { mdiCancel, mdiClose, mdiDelete, mdiInformationOutline } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 
@@ -73,7 +94,6 @@ const props = defineProps({
 });
 const store = useAppStore();
 const { activeAccount, transactionSigner } = useWallet();
-const showClear = ref(false);
 
 const appInfo = ref();
 
@@ -90,11 +110,15 @@ function exploreApp() {
   window.open(url, "_blank");
 }
 
-async function closeOut(force: boolean = false) {
+function isOwned(app: any) {
+  return app instanceof modelsv2.Application;
+}
+
+async function closeOut() {
   if (
     confirm(
-      "WARNING: Opting-out of this contract may result in financial loss. " +
-        "Before opting-out you should make sure this contract doesn't hold any current or future value. " +
+      "WARNING: Closing-out of this contract may result in financial loss. " +
+        "Before performing this action you should make sure this contract doesn't hold any current or future value. " +
         "Are you sure you want to proceed?"
     )
   ) {
@@ -102,32 +126,48 @@ async function closeOut(force: boolean = false) {
       store.overlay = true;
       const atc = new algosdk.AtomicTransactionComposer();
       const suggestedParams = await getParams();
-      let txn;
-      if (force) {
-        txn = algosdk.makeApplicationClearStateTxnFromObject({
-          from: activeAccount.value!.address,
-          suggestedParams,
-          appIndex: Number(props.app.id),
-        });
-      } else {
-        txn = algosdk.makeApplicationCloseOutTxnFromObject({
-          from: activeAccount.value!.address,
-          suggestedParams,
-          appIndex: Number(props.app.id),
-        });
-      }
+      const txn = algosdk.makeApplicationCloseOutTxnFromObject({
+        from: activeAccount.value!.address,
+        suggestedParams,
+        appIndex: Number(props.app.id),
+      });
       atc.addTransaction({ txn, signer: transactionSigner });
-      if (!force) await populateAppCallResources(atc, Algo.algod);
       await execAtc(atc, "Successfuly Closed Out of Application");
-      showClear.value = false;
     } catch (err: any) {
       console.error(err);
       store.setSnackbar(err.message, "error");
-      showClear.value = true;
     }
     store.overlay = false;
   }
 }
+
+async function clearState() {
+  if (
+    confirm(
+      "WARNING: CLEAR-STATE SHOULD ONLY BE USED IF CLOSE-OUT FAILS. Clearing this contract's state may result in financial loss. " +
+        "Before performing this action you should make sure this contract doesn't hold any current or future value. " +
+        "Are you sure you want to proceed?"
+    )
+  ) {
+    try {
+      store.overlay = true;
+      const atc = new algosdk.AtomicTransactionComposer();
+      const suggestedParams = await getParams();
+      const txn = algosdk.makeApplicationClearStateTxnFromObject({
+        from: activeAccount.value!.address,
+        suggestedParams,
+        appIndex: Number(props.app.id),
+      });
+      atc.addTransaction({ txn, signer: transactionSigner });
+      await execAtc(atc, "Successfuly Cleared Application State");
+    } catch (err: any) {
+      console.error(err);
+      store.setSnackbar(err.message, "error");
+    }
+    store.overlay = false;
+  }
+}
+
 async function deleteApp() {
   if (
     confirm(
