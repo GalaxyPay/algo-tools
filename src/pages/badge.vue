@@ -3,7 +3,7 @@
     <v-progress-circular :size="120" color="primary" indeterminate />
   </v-container>
   <v-container v-else>
-    <v-row v-if="store.network.name !== 'MainNet'">
+    <v-row v-if="store.network.networkId != 'mainnet'">
       <v-col class="text-center font-italic py-12">
         This feature is only available on MainNet
       </v-col>
