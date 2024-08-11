@@ -1,6 +1,6 @@
 {
   "name": "algo-tools",
-  "version": "4.4.3",
+  "version": "4.4.4",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
