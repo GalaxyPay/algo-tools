@@ -193,6 +193,7 @@
 </template>
 
 <script lang="ts" setup>
+import { Arc59Client } from "@/clients/Arc59Client";
 import Algo, { getParams } from "@/services/Algo";
 import { KeyRegTxn } from "@/types";
 import { execAtc, getAssetInfo } from "@/utils";
@@ -272,10 +273,14 @@ watch(
   { immediate: true }
 );
 
+const assets = ref<modelsv2.Asset[]>([]);
+const asset = ref<modelsv2.Asset>();
+
 watch(
   () => store.account,
   async () => {
     if (!store.account?.assets) return;
+    assets.value = [];
     await Promise.all(
       store.account.assets.map(async (a) => {
         if (a.amount > 0) {
@@ -287,9 +292,6 @@ watch(
   },
   { immediate: true }
 );
-
-const assets = ref<modelsv2.Asset[]>([]);
-const asset = ref<modelsv2.Asset>();
 
 function itemProps(item: modelsv2.Asset) {
   return {
@@ -367,7 +369,10 @@ async function compose() {
           closeRemainderTo: closeRemainderTo.value,
           revocationTarget: revocationTarget.value,
         });
-        break;
+        await arc59SendAsset(txn, atc, suggestedParams);
+        store.overlay = false;
+        return;
+      // break;
       case "Key Registration": {
         part.value.from = activeAccount.value!.address;
         const obj = {
@@ -415,5 +420,98 @@ async function offline() {
     store.setSnackbar(err.message, "error");
   }
   store.overlay = false;
+}
+
+async function arc59SendAsset(
+  axfer: algosdk.Transaction,
+  atc: algosdk.AtomicTransactionComposer,
+  suggestedParams: algosdk.SuggestedParams
+) {
+  const claimer = store.account?.address;
+  if (!claimer) throw Error("Invalid Claimer");
+  const sender = { addr: claimer, signer: transactionSigner };
+  const appClient = new Arc59Client(
+    { sender, resolveBy: "id", id: store.network.inboxRouter },
+    Algo.algod
+  );
+  const arc59RouterAddress = (await appClient.appClient.getAppReference())
+    .appAddress;
+  const assetId = asset.value?.index;
+  const receiver = to.value;
+  if (!assetId) throw Error("Invalid Asset");
+  const simSender = {
+    addr: claimer,
+    signer: algosdk.makeEmptyTransactionSigner(),
+  };
+  const [
+    itxns,
+    mbr,
+    routerOptedIn,
+    receiverOptedIn,
+    receiverAlgoNeededForClaim,
+  ] = (
+    await appClient
+      .compose()
+      .arc59GetSendAssetInfo(
+        { asset: assetId, receiver },
+        { sender: simSender }
+      )
+      .simulate({
+        allowEmptySignatures: true,
+        allowUnnamedResources: true,
+      })
+  ).returns[0];
+  // If the receiver has opted in, just send the asset directly
+  if (receiverOptedIn) {
+    atc.addTransaction({ txn: axfer, signer: transactionSigner });
+    await execAtc(atc, "Success");
+    form.value.reset();
+    return;
+  }
+  if (
+    !confirm(
+      `WARNING: The recipient is not opted-in to the asset, so the asset will be sent using the Inbox Router. ` +
+        `Custodial accounts, like those on an exchange, may not be able to claim the asset!`
+    )
+  )
+    return;
+  const composer = appClient.compose();
+  // If the MBR is non-zero, send the MBR to the router
+  if (mbr || receiverAlgoNeededForClaim) {
+    const mbrPayment = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+      to: arc59RouterAddress,
+      from: claimer,
+      suggestedParams,
+      amount: Number(mbr + receiverAlgoNeededForClaim),
+    });
+    composer.addTransaction({ txn: mbrPayment, signer: transactionSigner });
+  }
+  // If the router is not opted in, add a call to arc59OptRouterIn to do so
+  if (!routerOptedIn) composer.arc59OptRouterIn({ asa: assetId });
+  // The transfer of the asset to the router
+  axfer.to = algosdk.decodeAddress(arc59RouterAddress);
+  // An extra itxn is if we are also sending ALGO for the receiver claim
+  const totalItxns = itxns + (receiverAlgoNeededForClaim === 0n ? 0n : 1n);
+  const fee = (
+    algosdk.ALGORAND_MIN_TX_FEE * Number(totalItxns + 1n)
+  ).microAlgos();
+  const boxes = [algosdk.decodeAddress(receiver).publicKey];
+  const inboxAddress = (
+    await appClient
+      .compose()
+      .arc59GetInbox({ receiver }, { sender: simSender })
+      .simulate({
+        allowEmptySignatures: true,
+        allowUnnamedResources: true,
+      })
+  ).returns[0];
+  const accounts = [receiver, inboxAddress];
+  const assets = [Number(assetId)];
+  composer.arc59SendAsset(
+    { axfer, receiver, additionalReceiverFunds: receiverAlgoNeededForClaim },
+    { sendParams: { fee }, boxes, accounts, assets }
+  );
+  await execAtc(await composer.atc(), "Success");
+  form.value.reset();
 }
 </script>

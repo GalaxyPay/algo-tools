@@ -5,9 +5,16 @@ import {
   mdiLogout,
   mdiMirror,
   mdiPencil,
+  mdiTrayArrowDown,
 } from "@mdi/js";
 
 export const tools = [
+  {
+    title: "Inbox",
+    subtitle: "View and claim assets sent to your inbox.",
+    icon: mdiTrayArrowDown,
+    path: "/inbox",
+  },
   {
     title: "Opt-Out",
     subtitle:

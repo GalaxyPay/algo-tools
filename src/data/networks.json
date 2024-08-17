@@ -43,7 +43,8 @@
       "port": "8980",
       "token": ""
     },
-    "explorer": "https://app.dappflow.org/setnetwork?name=sandbox&redirect=explorer",
-    "vanityId": 1001
+    "explorer": "https://local.blockpack.app/#/explorer",
+    "vanityId": 1001,
+    "inboxRouter": 1110
   }
 ]
