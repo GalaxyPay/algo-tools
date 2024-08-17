@@ -443,6 +443,7 @@ async function arc59SendAsset(
     addr: claimer,
     signer: algosdk.makeEmptyTransactionSigner(),
   };
+  const simParams = { allowEmptySignatures: true, allowUnnamedResources: true };
   const [
     itxns,
     mbr,
@@ -456,10 +457,7 @@ async function arc59SendAsset(
         { asset: assetId, receiver },
         { sender: simSender }
       )
-      .simulate({
-        allowEmptySignatures: true,
-        allowUnnamedResources: true,
-      })
+      .simulate(simParams)
   ).returns[0];
   // If the receiver has opted in, just send the asset directly
   if (receiverOptedIn) {
@@ -500,10 +498,7 @@ async function arc59SendAsset(
     await appClient
       .compose()
       .arc59GetInbox({ receiver }, { sender: simSender })
-      .simulate({
-        allowEmptySignatures: true,
-        allowUnnamedResources: true,
-      })
+      .simulate(simParams)
   ).returns[0];
   const accounts = [receiver, inboxAddress];
   const assets = [Number(assetId)];
