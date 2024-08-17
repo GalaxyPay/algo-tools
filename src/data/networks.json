@@ -13,7 +13,8 @@
     },
     "networkId": "mainnet",
     "explorer": "https://www.blockpack.app/#/explorer",
-    "vanityId": 1093312673
+    "vanityId": 1093312673,
+    "inboxRouter": 2038081706
   },
   {
     "name": "TestNet",
@@ -29,7 +30,8 @@
     },
     "networkId": "testnet",
     "explorer": "https://testnet.blockpack.app/#/explorer",
-    "vanityId": 206059417
+    "vanityId": 206059417,
+    "inboxRouter": 643020148
   },
   {
     "name": "Sandbox",
