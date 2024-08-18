@@ -46,7 +46,6 @@
       "token": ""
     },
     "explorer": "https://local.blockpack.app/#/explorer",
-    "vanityId": 1001,
-    "inboxRouter": 1110
+    "vanityId": 1001
   }
 ]
