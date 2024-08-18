@@ -1,20 +1,29 @@
 <template>
   <v-container>
     <v-row>
-      <v-col
-        v-if="!inboxInfo?.assets?.length"
-        class="text-center font-italic py-12"
-      >
-        Your Inbox is Empty
-      </v-col>
-      <v-col
-        v-for="n in inboxInfo?.assets?.length"
-        :key="n"
-        cols="12"
-        md="6"
-        lg="4"
-      >
-        <InboxAsset :inbox-info="inboxInfo!" :idx="n - 1" />
+      <v-col>
+        <v-card>
+          <v-container class="pt-1 pb-0 pl-4 text-button"> Inbox </v-container>
+          <v-container>
+            <v-row>
+              <v-col
+                v-if="!inboxInfo?.assets?.length"
+                class="text-center font-italic py-12"
+              >
+                Your Inbox is Empty
+              </v-col>
+              <v-col
+                v-for="n in inboxInfo?.assets?.length"
+                :key="n"
+                cols="12"
+                md="6"
+                lg="4"
+              >
+                <InboxAsset :inbox-info="inboxInfo!" :idx="n - 1" />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
