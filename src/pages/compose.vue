@@ -447,6 +447,7 @@ async function arc59SendAsset() {
     showInboxWarning.value = false;
     if (!store.account) throw Error("Invalid Account");
     if (!asset.value) throw Error("Invalid Asset");
+    if (!store.network.inboxRouter) throw Error("Invalid Router");
     const suggestedParams = await Algo.algod.getTransactionParams().do();
     const sender = { addr: store.account.address, signer: transactionSigner };
     const appClient = new Arc59Client(

@@ -98,6 +98,7 @@ function formatAmount() {
 const claimer = store.account?.address;
 function getAppClient() {
   if (!claimer) throw Error("Invalid Claimer");
+  if (!store.network.inboxRouter) throw Error("Invalid Router");
   const sender = { addr: claimer, signer: transactionSigner };
   return new Arc59Client(
     { sender, resolveBy: "id", id: store.network.inboxRouter },

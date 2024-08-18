@@ -14,7 +14,7 @@ export interface Network {
   networkId: string;
   explorer: string;
   vanityId: number;
-  inboxRouter: number;
+  inboxRouter?: number;
 }
 
 export interface Node {
