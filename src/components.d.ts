@@ -15,6 +15,7 @@ declare module 'vue' {
     BadgeCard: typeof import('./components/BadgeCard.vue')['default']
     CustomNode: typeof import('./components/CustomNode.vue')['default']
     DonateDialog: typeof import('./components/DonateDialog.vue')['default']
+    InboxAsset: typeof import('./components/InboxAsset.vue')['default']
     LuteLogo: typeof import('./components/svg/LuteLogo.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

@@ -190,9 +190,22 @@
       </v-form>
     </v-card>
   </v-container>
+  <v-dialog v-model="showInboxWarning" max-width="600" persistent>
+    <v-card
+      title="WARNING"
+      text="The recipient is not opted-in to the asset, so the asset will be sent using the Inbox Router. 
+        Custodial accounts, like those on an exchange, may not be able to claim the asset."
+    >
+      <v-card-actions>
+        <v-btn text="Cancel" color="grey" @click="showInboxWarning = false" />
+        <v-btn text="Use Inbox" @click="arc59SendAsset()" />
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script lang="ts" setup>
+import { Arc59Client } from "@/clients/Arc59Client";
 import Algo, { getParams } from "@/services/Algo";
 import { KeyRegTxn } from "@/types";
 import { execAtc, getAssetInfo } from "@/utils";
@@ -228,6 +241,7 @@ const txnTypes = ref([
 ]);
 const txnType = ref();
 const part = ref<KeyRegTxn>({} as KeyRegTxn);
+const showInboxWarning = ref(false);
 
 const amountLabel = computed(() => {
   let val = "Amount";
@@ -272,10 +286,14 @@ watch(
   { immediate: true }
 );
 
+const assets = ref<modelsv2.Asset[]>([]);
+const asset = ref<modelsv2.Asset>();
+
 watch(
   () => store.account,
   async () => {
     if (!store.account?.assets) return;
+    assets.value = [];
     await Promise.all(
       store.account.assets.map(async (a) => {
         if (a.amount > 0) {
@@ -287,9 +305,6 @@ watch(
   },
   { immediate: true }
 );
-
-const assets = ref<modelsv2.Asset[]>([]);
-const asset = ref<modelsv2.Asset>();
 
 function itemProps(item: modelsv2.Asset) {
   return {
@@ -367,7 +382,16 @@ async function compose() {
           closeRemainderTo: closeRemainderTo.value,
           revocationTarget: revocationTarget.value,
         });
-        break;
+        const rawInfo = await Algo.algod.accountInformation(to.value).do();
+        const toInfo = modelsv2.Account.from_obj_for_encoding(rawInfo);
+        const receiverOptedIn = toInfo.assets?.some(
+          (a) => a.assetId === asset.value!.index
+        );
+        if (!receiverOptedIn) {
+          showInboxWarning.value = true;
+          store.overlay = false;
+          return;
+        }
       case "Key Registration": {
         part.value.from = activeAccount.value!.address;
         const obj = {
@@ -410,6 +434,100 @@ async function offline() {
     });
     atc.addTransaction({ txn, signer: transactionSigner });
     await execAtc(atc, "Successfuly Offline");
+  } catch (err: any) {
+    console.error(err);
+    store.setSnackbar(err.message, "error");
+  }
+  store.overlay = false;
+}
+
+async function arc59SendAsset() {
+  try {
+    store.overlay = true;
+    showInboxWarning.value = false;
+    if (!store.account) throw Error("Invalid Account");
+    if (!asset.value) throw Error("Invalid Asset");
+    const suggestedParams = await Algo.algod.getTransactionParams().do();
+    const sender = { addr: store.account.address, signer: transactionSigner };
+    const appClient = new Arc59Client(
+      { sender, resolveBy: "id", id: store.network.inboxRouter },
+      Algo.algod
+    );
+    const simSender = {
+      addr: store.account.address,
+      signer: algosdk.makeEmptyTransactionSigner(),
+    };
+    const simParams = {
+      allowEmptySignatures: true,
+      allowUnnamedResources: true,
+    };
+    const [
+      itxns,
+      mbr,
+      routerOptedIn,
+      _receiverOptedIn,
+      receiverAlgoNeededForClaim,
+    ] = (
+      await appClient
+        .compose()
+        .arc59GetSendAssetInfo(
+          { asset: asset.value.index, receiver: to.value },
+          { sender: simSender }
+        )
+        .simulate(simParams)
+    ).returns[0];
+    const composer = appClient.compose();
+    const appAddr = (await appClient.appClient.getAppReference()).appAddress;
+    const enc = new TextEncoder();
+    const note64 = note.value ? enc.encode(note.value) : undefined;
+    const axfer = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+      assetIndex: Number(asset.value.index),
+      to: appAddr,
+      from: store.account.address,
+      note: note64,
+      suggestedParams,
+      amount: amount.value * 10 ** Number(asset.value.params.decimals),
+      closeRemainderTo: closeRemainderTo.value,
+      revocationTarget: revocationTarget.value,
+    });
+    // If the MBR is non-zero, send the MBR to the router
+    if (mbr || receiverAlgoNeededForClaim) {
+      const mbrPayment = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+        to: appAddr,
+        from: store.account.address,
+        suggestedParams,
+        amount: Number(mbr + receiverAlgoNeededForClaim),
+      });
+      composer.addTransaction({ txn: mbrPayment, signer: transactionSigner });
+    }
+    // If the router is not opted in, add a call to arc59OptRouterIn to do so
+    if (!routerOptedIn) composer.arc59OptRouterIn({ asa: asset.value.index });
+    // The transfer of the asset to the router
+    axfer.to = algosdk.decodeAddress(appAddr);
+    // An extra itxn is if we are also sending ALGO for the receiver claim
+    const totalItxns = itxns + (receiverAlgoNeededForClaim === 0n ? 0n : 1n);
+    const fee = (
+      algosdk.ALGORAND_MIN_TX_FEE * Number(totalItxns + 1n)
+    ).microAlgos();
+    const boxes = [algosdk.decodeAddress(to.value).publicKey];
+    const inboxAddress = (
+      await appClient
+        .compose()
+        .arc59GetInbox({ receiver: to.value }, { sender: simSender })
+        .simulate(simParams)
+    ).returns[0];
+    const accounts = [to.value, inboxAddress];
+    const assets = [Number(asset.value.index)];
+    composer.arc59SendAsset(
+      {
+        axfer,
+        receiver: to.value,
+        additionalReceiverFunds: receiverAlgoNeededForClaim,
+      },
+      { sendParams: { fee }, boxes, accounts, assets }
+    );
+    await execAtc(await composer.atc(), "Success");
+    form.value.reset();
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");

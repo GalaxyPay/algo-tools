@@ -22,6 +22,7 @@ declare module 'vue-router/auto-routes' {
     '/badge': RouteRecordInfo<'/badge', '/badge', Record<never, never>, Record<never, never>>,
     '/burn': RouteRecordInfo<'/burn', '/burn', Record<never, never>, Record<never, never>>,
     '/compose': RouteRecordInfo<'/compose', '/compose', Record<never, never>, Record<never, never>>,
+    '/inbox': RouteRecordInfo<'/inbox', '/inbox', Record<never, never>, Record<never, never>>,
     '/optout': RouteRecordInfo<'/optout', '/optout', Record<never, never>, Record<never, never>>,
     '/partkey': RouteRecordInfo<'/partkey', '/partkey', Record<never, never>, Record<never, never>>,
     '/vanity': RouteRecordInfo<'/vanity', '/vanity', Record<never, never>, Record<never, never>>,
