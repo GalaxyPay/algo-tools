@@ -49,14 +49,11 @@ async function getInbox() {
   inboxInfo.value = modelsv2.Account.from_obj_for_encoding(info);
 }
 
-onMounted(async () => {
-  await getInbox();
-});
-
 watch(
   () => store.refresh,
   () => {
     getInbox();
-  }
+  },
+  { immediate: true }
 );
 </script>
