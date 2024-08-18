@@ -17,19 +17,24 @@
                 @click="exploreAsset()"
               />
               <v-spacer />
-              <v-icon
-                :icon="mdiCheck"
-                color="success"
-                size="small"
-                class="mr-2"
-                @click="claim()"
-              />
-              <v-icon
-                :icon="mdiClose"
-                color="error"
-                size="small"
-                @click="reject()"
-              />
+              <span class="mr-2">
+                <v-icon
+                  :icon="mdiCheck"
+                  color="success"
+                  size="small"
+                  @click="claim()"
+                />
+                <v-tooltip activator="parent" text="Claim" location="top" />
+              </span>
+              <span>
+                <v-icon
+                  :icon="mdiClose"
+                  color="error"
+                  size="small"
+                  @click="reject()"
+                />
+                <v-tooltip activator="parent" text="Reject" location="top" />
+              </span>
             </v-row>
             <v-row class="text-caption">
               {{ formatAmount() }}
