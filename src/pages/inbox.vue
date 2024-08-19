@@ -40,7 +40,7 @@
               <v-col> OR </v-col>
               <v-col>
                 <v-text-field
-                  v-model="store.network.inboxRouter"
+                  v-model.number="store.network.inboxRouter"
                   label="Existing App ID"
                   hide-details
                   :append-inner-icon="mdiContentSave"
@@ -111,6 +111,7 @@ async function createRouter() {
 async function setRouter() {
   await set("network", JSON.parse(JSON.stringify(store.network)));
   store.refresh++;
+  store.setSnackbar("Router ID Set", "success", 2000);
 }
 
 watch(
