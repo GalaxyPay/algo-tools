@@ -38,7 +38,7 @@
     <span
       class="text-vuet text-h5 ml-3 pt-2"
       style="cursor: pointer"
-      @click="$router.push('/')"
+      @click="router.push('/')"
     >
       <algo-icon color="currentColor" :width="30" />lgoTools
     </span>
@@ -179,6 +179,7 @@ import { useDisplay } from "vuetify";
 
 const store = useAppStore();
 const { smAndUp } = useDisplay();
+const router = useRouter();
 const drawer = ref(false);
 const showCustomNode = ref(false);
 const { activeAccount, activeWallet, wallets, setActiveNetwork } = useWallet();
