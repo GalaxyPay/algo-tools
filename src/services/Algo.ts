@@ -1,4 +1,4 @@
-import { Algodv2, Indexer } from "algosdk";
+import { Algodv2, Indexer, IntDecoding, parseJSON } from "algosdk";
 
 const Algo = {
   get algod() {
@@ -25,8 +25,9 @@ export async function getParams() {
 
 export async function getNetwork(token: string, url: string, port: string) {
   const tempClient = new Algodv2(token, url, port);
-  const genesisRaw = await tempClient.genesis().doRaw();
-  const genesis = JSON.parse(Buffer.from(genesisRaw).toString());
+  const genesis = parseJSON(await tempClient.genesis().do(), {
+    intDecoding: IntDecoding.MIXED,
+  });
   return genesis.network as string;
 }
 

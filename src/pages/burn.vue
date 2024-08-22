@@ -123,7 +123,7 @@ import burnTeal from "@/teal/burn.teal?raw";
 import { execAtc } from "@/utils";
 import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import algosdk from "algosdk";
+import algosdk, { IntDecoding, parseJSON, stringifyJSON } from "algosdk";
 
 const store = useAppStore();
 const { activeAccount, transactionSigner } = useWallet();
@@ -153,7 +153,9 @@ const needFunding = computed(
 const required = (v: number) => closeout.value || !!v || v === 0 || "Required";
 
 async function getAssets() {
-  const account = JSON.parse(JSON.stringify(store.account));
+  const account = parseJSON(stringifyJSON(store.account), {
+    intDecoding: IntDecoding.MIXED,
+  });
 
   if (!account) throw Error("Invalid Account");
   if (!account.assets) return;

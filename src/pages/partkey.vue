@@ -148,7 +148,7 @@ import {
   mdiPlus,
 } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import algosdk, { modelsv2 } from "algosdk";
+import algosdk, { decodeJSON, modelsv2, stringifyJSON } from "algosdk";
 
 const store = useAppStore();
 const { activeAccount, transactionSigner } = useWallet();
@@ -221,10 +221,7 @@ async function getKeys() {
       .filter((p: any) => p.address === addr)
       .map((p: any) => ({
         ...p,
-        key: algosdk.decodeJSON(
-          algosdk.stringifyJSON(p.key),
-          modelsv2.AccountParticipation
-        ),
+        key: decodeJSON(stringifyJSON(p.key), modelsv2.AccountParticipation),
       }))
       .sort((a: any, b: any) => b.key.voteLastValid - a.key.voteLastValid);
   } else {
