@@ -123,7 +123,7 @@ import burnTeal from "@/teal/burn.teal?raw";
 import { execAtc } from "@/utils";
 import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import algosdk, { modelsv2 } from "algosdk";
+import algosdk from "algosdk";
 
 const store = useAppStore();
 const { activeAccount, transactionSigner } = useWallet();
@@ -166,8 +166,7 @@ async function getAssets() {
         params = ca.params;
       } else {
         try {
-          const asset = await Algo.algod.getAssetByID(id).do();
-          const assetInfo = modelsv2.Asset.from_obj_for_encoding(asset);
+          const assetInfo = await Algo.algod.getAssetByID(id).do();
           params = assetInfo.params;
         } catch (err: any) {
           console.error(err);
@@ -187,8 +186,7 @@ const lsigInfo = ref();
 
 async function getLsig() {
   lsig.value = await Algo.algod.compile(burnTeal).do();
-  const info = await Algo.algod.accountInformation(lsig.value.hash).do();
-  lsigInfo.value = modelsv2.Account.from_obj_for_encoding(info);
+  lsigInfo.value = await Algo.algod.accountInformation(lsig.value.hash).do();
 }
 
 onMounted(async () => {
@@ -206,11 +204,11 @@ async function burn() {
 
     if (!opted.value && needFunding.value) {
       suggestedParams.flatFee = true;
-      suggestedParams.fee = algosdk.ALGORAND_MIN_TX_FEE * 2;
+      suggestedParams.fee = suggestedParams.minFee * 2n;
 
       const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        to: lsig.value.hash,
-        from: activeAccount.value!.address,
+        receiver: lsig.value.hash,
+        sender: activeAccount.value!.address,
         suggestedParams,
         amount: 100000,
       });
@@ -219,14 +217,14 @@ async function burn() {
 
     if (!opted.value) {
       suggestedParams.flatFee = true;
-      suggestedParams.fee = 0;
+      suggestedParams.fee = 0n;
       const lsigAcct = new algosdk.LogicSigAccount(
         new Uint8Array(Buffer.from(lsig.value.result, "base64"))
       );
       const lsigSigner = algosdk.makeLogicSigAccountTransactionSigner(lsigAcct);
       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: lsig.value.hash,
-        to: lsig.value.hash,
+        sender: lsig.value.hash,
+        receiver: lsig.value.hash,
         suggestedParams,
         assetIndex: assetId.value,
         amount: 0,
@@ -235,12 +233,12 @@ async function burn() {
     }
 
     suggestedParams.flatFee = true;
-    suggestedParams.fee = algosdk.ALGORAND_MIN_TX_FEE;
+    suggestedParams.fee = suggestedParams.minFee;
 
     if (amount.value || closeout.value) {
       const burnObj: any = {
-        from: activeAccount.value!.address,
-        to: lsig.value.hash,
+        sender: activeAccount.value!.address,
+        receiver: lsig.value.hash,
         suggestedParams,
         assetIndex: assetId.value,
         amount: amount.value * 10 ** asset.value.params.decimals || 0,

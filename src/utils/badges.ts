@@ -1,7 +1,6 @@
 import { Badge } from "@/types";
 import { fetchAsync, ipfs2http } from ".";
 import { getAssetInfo } from "./assetInfo";
-import { modelsv2 } from "algosdk";
 
 async function getGov(slug: string, addr: string) {
   const url = `https://governance.algorand.foundation/api/periods/${slug}/governors/${addr}`;
@@ -58,7 +57,7 @@ export async function getBadges() {
         if (tier) {
           if (
             !store.account?.assets?.some(
-              (a) => a.amount && a.assetId === ba[tier]
+              (a) => a.amount && Number(a.assetId) === ba[tier]
             )
           )
             assets.push(ba[tier]);
@@ -68,12 +67,11 @@ export async function getBadges() {
   );
   await Promise.all(
     assets.map(async (id) => {
-      const resp = await getAssetInfo(id);
-      if (!resp) throw Error("Invalid Badge Asset");
-      let badge = modelsv2.Asset.from_obj_for_encoding(resp) as Badge;
-      if (!badge.params.url) throw Error("Invalid Badge URL");
-      const arc3 = await getIpfsJson(badge.params.url);
-      badge = { ...badge, ...arc3 };
+      let assetInfo = await getAssetInfo(id);
+      if (!assetInfo) throw Error("Invalid Badge Asset");
+      if (!assetInfo.params.url) throw Error("Invalid Badge URL");
+      const arc3 = await getIpfsJson(assetInfo.params.url);
+      const badge = { ...assetInfo, ...arc3 };
       const addrs = await fetchAsync(LUTE_DATA + arc3.properties.addrs);
       badge.addrs = addrs;
       badges.push(badge);

@@ -180,13 +180,13 @@ async function buy(item: ForSale) {
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await getParams();
     const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      from: activeAccount.value!.address,
+      sender: activeAccount.value!.address,
       suggestedParams,
-      to: item.vanity.owner,
+      receiver: item.vanity.owner,
       amount: item.vanity.price,
     });
     const txnWithSigner = { txn: payTxn, signer: transactionSigner };
-    suggestedParams.fee = algosdk.ALGORAND_MIN_TX_FEE * 2;
+    suggestedParams.fee = suggestedParams.minFee * 2n;
     suggestedParams.flatFee = true;
     const method = vanityAbi.methods.find((m) => m.name == "purchase");
     if (!method) throw Error("Invalid Method");
@@ -215,7 +215,7 @@ async function rescind(item: ForSale) {
     store.overlay = true;
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await getParams();
-    suggestedParams.fee = algosdk.ALGORAND_MIN_TX_FEE * 3;
+    suggestedParams.fee = suggestedParams.minFee * 3n;
     suggestedParams.flatFee = true;
     const method = vanityAbi.methods.find((m) => m.name == "rescind");
     if (!method) throw Error("Invalid Method");
@@ -248,32 +248,33 @@ async function getForSale() {
     .searchAccounts()
     .authAddr(appAddr)
     .do();
-  const typedAccounts: indexerModels.Account[] = accounts.map((a: any) =>
-    indexerModels.Account.from_obj_for_encoding(a)
-  );
-  const mapVanity: ForSale[] = typedAccounts.map((a) => {
+
+  const mapVanity: ForSale[] = accounts.map((a) => {
     const kv = a.appsLocalState?.find(
-      (s) => s.id == store.network.vanityId
+      (s) => Number(s.id) === store.network.vanityId
     )?.keyValue;
     if (!kv) return a;
     const fs: ForSale = a;
     fs.vanity = {
       owner: algosdk.encodeAddress(
-        Buffer.from(
-          kv.find((kv) => kv.key == "b3duZXI=")!.value.bytes,
-          "base64"
-        )
+        kv.find((kv) => kv.key === Buffer.from("b3duZXI=", "base64"))!.value
+          .bytes
       ),
-      price: Number(kv.find((kv) => kv.key == "cHJpY2U=")!.value.uint),
+      price: Number(
+        kv.find((kv) => kv.key === Buffer.from("cHJpY2U=", "base64"))!.value
+          .uint
+      ),
       key: algosdk.mnemonicToSecretKey(
         algosdk.secretKeyToMnemonic(
-          Buffer.from(kv.find((kv) => kv.key == "a2V5")!.value.bytes, "base64")
+          kv.find((kv) => kv.key === Buffer.from("a2V5", "base64"))!.value.bytes
         )
       ),
     };
     return fs;
   });
-  forSale.value = mapVanity.filter((a) => a.address == a.vanity?.key.addr);
+  forSale.value = mapVanity.filter(
+    (a) => a.address === a.vanity?.key.addr.toString()
+  );
   loading.value = false;
 }
 

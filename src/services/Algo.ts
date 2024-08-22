@@ -25,7 +25,8 @@ export async function getParams() {
 
 export async function getNetwork(token: string, url: string, port: string) {
   const tempClient = new Algodv2(token, url, port);
-  const genesis = await tempClient.genesis().do();
+  const genesisRaw = await tempClient.genesis().doRaw();
+  const genesis = JSON.parse(Buffer.from(genesisRaw).toString());
   return genesis.network as string;
 }
 

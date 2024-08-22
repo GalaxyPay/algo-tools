@@ -65,11 +65,11 @@ async function claim() {
     );
     const composer = appClient.compose();
     const suggestedParams = await Algo.algod.getTransactionParams().do();
-    if (!store.account.assets?.some((a) => a.assetId === assetId)) {
+    if (!store.account.assets?.some((a) => Number(a.assetId) === assetId)) {
       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         assetIndex: assetId,
-        to: sender.addr,
-        from: sender.addr,
+        receiver: sender.addr,
+        sender: sender.addr,
         suggestedParams,
         amount: 0,
       });

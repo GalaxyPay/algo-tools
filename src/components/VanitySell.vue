@@ -49,7 +49,7 @@ import { vanityAbi } from "@/data";
 import Algo, { getParams } from "@/services/Algo";
 import { delay, execAtc } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import algosdk, { modelsv2 } from "algosdk";
+import algosdk from "algosdk";
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
@@ -100,35 +100,32 @@ async function sell() {
   try {
     if (!m2a.value) throw Error("Invalid Account");
     store.overlay = true;
-    const resp = await Algo.algod.accountInformation(m2a.value.addr).do();
-
-    const vanityInfo = modelsv2.Account.from_obj_for_encoding(resp);
-
+    const vanityInfo = await Algo.algod.accountInformation(m2a.value.addr).do();
     const atc = new algosdk.AtomicTransactionComposer();
-    const sp = await getParams();
+    const suggestedParams = await getParams();
 
-    sp.fee = algosdk.ALGORAND_MIN_TX_FEE * 2;
-    sp.flatFee = true;
+    suggestedParams.fee = suggestedParams.minFee * 2n;
+    suggestedParams.flatFee = true;
     const appAddr = algosdk.getApplicationAddress(store.network.vanityId);
     const price = vanity.value.price! * 10 ** 6;
     const tax = Math.floor(price / 20);
 
     const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      from: activeAccount.value!.address,
-      suggestedParams: sp,
-      to: appAddr,
+      sender: activeAccount.value!.address,
+      suggestedParams,
+      receiver: appAddr,
       amount: tax,
     });
 
     const txnWithSigner = { txn: payTxn, signer: transactionSigner };
     const key = m2a.value.sk.slice(0, 32);
     const optedIn = vanityInfo.appsLocalState?.some(
-      (s) => s.id == store.network.vanityId
+      (s) => Number(s.id) === store.network.vanityId
     );
     const optinOrNoop = optedIn
       ? algosdk.OnApplicationComplete.NoOpOC
       : algosdk.OnApplicationComplete.OptInOC;
-    sp.fee = 0;
+    suggestedParams.fee = 0n;
     const method = vanityAbi.methods.find((m) => m.name == "post");
     if (!method) throw Error("Invalid Method");
     atc.addMethodCall({
@@ -136,7 +133,7 @@ async function sell() {
       sender: m2a.value.addr,
       method,
       methodArgs: [txnWithSigner, activeAccount.value!.address, price, key],
-      suggestedParams: sp,
+      suggestedParams,
       rekeyTo: appAddr,
       onComplete: optinOrNoop,
       signer: transactionSigner,

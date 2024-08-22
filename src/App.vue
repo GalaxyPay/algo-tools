@@ -11,7 +11,6 @@
 <script lang="ts" setup>
 import Algo from "@/services/Algo";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import { modelsv2 } from "algosdk";
 import { fetchAsync } from "./utils";
 
 const store = useAppStore();
@@ -22,10 +21,9 @@ async function refresh() {
   try {
     store.loading++;
     if (activeAccount.value?.address) {
-      const account = await Algo.algod
+      store.account = await Algo.algod
         .accountInformation(activeAccount.value.address)
         .do();
-      store.account = modelsv2.Account.from_obj_for_encoding(account);
     } else {
       store.account = undefined;
       router.push("/");

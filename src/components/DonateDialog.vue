@@ -53,8 +53,8 @@ async function donate() {
     const note64 = note.value ? enc.encode(note.value) : undefined;
     const microAlgo = amount.value * 10 ** 6;
     const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      to: "TOOLSGOIPA6BC2JHR4QZYWNYJQRKLTA7NQ44EDRUQCR2R26Y4Y5OAIE6MM",
-      from: activeAccount.value!.address,
+      receiver: "TOOLSGOIPA6BC2JHR4QZYWNYJQRKLTA7NQ44EDRUQCR2R26Y4Y5OAIE6MM",
+      sender: activeAccount.value!.address,
       note: note64,
       suggestedParams,
       amount: microAlgo,

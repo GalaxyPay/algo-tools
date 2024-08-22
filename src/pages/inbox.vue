@@ -85,8 +85,7 @@ async function getInbox() {
   } catch {
     return;
   }
-  const info = await Algo.algod.accountInformation(inbox).do();
-  inboxInfo.value = modelsv2.Account.from_obj_for_encoding(info);
+  inboxInfo.value = await Algo.algod.accountInformation(inbox).do();
 }
 
 async function createRouter() {

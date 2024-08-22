@@ -78,8 +78,8 @@
           />
           <v-checkbox-btn
             v-if="txnType.fields.includes('revoke')"
-            v-model="showRevocationTarget"
-            @update:model-value="revocationTarget = undefined"
+            v-model="showAssetSender"
+            @update:model-value="assetSender = undefined"
           >
             <template #label>
               Revocation Target
@@ -95,8 +95,8 @@
             </template>
           </v-checkbox-btn>
           <v-text-field
-            v-if="showRevocationTarget"
-            v-model="revocationTarget"
+            v-if="showAssetSender"
+            v-model="assetSender"
             label="Revocation Target"
             :rules="[validAddress]"
           />
@@ -226,8 +226,8 @@ const showNote = ref(false);
 const rekeyTo = ref();
 const closeRemainderTo = ref();
 const showCloseRemainderTo = ref(false);
-const revocationTarget = ref();
-const showRevocationTarget = ref(false);
+const assetSender = ref();
+const showAssetSender = ref(false);
 const form = ref();
 const txnTypes = ref([
   { title: "Payment", type: "pay", fields: ["to", "amount", "note", "close"] },
@@ -352,8 +352,8 @@ async function compose() {
     switch (txnType.value.title) {
       case "Payment":
         txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-          to: to.value,
-          from: activeAccount.value!.address,
+          receiver: to.value,
+          sender: activeAccount.value!.address,
           note: note64,
           suggestedParams,
           amount: amount.value * 10 ** 6,
@@ -362,8 +362,8 @@ async function compose() {
         break;
       case "Rekey":
         txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-          to: activeAccount.value!.address,
-          from: activeAccount.value!.address,
+          receiver: activeAccount.value!.address,
+          sender: activeAccount.value!.address,
           note: note64,
           suggestedParams,
           amount: 0,
@@ -374,16 +374,15 @@ async function compose() {
         if (!asset.value) throw Error("Invalid Asset");
         txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           assetIndex: Number(asset.value.index),
-          to: to.value,
-          from: activeAccount.value!.address,
+          receiver: to.value,
+          sender: activeAccount.value!.address,
           note: note64,
           suggestedParams,
           amount: amount.value * 10 ** Number(asset.value.params.decimals),
           closeRemainderTo: closeRemainderTo.value,
-          revocationTarget: revocationTarget.value,
+          assetSender: assetSender.value,
         });
-        const rawInfo = await Algo.algod.accountInformation(to.value).do();
-        const toInfo = modelsv2.Account.from_obj_for_encoding(rawInfo);
+        const toInfo = await Algo.algod.accountInformation(to.value).do();
         const receiverOptedIn = toInfo.assets?.some(
           (a) => a.assetId === asset.value!.index
         );
@@ -415,11 +414,15 @@ async function compose() {
 
 async function calcAvgBlockTime() {
   const status = await Algo.algod.status().do();
-  lastRound.value = status["last-round"];
+  lastRound.value = status.lastRound;
   const currentRound = await Algo.algod.block(lastRound.value).do();
   const oldRound = await Algo.algod.block(lastRound.value - 100).do();
   avgBlockTime.value =
-    Math.floor(currentRound.block.ts - oldRound.block.ts) * 10;
+    Math.floor(
+      Number(
+        currentRound.block.header.timestamp - oldRound.block.header.timestamp
+      )
+    ) * 10;
 }
 
 async function offline() {
@@ -428,7 +431,7 @@ async function offline() {
     const suggestedParams = await getParams();
     const atc = new algosdk.AtomicTransactionComposer();
     const txn = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject({
-      from: activeAccount.value!.address,
+      sender: activeAccount.value!.address,
       suggestedParams,
       nonParticipation: false,
     });
@@ -481,21 +484,22 @@ async function arc59SendAsset() {
     const appAddr = (await appClient.appClient.getAppReference()).appAddress;
     const enc = new TextEncoder();
     const note64 = note.value ? enc.encode(note.value) : undefined;
-    const axfer = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-      assetIndex: Number(asset.value.index),
-      to: appAddr,
-      from: store.account.address,
-      note: note64,
-      suggestedParams,
-      amount: amount.value * 10 ** Number(asset.value.params.decimals),
-      closeRemainderTo: closeRemainderTo.value,
-      revocationTarget: revocationTarget.value,
-    });
+    const axfer: algosdk.Transaction =
+      algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+        assetIndex: Number(asset.value.index),
+        receiver: appAddr,
+        sender: store.account.address,
+        note: note64,
+        suggestedParams,
+        amount: amount.value * 10 ** Number(asset.value.params.decimals),
+        closeRemainderTo: closeRemainderTo.value,
+        assetSender: assetSender.value,
+      });
     // If the MBR is non-zero, send the MBR to the router
     if (mbr || receiverAlgoNeededForClaim) {
       const mbrPayment = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        to: appAddr,
-        from: store.account.address,
+        receiver: appAddr,
+        sender: store.account.address,
         suggestedParams,
         amount: Number(mbr + receiverAlgoNeededForClaim),
       });
@@ -503,13 +507,9 @@ async function arc59SendAsset() {
     }
     // If the router is not opted in, add a call to arc59OptRouterIn to do so
     if (!routerOptedIn) composer.arc59OptRouterIn({ asa: asset.value.index });
-    // The transfer of the asset to the router
-    axfer.to = algosdk.decodeAddress(appAddr);
     // An extra itxn is if we are also sending ALGO for the receiver claim
     const totalItxns = itxns + (receiverAlgoNeededForClaim === 0n ? 0n : 1n);
-    const fee = (
-      algosdk.ALGORAND_MIN_TX_FEE * Number(totalItxns + 1n)
-    ).microAlgos();
+    const fee = Number(suggestedParams.minFee * (totalItxns + 1n)).microAlgos();
     const boxes = [algosdk.decodeAddress(to.value).publicKey];
     const inboxAddress = (
       await appClient

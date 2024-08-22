@@ -154,7 +154,7 @@ async function destroy() {
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await getParams();
     const txn = algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
-      from: activeAccount.value!.address,
+      sender: activeAccount.value!.address,
       suggestedParams,
       assetIndex: Number(props.asset.assetId),
     });
@@ -185,8 +185,8 @@ async function closeOut() {
     let txn;
     if (props.asset.assetId) {
       txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: activeAccount.value!.address,
-        to: activeAccount.value!.address,
+        sender: activeAccount.value!.address,
+        receiver: activeAccount.value!.address,
         closeRemainderTo: receiver.value,
         amount: 0,
         assetIndex: Number(props.asset.assetId),
@@ -194,8 +194,8 @@ async function closeOut() {
       });
     } else {
       txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: activeAccount.value!.address,
-        to: activeAccount.value!.address,
+        sender: activeAccount.value!.address,
+        receiver: activeAccount.value!.address,
         closeRemainderTo: receiver.value,
         amount: 0,
         suggestedParams,

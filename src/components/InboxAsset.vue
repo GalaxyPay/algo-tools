@@ -120,18 +120,18 @@ async function claim() {
       composer.arc59ClaimAlgo({}, { sendParams: { fee: (0).microAlgos() } });
     }
     // If the claimer hasn't already opted in, add a transaction to do so
+    const suggestedParams = await getParams();
     if (!claimerOptedIn) {
-      const suggestedParams = await getParams();
       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: claimer!,
-        to: claimer!,
+        sender: claimer!,
+        receiver: claimer!,
         amount: 0,
         assetIndex: Number(asset.assetId),
         suggestedParams,
       });
       composer.addTransaction({ txn, signer: transactionSigner });
     }
-    const fee = (algosdk.ALGORAND_MIN_TX_FEE * totalTxns).microAlgos();
+    const fee = (Number(suggestedParams.minFee) * totalTxns).microAlgos();
     const boxes = [algosdk.decodeAddress(claimer!).publicKey];
     const accounts = [props.inboxInfo.address];
     const assets = [Number(asset.assetId)];
@@ -149,7 +149,8 @@ async function reject() {
   try {
     store.overlay = true;
     const appClient = getAppClient();
-    const fee = (algosdk.ALGORAND_MIN_TX_FEE * 3).microAlgos();
+    const suggestedParams = await getParams();
+    const fee = (Number(suggestedParams.minFee) * 3).microAlgos();
     const boxes = [algosdk.decodeAddress(claimer!).publicKey];
     const accounts = [props.inboxInfo.address, assetInfo.value!.params.creator];
     const assets = [Number(asset.assetId)];
