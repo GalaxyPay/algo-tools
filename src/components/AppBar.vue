@@ -216,13 +216,18 @@ const network = computed({
 });
 
 async function walletAction(wallet: Wallet) {
-  wallet.isActive
-    ? await wallet.disconnect()
-    : wallet.isConnected
-    ? wallet.setActive()
-    : await wallet.connect();
-  store.refresh++;
-  store.connectMenu = false;
+  try {
+    wallet.isActive
+      ? await wallet.disconnect()
+      : wallet.isConnected
+      ? wallet.setActive()
+      : await wallet.connect();
+    store.refresh++;
+    store.connectMenu = false;
+  } catch (err: any) {
+    console.error(err);
+    store.setSnackbar(err.message, "error");
+  }
 }
 
 const items = computed(() => {
