@@ -392,6 +392,7 @@ async function compose() {
           store.overlay = false;
           return;
         }
+        break;
       case "Key Registration": {
         part.value.from = activeAccount.value!.address;
         const obj = {
