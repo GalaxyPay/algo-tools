@@ -13,22 +13,11 @@ import {
   WalletId,
   WalletManagerPlugin,
 } from "@txnlab/use-wallet-vue";
-import { nids } from "@/data";
 
 // Types
 import type { App } from "vue";
-import { get } from "idb-keyval";
 
-export async function registerPlugins(app: App) {
-  const network = await get("network");
-  const nid = (
-    network
-      ? nids.includes(network.networkId)
-        ? network.networkId
-        : "localnet"
-      : "mainnet"
-  ) as NetworkId;
-
+export function registerPlugins(app: App) {
   app
     .use(vuetify)
     .use(router)
@@ -42,6 +31,6 @@ export async function registerPlugins(app: App) {
         WalletId.DEFLY,
         WalletId.PERA,
       ],
-      network: nid,
+      network: NetworkId.MAINNET,
     });
 }
