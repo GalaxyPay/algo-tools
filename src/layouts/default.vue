@@ -1,12 +1,8 @@
 <template>
-  <v-app>
-    <v-main>
-      <router-view />
-      <v-overlay v-model="store.overlay" persistent />
-    </v-main>
-    <DonateDialog />
-    <Snackbar />
-  </v-app>
+  <router-view />
+  <v-overlay v-model="store.overlay" persistent />
+  <DonateDialog />
+  <Snackbar />
 </template>
 
 <script lang="ts" setup>

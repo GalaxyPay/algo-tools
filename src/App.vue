@@ -59,4 +59,7 @@ a {
 .no-uppercase {
   text-transform: unset !important;
 }
+.no-select {
+  user-select: none;
+}
 </style>
