@@ -36,7 +36,7 @@
       @click.stop="drawer = !drawer"
     />
     <span
-      class="text-vuet text-h5 ml-3 pt-2"
+      class="text-vuet text-h5 ml-3 pt-2 no-select"
       style="cursor: pointer"
       @click="router.push('/')"
     >
