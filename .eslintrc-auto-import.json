@@ -77,6 +77,10 @@
     "setActivePinia": true,
     "setMapStoreSuffix": true,
     "storeToRefs": true,
-    "useAppStore": true
+    "useAppStore": true,
+    "onWatcherCleanup": true,
+    "useId": true,
+    "useModel": true,
+    "useTemplateRef": true
   }
 }
