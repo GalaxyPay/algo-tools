@@ -36,7 +36,7 @@
       @click.stop="drawer = !drawer"
     />
     <span
-      class="text-vuet text-h5 ml-3 pt-2"
+      class="text-vuet text-h5 ml-3 pt-2 no-select"
       style="cursor: pointer"
       @click="router.push('/')"
     >
@@ -216,13 +216,18 @@ const network = computed({
 });
 
 async function walletAction(wallet: Wallet) {
-  wallet.isActive
-    ? await wallet.disconnect()
-    : wallet.isConnected
-    ? wallet.setActive()
-    : await wallet.connect();
-  store.refresh++;
-  store.connectMenu = false;
+  try {
+    wallet.isActive
+      ? await wallet.disconnect()
+      : wallet.isConnected
+      ? wallet.setActive()
+      : await wallet.connect();
+    store.refresh++;
+    store.connectMenu = false;
+  } catch (err: any) {
+    console.error(err);
+    store.setSnackbar(err.message, "error");
+  }
 }
 
 const items = computed(() => {

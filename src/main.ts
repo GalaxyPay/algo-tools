@@ -15,9 +15,6 @@ import { createApp } from "vue";
 
 const app = createApp(App);
 
-async function initApp() {
-  await registerPlugins(app);
-  app.mount("#app");
-}
+registerPlugins(app);
 
-initApp();
+app.mount("#app");
