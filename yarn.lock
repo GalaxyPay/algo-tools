@@ -1559,7 +1559,7 @@ __metadata:
     eslint-plugin-promise: ^6.2.0
     eslint-plugin-vue: ^9.28.0
     idb-keyval: ^6.2.1
-    lute-connect: beta
+    lute-connect: ^1.4.0
     merkletreejs: ^0.4.0
     multiformats: ^13.3.0
     pinia: ^2.2.2
@@ -4150,10 +4150,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lute-connect@npm:beta":
-  version: 1.4.0-beta.1
-  resolution: "lute-connect@npm:1.4.0-beta.1"
-  checksum: 8413c61f07ed3d800232138a64945870a83007526ea481c5243e91e7123dee3f56ca720fcdfe72a6cd9233dfab71ed94d4ca2c5ade453ab23c1f1209cfeb4bed
+"lute-connect@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "lute-connect@npm:1.4.0"
+  checksum: ef6b7a2ef112083d8279df8f077ae53b87191a68da7ac0947e756b69c89fff3f9fe6ed8eef7b755a6814e3a832e39e8de222dafbff093d8483c89354ea0b308c
   languageName: node
   linkType: hard
 
