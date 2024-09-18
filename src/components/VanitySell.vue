@@ -99,6 +99,7 @@ async function sell() {
   if (!valid) return;
   try {
     if (!m2a.value) throw Error("Invalid Account");
+    if (!store.network.vanityId) throw Error("Network not supported");
     store.overlay = true;
     const resp = await Algo.algod.accountInformation(m2a.value.addr).do();
 

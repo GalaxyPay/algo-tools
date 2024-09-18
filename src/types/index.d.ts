@@ -13,7 +13,7 @@ export interface Network {
   indexer: Node;
   networkId: string;
   explorer: string;
-  vanityId: number;
+  vanityId?: number;
   inboxRouter?: number;
 }
 
