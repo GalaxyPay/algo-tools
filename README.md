@@ -21,17 +21,17 @@ AlgoTools is provided as utility to help users take administrative action on the
 ## Project setup
 
 ```
-yarn
+pnpm i
 ```
 
 ### Compiles and hot-reloads for development
 
 ```
-yarn dev
+pnpm dev
 ```
 
 ### Compiles and minifies for production
 
 ```
-yarn build
+pnpm build
 ```

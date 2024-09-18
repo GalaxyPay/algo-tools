@@ -72,4 +72,8 @@ export default defineConfig({
   server: {
     port: 3030,
   },
+  optimizeDeps: {
+    include: ["@algorandfoundation/algokit-utils", "merkletreejs"],
+    exclude: ["lute-connect", "vuetify"],
+  },
 });

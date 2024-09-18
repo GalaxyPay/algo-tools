@@ -45,7 +45,21 @@
       "port": "8980",
       "token": ""
     },
-    "explorer": "https://local.blockpack.app/#/explorer",
-    "vanityId": 1001
+    "explorer": "https://local.blockpack.app/#/explorer"
+  },
+  {
+    "name": "Voi MainNet",
+    "algod": {
+      "url": "https://mainnet-api.voi.nodely.dev",
+      "port": "",
+      "token": ""
+    },
+    "indexer": {
+      "url": "https://mainnet-idx.voi.nodely.dev",
+      "port": "",
+      "token": ""
+    },
+    "networkId": "voimain",
+    "explorer": "https://voimain.blockpack.app/#/explorer"
   }
 ]

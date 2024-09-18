@@ -218,7 +218,7 @@ async function getKeys() {
     const data = await response.json();
     const addr = altAddr.value || activeAccount.value!.address;
     keys.value = data
-      .filter((p: any) => p.address === addr)
+      ?.filter((p: any) => p.address === addr)
       .map((p: any) => ({
         ...p,
         key: modelsv2.AccountParticipation.from_obj_for_encoding(p.key),
