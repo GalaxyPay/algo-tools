@@ -1,6 +1,6 @@
 {
   "name": "algo-tools",
-  "version": "4.6.0",
+  "version": "4.6.1",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
@@ -16,7 +16,7 @@
     "algosdk": "^2.9.0",
     "core-js": "^3.38.1",
     "idb-keyval": "^6.2.1",
-    "lute-connect": "^1.4.0",
+    "lute-connect": "^1.4.1",
     "merkletreejs": "^0.4.0",
     "multiformats": "^13.3.0",
     "roboto-fontface": "^0.10.0",

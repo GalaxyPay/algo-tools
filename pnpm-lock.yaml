@@ -22,7 +22,7 @@ importers:
         version: 1.3.4(algosdk@2.9.0)
       '@txnlab/use-wallet-vue':
         specifier: ^3.1.6
-        version: 3.4.0(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.4(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.0)(vue@3.5.6(typescript@5.6.2))
+        version: 3.4.0(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.4(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)(vue@3.5.6(typescript@5.6.2))
       algosdk:
         specifier: ^2.9.0
         version: 2.9.0
@@ -33,8 +33,8 @@ importers:
         specifier: ^6.2.1
         version: 6.2.1
       lute-connect:
-        specifier: ^1.4.0
-        version: 1.4.0
+        specifier: ^1.4.1
+        version: 1.4.1
       merkletreejs:
         specifier: ^0.4.0
         version: 0.4.0
@@ -1714,8 +1714,8 @@ packages:
   lottie-web@5.12.2:
     resolution: {integrity: sha512-uvhvYPC8kGPjXT3MyKMrL3JitEAmDMp30lVkuq/590Mw9ok6pWcFCwXJveo0t5uqYw1UREQHofD+jVpdjBv8wg==}
 
-  lute-connect@1.4.0:
-    resolution: {integrity: sha512-eDhsJ5+pcyIAMEmZTii8Hmx6O2ABgMFN8Nu7hOmkaKbRiU18/Kq1SXuoQHXq8QRwMf8EJrcYNdE1zjAwEMElRw==}
+  lute-connect@1.4.1:
+    resolution: {integrity: sha512-mOiu0NzXR4Ep8w8xBBVX3naoM9/VMPudZZWrtRS6pk+g83czfzmoMwlsuzUltC/t+UrNFlSP8xKp2M9bmYtf8Q==}
 
   magic-string-ast@0.6.2:
     resolution: {integrity: sha512-oN3Bcd7ZVt+0VGEs7402qR/tjgjbM7kPlH/z7ufJnzTLVBzXJITRHOJiwMmmYMgZfdoWQsfQcY+iKlxiBppnMA==}
@@ -2817,28 +2817,28 @@ snapshots:
       vue: 3.5.6(typescript@5.6.2)
       vue-demi: 0.14.10(vue@3.5.6(typescript@5.6.2))
 
-  '@txnlab/use-wallet-vue@3.4.0(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.4(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.0)(vue@3.5.6(typescript@5.6.2))':
+  '@txnlab/use-wallet-vue@3.4.0(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.4(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)(vue@3.5.6(typescript@5.6.2))':
     dependencies:
       '@tanstack/vue-store': 0.5.5(vue@3.5.6(typescript@5.6.2))
-      '@txnlab/use-wallet': 3.4.0(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.4(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.0)
+      '@txnlab/use-wallet': 3.4.0(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.4(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)
       algosdk: 2.9.0
       vue: 3.5.6(typescript@5.6.2)
     optionalDependencies:
       '@blockshake/defly-connect': 1.1.6(algosdk@2.9.0)
       '@perawallet/connect': 1.3.4(algosdk@2.9.0)
-      lute-connect: 1.4.0
+      lute-connect: 1.4.1
     transitivePeerDependencies:
       - '@agoralabs-sh/avm-web-provider'
       - '@vue/composition-api'
 
-  '@txnlab/use-wallet@3.4.0(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.4(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.0)':
+  '@txnlab/use-wallet@3.4.0(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.4(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)':
     dependencies:
       '@tanstack/store': 0.5.5
       algosdk: 2.9.0
     optionalDependencies:
       '@blockshake/defly-connect': 1.1.6(algosdk@2.9.0)
       '@perawallet/connect': 1.3.4(algosdk@2.9.0)
-      lute-connect: 1.4.0
+      lute-connect: 1.4.1
 
   '@types/estree@1.0.5': {}
 
@@ -4263,7 +4263,7 @@ snapshots:
 
   lottie-web@5.12.2: {}
 
-  lute-connect@1.4.0: {}
+  lute-connect@1.4.1: {}
 
   magic-string-ast@0.6.2:
     dependencies:
