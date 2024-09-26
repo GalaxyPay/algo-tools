@@ -3,7 +3,7 @@
     <v-list dense nav>
       <v-list-item to="/" title="Home" :prepend-icon="mdiHome" exact />
       <v-list-item
-        v-for="tool in tools"
+        v-for="tool in tools()"
         :key="tool.title"
         :to="tool.path"
         :title="tool.title"

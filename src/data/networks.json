@@ -59,6 +59,7 @@
       "port": "",
       "token": ""
     },
+    "nftIndexer": "https://mainnet-idx.nautilus.sh/nft-indexer/v1",
     "networkId": "voimain",
     "explorer": "https://voimain.blockpack.app/#/explorer"
   }
