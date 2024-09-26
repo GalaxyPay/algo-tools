@@ -11,6 +11,7 @@ declare module 'vue' {
     AppBar: typeof import('./components/AppBar.vue')['default']
     AppCard: typeof import('./components/AppCard.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    Arc200AssetCard: typeof import('./components/Arc200AssetCard.vue')['default']
     AssetCard: typeof import('./components/AssetCard.vue')['default']
     BadgeCard: typeof import('./components/BadgeCard.vue')['default']
     CustomNode: typeof import('./components/CustomNode.vue')['default']

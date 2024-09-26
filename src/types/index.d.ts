@@ -15,6 +15,7 @@ export interface Network {
   explorer: string;
   vanityId?: number;
   inboxRouter?: number;
+  nftIndexer?: string;
 }
 
 export interface Node {

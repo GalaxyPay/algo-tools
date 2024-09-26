@@ -3,7 +3,7 @@
     <v-container>
       <v-list lines="two">
         <v-list-item
-          v-for="tool in tools"
+          v-for="tool in tools()"
           :key="tool.title"
           :to="tool.path"
           :title="tool.title"
