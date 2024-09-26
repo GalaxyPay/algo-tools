@@ -122,12 +122,8 @@ async function sendAsset() {
       Algo.indexer,
       { acc: { addr: activeAccount.value.address, sk: new Uint8Array() } }
     );
-    const sim = await contract.arc200_transfer(
-      receiver.value,
-      amount.value,
-      true,
-      true
-    );
+    const amt = BigInt(amount.value * 10 ** props.asset.params.decimals);
+    const sim = await contract.arc200_transfer(receiver.value, amt, true, true);
     if (sim.success) {
       const atc = new algosdk.AtomicTransactionComposer();
       sim.txns.forEach((txn) => {
