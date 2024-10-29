@@ -102,7 +102,7 @@ async function claim() {
       }
     );
     (await composer.atc()).buildGroup;
-    await execAtc(await composer.atc(), "Successfuly Claimed Badge");
+    await execAtc(await composer.atc(), "Successfully Claimed Badge");
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");

@@ -132,7 +132,7 @@ async function closeOut() {
         appIndex: Number(props.app.id),
       });
       atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, "Successfuly Closed Out of Application");
+      await execAtc(atc, "Successfully Closed Out of Application");
     } catch (err: any) {
       console.error(err);
       store.setSnackbar(err.message, "error");
@@ -159,7 +159,7 @@ async function clearState() {
         appIndex: Number(props.app.id),
       });
       atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, "Successfuly Cleared Application State");
+      await execAtc(atc, "Successfully Cleared Application State");
     } catch (err: any) {
       console.error(err);
       store.setSnackbar(err.message, "error");
@@ -184,7 +184,7 @@ async function deleteApp() {
         appIndex: Number(props.app.id),
       });
       atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, "Successfuly Deleted Application");
+      await execAtc(atc, "Successfully Deleted Application");
     } catch (err: any) {
       console.error(err);
       store.setSnackbar(err.message, "error");

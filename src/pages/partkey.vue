@@ -329,7 +329,7 @@ async function registerKey(item: any) {
       stateProofKey: item.key.stateProofKey,
     });
     atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, "Successfuly Registered Key");
+    await execAtc(atc, "Successfully Registered Key");
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");
@@ -349,7 +349,7 @@ async function offline() {
         nonParticipation: false,
       });
       atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, "Successfuly Offline");
+      await execAtc(atc, "Successfully Offline");
     } catch (err: any) {
       console.error(err);
       store.setSnackbar(err.message, "error");

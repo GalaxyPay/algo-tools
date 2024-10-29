@@ -137,7 +137,7 @@ async function claim() {
     const assets = [Number(asset.assetId)];
     const params = { sendParams: { fee }, boxes, accounts, assets };
     composer.arc59Claim({ asa: asset.assetId }, params);
-    await execAtc(await composer.atc(), "Successfuly Claimed Asset");
+    await execAtc(await composer.atc(), "Successfully Claimed Asset");
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");
@@ -156,7 +156,7 @@ async function reject() {
     const params = { sendParams: { fee }, boxes, accounts, assets };
     const composer = appClient.compose();
     composer.arc59Reject({ asa: asset.assetId }, params);
-    await execAtc(await composer.atc(), "Successfuly Rejected Asset");
+    await execAtc(await composer.atc(), "Successfully Rejected Asset");
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");

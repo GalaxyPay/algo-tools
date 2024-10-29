@@ -142,7 +142,7 @@ async function sell() {
       onComplete: optinOrNoop,
       signer: transactionSigner,
     });
-    await execAtc(atc, "Successfuly Listed Account");
+    await execAtc(atc, "Successfully Listed Account");
     await delay(4000);
     store.refresh++;
   } catch (err: any) {
