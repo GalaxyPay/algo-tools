@@ -463,6 +463,7 @@ async function arc59SendAsset() {
     const simParams = {
       allowEmptySignatures: true,
       allowUnnamedResources: true,
+      fixSigners: true,
     };
     const [
       itxns,
