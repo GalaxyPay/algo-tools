@@ -159,7 +159,7 @@ async function destroy() {
       assetIndex: Number(props.asset.assetId),
     });
     atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, "Successfuly Destroyed Asset");
+    await execAtc(atc, "Successfully Destroyed Asset");
   } catch (err: any) {
     console.error(err);
     let message = err.message;
@@ -202,7 +202,7 @@ async function closeOut() {
       });
     }
     atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, "Successfuly Closed Out of Asset");
+    await execAtc(atc, "Successfully Closed Out of Asset");
   } catch (err: any) {
     console.error(err);
     let message = err.message;
