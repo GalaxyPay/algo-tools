@@ -30,7 +30,7 @@
 <script lang="ts" setup>
 import { LuteGovClient } from "@/clients/LuteGovClient";
 import Algo from "@/services/Algo";
-import { Badge } from "@/types";
+import type { Badge } from "@/types";
 import { execAtc, ipfs2http } from "@/utils";
 import { getAssetInfo } from "@/utils/assetInfo";
 import { sha256 } from "@/utils/sha256";

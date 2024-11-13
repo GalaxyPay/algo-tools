@@ -39,7 +39,7 @@
 <script lang="ts" setup>
 import { networks, nids } from "@/data";
 import { getNetwork } from "@/services/Algo";
-import { Network, Node } from "@/types";
+import type { Network, Node } from "@/types";
 import { NetworkId, useWallet } from "@txnlab/use-wallet-vue";
 import { get, set } from "idb-keyval";
 

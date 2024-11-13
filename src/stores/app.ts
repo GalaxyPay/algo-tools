@@ -1,6 +1,6 @@
 // Utilities
 import { networks } from "@/data";
-import { Network, SnackBar, TinyAsset } from "@/types";
+import type { Network, SnackBar, TinyAsset } from "@/types";
 import { modelsv2 } from "algosdk";
 import { get } from "idb-keyval";
 import { defineStore } from "pinia";

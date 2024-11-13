@@ -1,5 +1,5 @@
 import Algo from "@/services/Algo";
-import { TinyAsset } from "@/types";
+import type { TinyAsset } from "@/types";
 import { modelsv2 } from "algosdk";
 import { createStore, get, set } from "idb-keyval";
 
