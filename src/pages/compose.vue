@@ -207,7 +207,7 @@
 <script lang="ts" setup>
 import { Arc59Client } from "@/clients/Arc59Client";
 import Algo, { getParams } from "@/services/Algo";
-import { KeyRegTxn } from "@/types";
+import type { KeyRegTxn } from "@/types";
 import { execAtc, getAssetInfo } from "@/utils";
 import { mdiContentPaste, mdiInformation } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";

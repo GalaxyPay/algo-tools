@@ -59,8 +59,8 @@ export function sha256(data) {
           (buf[r] << 24) | (buf[r + 1] << 16) | (buf[r + 2] << 8) | buf[r + 3];
       }
       for (let j = 16; j < 64; j++) {
-        let s0 = rrot(w[j - 15], 7) ^ rrot(w[j - 15], 18) ^ (w[j - 15] >>> 3);
-        let s1 = rrot(w[j - 2], 17) ^ rrot(w[j - 2], 19) ^ (w[j - 2] >>> 10);
+        const s0 = rrot(w[j - 15], 7) ^ rrot(w[j - 15], 18) ^ (w[j - 15] >>> 3);
+        const s1 = rrot(w[j - 2], 17) ^ rrot(w[j - 2], 19) ^ (w[j - 2] >>> 10);
         w[j] = (w[j - 16] + s0 + w[j - 7] + s1) | 0;
       }
       let a = h0,
@@ -72,7 +72,7 @@ export function sha256(data) {
         g = h6,
         h = h7;
       for (let j = 0; j < 64; j++) {
-        let S1 = rrot(e, 6) ^ rrot(e, 11) ^ rrot(e, 25),
+        const S1 = rrot(e, 6) ^ rrot(e, 11) ^ rrot(e, 25),
           ch = (e & f) ^ (~e & g),
           t1 = (h + S1 + ch + k[j] + w[j]) | 0,
           S0 = rrot(a, 2) ^ rrot(a, 13) ^ rrot(a, 22),
@@ -119,7 +119,7 @@ export function sha256(data) {
       }
       while (bp < 58) buf[bp++] = 0x00;
       // Max number of bytes is 35,184,372,088,831
-      let L = tsz * 8;
+      const L = tsz * 8;
       buf[bp++] = (L / 1099511627776) & 255;
       buf[bp++] = (L / 4294967296) & 255;
       buf[bp++] = L >>> 24;
@@ -127,7 +127,7 @@ export function sha256(data) {
       buf[bp++] = (L >>> 8) & 255;
       buf[bp++] = L & 255;
       process();
-      let reply = new Uint8Array(32);
+      const reply = new Uint8Array(32);
       reply[0] = h0 >>> 24;
       reply[1] = (h0 >>> 16) & 255;
       reply[2] = (h0 >>> 8) & 255;
@@ -181,13 +181,13 @@ export function hmac_sha256(key, message) {
         : new TextEncoder().encode(key);
   }
   if (key.length > 64) key = sha256(key);
-  let inner = new Uint8Array(64).fill(0x36);
-  let outer = new Uint8Array(64).fill(0x5c);
+  const inner = new Uint8Array(64).fill(0x36);
+  const outer = new Uint8Array(64).fill(0x5c);
   for (let i = 0; i < key.length; i++) {
     inner[i] ^= key[i];
     outer[i] ^= key[i];
   }
-  let pass1 = sha256(),
+  const pass1 = sha256(),
     pass2 = sha256();
   pass1.add(inner);
   pass1.add(message);

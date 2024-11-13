@@ -66,6 +66,7 @@ const props = defineProps({
   idx: { type: Number, required: true },
 });
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
 const asset = props.inboxInfo.assets?.[props.idx]!;
 const assetInfo = ref<modelsv2.Asset>();
 const image = ref();
@@ -108,6 +109,7 @@ function getAppClient() {
 
 async function claim() {
   try {
+    if (!store.account) throw Error("Invalid Account");
     store.overlay = true;
     const appClient = getAppClient();
     const composer = appClient.compose();
@@ -123,8 +125,8 @@ async function claim() {
     if (!claimerOptedIn) {
       const suggestedParams = await getParams();
       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: store.account?.address!,
-        to: store.account?.address!,
+        from: store.account.address,
+        to: store.account.address,
         amount: 0,
         assetIndex: Number(asset.assetId),
         suggestedParams,
