@@ -176,6 +176,7 @@ interface ForSale extends indexerModels.Account {
 async function buy(item: ForSale) {
   try {
     if (!item.vanity) throw Error("Invalid Item");
+    if (!store.network.vanityId) throw Error("Network not supported");
     store.overlay = true;
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await getParams();
@@ -199,7 +200,7 @@ async function buy(item: ForSale) {
       appAccounts: [item.address],
       signer: transactionSigner,
     });
-    await execAtc(atc, "Successfuly Purchased Account");
+    await execAtc(atc, "Successfully Purchased Account");
     mnemonic.value = algosdk.secretKeyToMnemonic(item.vanity.key.sk);
     showVanityMnemonic.value = true;
   } catch (err: any) {
@@ -212,6 +213,7 @@ async function buy(item: ForSale) {
 
 async function rescind(item: ForSale) {
   try {
+    if (!store.network.vanityId) throw Error("Network not supported");
     store.overlay = true;
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await getParams();
@@ -228,7 +230,7 @@ async function rescind(item: ForSale) {
       appAccounts: [item.address],
       signer: transactionSigner,
     });
-    await execAtc(atc, "Successfuly Unlisted Account");
+    await execAtc(atc, "Successfully Unlisted Account");
     await delay(4000);
     store.refresh++;
   } catch (err: any) {
@@ -242,39 +244,47 @@ async function rescind(item: ForSale) {
 const forSale = ref<ForSale[]>();
 const loading = ref();
 async function getForSale() {
-  loading.value = true;
-  const appAddr = algosdk.getApplicationAddress(store.network.vanityId);
-  const { accounts } = await Algo.indexer
-    .searchAccounts()
-    .authAddr(appAddr)
-    .do();
-
-  const mapVanity: ForSale[] = accounts.map((a) => {
-    const kv = a.appsLocalState?.find(
-      (s) => Number(s.id) === store.network.vanityId
-    )?.keyValue;
-    if (!kv) return a;
-    const fs: ForSale = a;
-    fs.vanity = {
-      owner: algosdk.encodeAddress(
-        kv.find((kv) => kv.key === Buffer.from("b3duZXI=", "base64"))!.value
-          .bytes
-      ),
-      price: Number(
-        kv.find((kv) => kv.key === Buffer.from("cHJpY2U=", "base64"))!.value
-          .uint
-      ),
-      key: algosdk.mnemonicToSecretKey(
-        algosdk.secretKeyToMnemonic(
-          kv.find((kv) => kv.key === Buffer.from("a2V5", "base64"))!.value.bytes
-        )
-      ),
-    };
-    return fs;
-  });
-  forSale.value = mapVanity.filter(
-    (a) => a.address === a.vanity?.key.addr.toString()
-  );
+  try {
+    if (!store.network.vanityId) throw Error("Network not supported");
+    loading.value = true;
+    const appAddr = algosdk.getApplicationAddress(store.network.vanityId);
+    const { accounts } = await Algo.indexer
+      .searchAccounts()
+      .authAddr(appAddr)
+      .do();
+    const typedAccounts: indexerModels.Account[] = accounts.map((a: any) =>
+      indexerModels.Account.from_obj_for_encoding(a)
+    );
+    const mapVanity: ForSale[] = typedAccounts.map((a) => {
+      const kv = a.appsLocalState?.find(
+        (s) => s.id == store.network.vanityId
+      )?.keyValue;
+      if (!kv) return a;
+      const fs: ForSale = a;
+      fs.vanity = {
+        owner: algosdk.encodeAddress(
+          Buffer.from(
+            kv.find((kv) => kv.key == "b3duZXI=")!.value.bytes,
+            "base64"
+          )
+        ),
+        price: Number(kv.find((kv) => kv.key == "cHJpY2U=")!.value.uint),
+        key: algosdk.mnemonicToSecretKey(
+          algosdk.secretKeyToMnemonic(
+            Buffer.from(
+              kv.find((kv) => kv.key == "a2V5")!.value.bytes,
+              "base64"
+            )
+          )
+        ),
+      };
+      return fs;
+    });
+    forSale.value = mapVanity.filter((a) => a.address == a.vanity?.key.addr);
+  } catch (err: any) {
+    console.error(err);
+    store.setSnackbar(err.message, "error");
+  }
   loading.value = false;
 }
 

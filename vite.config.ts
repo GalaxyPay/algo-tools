@@ -8,6 +8,7 @@ import VueRouter from "unplugin-vue-router/vite";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import mkcert from "vite-plugin-mkcert";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
+import vueDevTools from "vite-plugin-vue-devtools";
 
 // Utilities
 import { defineConfig } from "vite";
@@ -57,6 +58,7 @@ export default defineConfig({
     }),
     mkcert(),
     nodePolyfills(),
+    vueDevTools(),
   ],
   define: {
     "process.env": {},
@@ -71,5 +73,9 @@ export default defineConfig({
   },
   server: {
     port: 3030,
+  },
+  optimizeDeps: {
+    include: ["@algorandfoundation/algokit-utils", "merkletreejs"],
+    exclude: ["lute-connect", "vuetify"],
   },
 });

@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Badge } from "@/types";
+import type { Badge } from "@/types";
 import { getBadges } from "@/utils/badges";
 
 const store = useAppStore();

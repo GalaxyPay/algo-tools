@@ -30,10 +30,11 @@
 <script lang="ts" setup>
 import { LuteGovClient } from "@/clients/LuteGovClient";
 import Algo from "@/services/Algo";
-import { Badge } from "@/types";
+import type { Badge } from "@/types";
 import { execAtc, ipfs2http } from "@/utils";
 import { getAssetInfo } from "@/utils/assetInfo";
 import { sha256 } from "@/utils/sha256";
+import { populateAppCallResources } from "@algorandfoundation/algokit-utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
 import MerkleTree from "merkletreejs";
@@ -83,26 +84,15 @@ async function claim() {
     const proof = proofArr.map((p) => p.data);
     const isLeft = proofArr.map((p) => p.position === "left");
     const fee = (Math.floor(proofArr.length / 9) * 1000 + 2000).microAlgos();
-    const boxName = algosdk.bigIntToBytes(assetId, 8);
-    const br: algosdk.BoxReference = {
-      appIndex: 0,
-      name: boxName,
-    };
     if (!assetInfo.value) throw Error("Invalid Asset");
-    const creator = assetInfo.value.params.creator;
     const clawback = assetInfo.value.params.clawback;
     if (!clawback) throw Error("Invalid Clawback");
-    composer.claim(
-      { assetId, proof, isLeft },
-      {
-        sendParams: { fee },
-        accounts: [creator],
-        assets: [assetId],
-        boxes: [br],
-      }
+    composer.claim({ assetId, proof, isLeft }, { sendParams: { fee } });
+    const atc = await populateAppCallResources(
+      await composer.atc(),
+      Algo.algod
     );
-    (await composer.atc()).buildGroup;
-    await execAtc(await composer.atc(), "Successfuly Claimed Badge");
+    await execAtc(atc, "Successfully Claimed Badge");
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");

@@ -207,7 +207,7 @@
 <script lang="ts" setup>
 import { Arc59Client } from "@/clients/Arc59Client";
 import Algo, { getParams } from "@/services/Algo";
-import { KeyRegTxn } from "@/types";
+import type { KeyRegTxn } from "@/types";
 import { execAtc, getAssetInfo } from "@/utils";
 import { mdiContentPaste, mdiInformation } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
@@ -370,7 +370,7 @@ async function compose() {
           rekeyTo: rekeyTo.value,
         });
         break;
-      case "Asset Transfer":
+      case "Asset Transfer": {
         if (!asset.value) throw Error("Invalid Asset");
         txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
           assetIndex: Number(asset.value.index),
@@ -392,6 +392,7 @@ async function compose() {
           return;
         }
         break;
+      }
       case "Key Registration": {
         part.value.from = activeAccount.value!.address;
         const obj = {
@@ -437,7 +438,7 @@ async function offline() {
       nonParticipation: false,
     });
     atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, "Successfuly Offline");
+    await execAtc(atc, "Successfully Offline");
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");
@@ -465,6 +466,7 @@ async function arc59SendAsset() {
     const simParams = {
       allowEmptySignatures: true,
       allowUnnamedResources: true,
+      fixSigners: true,
     };
     const [
       itxns,

@@ -3,7 +3,7 @@
     <v-list dense nav>
       <v-list-item to="/" title="Home" :prepend-icon="mdiHome" exact />
       <v-list-item
-        v-for="tool in tools"
+        v-for="tool in tools()"
         :key="tool.title"
         :to="tool.path"
         :title="tool.title"
@@ -158,7 +158,7 @@
 <script lang="ts" setup>
 import { networks, nids, tools } from "@/data";
 import { getNetwork } from "@/services/Algo";
-import { Network } from "@/types";
+import type { Network } from "@/types";
 import { formatAddr } from "@/utils";
 import {
   mdiContentCopy,
@@ -170,8 +170,8 @@ import {
 } from "@mdi/js";
 import {
   NetworkId,
-  Wallet,
-  WalletAccount,
+  type Wallet,
+  type WalletAccount,
   useWallet,
 } from "@txnlab/use-wallet-vue";
 import { set } from "idb-keyval";
@@ -217,11 +217,9 @@ const network = computed({
 
 async function walletAction(wallet: Wallet) {
   try {
-    wallet.isActive
-      ? await wallet.disconnect()
-      : wallet.isConnected
-      ? wallet.setActive()
-      : await wallet.connect();
+    if (wallet.isActive) await wallet.disconnect();
+    else if (wallet.isConnected) wallet.setActive();
+    else await wallet.connect();
     store.refresh++;
     store.connectMenu = false;
   } catch (err: any) {

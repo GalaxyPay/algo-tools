@@ -51,6 +51,7 @@
 import { Arc59Client } from "@/clients/Arc59Client";
 import Algo, { getParams } from "@/services/Algo";
 import { execAtc, getAssetInfo, resolveProtocol } from "@/utils";
+import { populateAppCallResources } from "@algorandfoundation/algokit-utils";
 import { mdiCheck, mdiClose, mdiInformationOutline } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
@@ -65,6 +66,7 @@ const props = defineProps({
   idx: { type: Number, required: true },
 });
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
 const asset = props.inboxInfo.assets?.[props.idx]!;
 const assetInfo = ref<modelsv2.Asset>();
 const image = ref();
@@ -95,11 +97,10 @@ function formatAmount() {
     : "-";
 }
 
-const claimer = store.account?.address;
 function getAppClient() {
-  if (!claimer) throw Error("Invalid Claimer");
+  if (!store.account?.address) throw Error("Invalid Claimer");
   if (!store.network.inboxRouter) throw Error("Invalid Router");
-  const sender = { addr: claimer, signer: transactionSigner };
+  const sender = { addr: store.account.address, signer: transactionSigner };
   return new Arc59Client(
     { sender, resolveBy: "id", id: store.network.inboxRouter },
     Algo.algod
@@ -108,6 +109,7 @@ function getAppClient() {
 
 async function claim() {
   try {
+    if (!store.account) throw Error("Invalid Account");
     store.overlay = true;
     const appClient = getAppClient();
     const composer = appClient.compose();
@@ -132,12 +134,12 @@ async function claim() {
       composer.addTransaction({ txn, signer: transactionSigner });
     }
     const fee = (Number(suggestedParams.minFee) * totalTxns).microAlgos();
-    const boxes = [algosdk.decodeAddress(claimer!).publicKey];
-    const accounts = [props.inboxInfo.address];
-    const assets = [Number(asset.assetId)];
-    const params = { sendParams: { fee }, boxes, accounts, assets };
-    composer.arc59Claim({ asa: asset.assetId }, params);
-    await execAtc(await composer.atc(), "Successfuly Claimed Asset");
+    composer.arc59Claim({ asa: asset.assetId }, { sendParams: { fee } });
+    const atc = await populateAppCallResources(
+      await composer.atc(),
+      Algo.algod
+    );
+    await execAtc(atc, "Successfully Claimed Asset");
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");
@@ -151,13 +153,13 @@ async function reject() {
     const appClient = getAppClient();
     const suggestedParams = await getParams();
     const fee = (Number(suggestedParams.minFee) * 3).microAlgos();
-    const boxes = [algosdk.decodeAddress(claimer!).publicKey];
-    const accounts = [props.inboxInfo.address, assetInfo.value!.params.creator];
-    const assets = [Number(asset.assetId)];
-    const params = { sendParams: { fee }, boxes, accounts, assets };
     const composer = appClient.compose();
-    composer.arc59Reject({ asa: asset.assetId }, params);
-    await execAtc(await composer.atc(), "Successfuly Rejected Asset");
+    composer.arc59Reject({ asa: asset.assetId }, { sendParams: { fee } });
+    const atc = await populateAppCallResources(
+      await composer.atc(),
+      Algo.algod
+    );
+    await execAtc(atc, "Successfully Rejected Asset");
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");

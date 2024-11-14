@@ -1,5 +1,5 @@
 import { decodeAddress } from "algosdk";
-import { CID, Version } from "multiformats/cid";
+import { CID, type Version } from "multiformats/cid";
 import * as mfsha2 from "multiformats/hashes/sha2";
 import * as digest from "multiformats/hashes/digest";
 

@@ -250,7 +250,7 @@ async function burn() {
         algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(burnObj);
       atc.addTransaction({ txn, signer: transactionSigner });
     }
-    await execAtc(atc, "Successfuly Burned Asset");
+    await execAtc(atc, "Successfully Burned Asset");
     form.value.reset();
     assetId.value = undefined;
   } catch (err: any) {
