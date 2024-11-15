@@ -14,9 +14,12 @@ importers:
       '@mdi/js':
         specifier: ^7.4.47
         version: 7.4.47
+      '@perawallet/connect':
+        specifier: ^1.3.5
+        version: 1.3.5(algosdk@2.9.0)
       '@txnlab/use-wallet-vue':
         specifier: ^3.10.0
-        version: 3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)(vue@3.5.12(typescript@5.6.3))
+        version: 3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.5(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)(vue@3.5.12(typescript@5.6.3))
       algosdk:
         specifier: ^2.9.0
         version: 2.9.0
@@ -99,9 +102,6 @@ importers:
       vite-plugin-vue-devtools:
         specifier: ^7.6.4
         version: 7.6.4(rollup@4.25.0)(vite@5.4.11(@types/node@22.9.0))(vue@3.5.12(typescript@5.6.3))
-      vite-plugin-vue-layouts:
-        specifier: ^0.11.0
-        version: 0.11.0(vite@5.4.11(@types/node@22.9.0))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue@3.5.12(typescript@5.6.3))
       vite-plugin-vuetify:
         specifier: ^2.0.4
         version: 2.0.4(vite@5.4.11(@types/node@22.9.0))(vue@3.5.12(typescript@5.6.3))(vuetify@3.7.4)
@@ -450,6 +450,9 @@ packages:
     resolution: {integrity: sha512-zQ0IqbdX8FZ9aw11vP+dZkKDkS+kgIvQPHnSAXzP9pLu+Rfu3D3XEeLbicvoXJTYnhZiPmsZUxgdzXwNKxRPbA==}
     engines: {node: '>=14'}
 
+  '@evanhahn/lottie-web-light@5.8.1':
+    resolution: {integrity: sha512-U0G1tt3/UEYnyCNNslWPi1dB7X1xQ9aoSip+B3GTKO/Bns8yz/p39vBkRSN9d25nkbHuCsbjky2coQftj5YVKw==}
+
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
     engines: {node: '>=18.18.0'}
@@ -565,6 +568,11 @@ packages:
 
   '@octokit/types@13.6.1':
     resolution: {integrity: sha512-PHZE9Z+kWXb23Ndik8MKPirBPziOc0D2/3KH1P+6jK5nGWe96kadZuE4jev2/Jq7FvIfTlT2Ltg8Fv2x1v0a5g==}
+
+  '@perawallet/connect@1.3.5':
+    resolution: {integrity: sha512-JBaaS0tjipo3DcS2v5Q1lcQXqxYkVpKB3YiqV7okBnd1KQ54zcATvPwRXvpsbxttec1OpdHmkWymuTpxpx+2Ng==}
+    peerDependencies:
+      algosdk: ^2.1.0
 
   '@polka/url@1.0.0-next.28':
     resolution: {integrity: sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==}
@@ -2398,13 +2406,6 @@ packages:
     peerDependencies:
       vite: ^3.0.0-0 || ^4.0.0-0 || ^5.0.0-0
 
-  vite-plugin-vue-layouts@0.11.0:
-    resolution: {integrity: sha512-uh6NW7lt+aOXujK4eHfiNbeo55K9OTuB7fnv+5RVc4OBn/cZull6ThXdYH03JzKanUfgt6QZ37NbbtJ0og59qw==}
-    peerDependencies:
-      vite: ^4.0.0 || ^5.0.0
-      vue: ^3.2.4
-      vue-router: ^4.0.11
-
   vite-plugin-vuetify@2.0.4:
     resolution: {integrity: sha512-A4cliYUoP/u4AWSRVRvAPKgpgR987Pss7LpFa7s1GvOe8WjgDq92Rt3eVXrvgxGCWvZsPKziVqfHHdCMqeDhfw==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -2898,6 +2899,8 @@ snapshots:
       ethereum-cryptography: 2.2.1
       micro-ftch: 0.3.1
 
+  '@evanhahn/lottie-web-light@5.8.1': {}
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.6':
@@ -3013,6 +3016,19 @@ snapshots:
     dependencies:
       '@octokit/openapi-types': 22.2.0
 
+  '@perawallet/connect@1.3.5(algosdk@2.9.0)':
+    dependencies:
+      '@evanhahn/lottie-web-light': 5.8.1
+      '@walletconnect/client': 1.8.0
+      '@walletconnect/types': 1.8.0
+      algosdk: 2.9.0
+      bowser: 2.11.0
+      buffer: 6.0.3
+      qr-code-styling: 1.6.0-rc.1
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   '@polka/url@1.0.0-next.28': {}
 
   '@rollup/plugin-inject@5.0.5(rollup@4.25.0)':
@@ -3108,27 +3124,29 @@ snapshots:
 
   '@tsconfig/node22@22.0.0': {}
 
-  '@txnlab/use-wallet-vue@3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)(vue@3.5.12(typescript@5.6.3))':
+  '@txnlab/use-wallet-vue@3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.5(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)(vue@3.5.12(typescript@5.6.3))':
     dependencies:
       '@tanstack/vue-store': 0.5.5(vue@3.5.12(typescript@5.6.3))
-      '@txnlab/use-wallet': 3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)
+      '@txnlab/use-wallet': 3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.5(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)
       algosdk: 2.9.0
       vue: 3.5.12(typescript@5.6.3)
     optionalDependencies:
       '@blockshake/defly-connect': 1.1.6(algosdk@2.9.0)
+      '@perawallet/connect': 1.3.5(algosdk@2.9.0)
       lute-connect: 1.4.1
     transitivePeerDependencies:
       - '@agoralabs-sh/avm-web-provider'
       - '@algorandfoundation/liquid-auth-use-wallet-client'
       - '@vue/composition-api'
 
-  '@txnlab/use-wallet@3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)':
+  '@txnlab/use-wallet@3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.5(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)':
     dependencies:
       '@tanstack/store': 0.5.5
       algosdk: 2.9.0
     optionalDependencies:
       '@agoralabs-sh/avm-web-provider': 1.7.0
       '@blockshake/defly-connect': 1.1.6(algosdk@2.9.0)
+      '@perawallet/connect': 1.3.5(algosdk@2.9.0)
       lute-connect: 1.4.1
 
   '@types/estree@1.0.6': {}
@@ -3409,7 +3427,6 @@ snapshots:
       '@walletconnect/window-getters': 1.0.0
       '@walletconnect/window-metadata': 1.0.0
       detect-browser: 5.2.0
-    optional: true
 
   '@walletconnect/client@1.8.0':
     dependencies:
@@ -3420,7 +3437,6 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    optional: true
 
   '@walletconnect/core@1.8.0':
     dependencies:
@@ -3430,7 +3446,6 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    optional: true
 
   '@walletconnect/crypto@1.0.3':
     dependencies:
@@ -3440,39 +3455,33 @@ snapshots:
       aes-js: 3.1.2
       hash.js: 1.1.7
       tslib: 1.14.1
-    optional: true
 
   '@walletconnect/encoding@1.0.2':
     dependencies:
       is-typedarray: 1.0.0
       tslib: 1.14.1
       typedarray-to-buffer: 3.1.5
-    optional: true
 
   '@walletconnect/environment@1.0.1':
     dependencies:
       tslib: 1.14.1
-    optional: true
 
   '@walletconnect/iso-crypto@1.8.0':
     dependencies:
       '@walletconnect/crypto': 1.0.3
       '@walletconnect/types': 1.8.0
       '@walletconnect/utils': 1.8.0
-    optional: true
 
   '@walletconnect/jsonrpc-types@1.0.4':
     dependencies:
       events: 3.3.0
       keyvaluestorage-interface: 1.0.0
-    optional: true
 
   '@walletconnect/jsonrpc-utils@1.0.8':
     dependencies:
       '@walletconnect/environment': 1.0.1
       '@walletconnect/jsonrpc-types': 1.0.4
       tslib: 1.14.1
-    optional: true
 
   '@walletconnect/randombytes@1.0.3':
     dependencies:
@@ -3480,10 +3489,8 @@ snapshots:
       '@walletconnect/environment': 1.0.1
       randombytes: 2.1.0
       tslib: 1.14.1
-    optional: true
 
-  '@walletconnect/safe-json@1.0.0':
-    optional: true
+  '@walletconnect/safe-json@1.0.0': {}
 
   '@walletconnect/socket-transport@1.8.0':
     dependencies:
@@ -3493,10 +3500,8 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    optional: true
 
-  '@walletconnect/types@1.8.0':
-    optional: true
+  '@walletconnect/types@1.8.0': {}
 
   '@walletconnect/utils@1.8.0':
     dependencies:
@@ -3507,15 +3512,12 @@ snapshots:
       bn.js: 4.11.8
       js-sha3: 0.8.0
       query-string: 6.13.5
-    optional: true
 
-  '@walletconnect/window-getters@1.0.0':
-    optional: true
+  '@walletconnect/window-getters@1.0.0': {}
 
   '@walletconnect/window-metadata@1.0.0':
     dependencies:
       '@walletconnect/window-getters': 1.0.0
-    optional: true
 
   acorn-jsx@5.3.2(acorn@8.14.0):
     dependencies:
@@ -3523,8 +3525,7 @@ snapshots:
 
   acorn@8.14.0: {}
 
-  aes-js@3.1.2:
-    optional: true
+  aes-js@3.1.2: {}
 
   ajv@6.12.6:
     dependencies:
@@ -3618,8 +3619,7 @@ snapshots:
 
   bn.js@4.11.6: {}
 
-  bn.js@4.11.8:
-    optional: true
+  bn.js@4.11.8: {}
 
   bn.js@4.12.1: {}
 
@@ -3627,8 +3627,7 @@ snapshots:
 
   boolbase@1.0.0: {}
 
-  bowser@2.11.0:
-    optional: true
+  bowser@2.11.0: {}
 
   brace-expansion@1.1.11:
     dependencies:
@@ -3840,8 +3839,7 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
-  decode-uri-component@0.2.2:
-    optional: true
+  decode-uri-component@0.2.2: {}
 
   deep-is@0.1.4: {}
 
@@ -3875,8 +3873,7 @@ snapshots:
       inherits: 2.0.4
       minimalistic-assert: 1.0.1
 
-  detect-browser@5.2.0:
-    optional: true
+  detect-browser@5.2.0: {}
 
   diffie-hellman@5.0.3:
     dependencies:
@@ -4279,8 +4276,7 @@ snapshots:
     dependencies:
       which-typed-array: 1.1.15
 
-  is-typedarray@1.0.0:
-    optional: true
+  is-typedarray@1.0.0: {}
 
   is-what@4.1.16: {}
 
@@ -4332,8 +4328,7 @@ snapshots:
     dependencies:
       json-buffer: 3.0.1
 
-  keyvaluestorage-interface@1.0.0:
-    optional: true
+  keyvaluestorage-interface@1.0.0: {}
 
   kolorist@1.8.0: {}
 
@@ -4639,10 +4634,8 @@ snapshots:
   qr-code-styling@1.6.0-rc.1:
     dependencies:
       qrcode-generator: 1.4.4
-    optional: true
 
-  qrcode-generator@1.4.4:
-    optional: true
+  qrcode-generator@1.4.4: {}
 
   qs@6.13.0:
     dependencies:
@@ -4653,7 +4646,6 @@ snapshots:
       decode-uri-component: 0.2.2
       split-on-first: 1.1.0
       strict-uri-encode: 2.0.0
-    optional: true
 
   querystring-es3@0.2.1: {}
 
@@ -4796,8 +4788,7 @@ snapshots:
 
   speakingurl@14.0.1: {}
 
-  split-on-first@1.1.0:
-    optional: true
+  split-on-first@1.1.0: {}
 
   stream-browserify@3.0.0:
     dependencies:
@@ -4811,8 +4802,7 @@ snapshots:
       readable-stream: 3.6.2
       xtend: 4.0.2
 
-  strict-uri-encode@2.0.0:
-    optional: true
+  strict-uri-encode@2.0.0: {}
 
   string_decoder@1.1.1:
     dependencies:
@@ -4864,8 +4854,7 @@ snapshots:
     dependencies:
       typescript: 5.6.3
 
-  tslib@1.14.1:
-    optional: true
+  tslib@1.14.1: {}
 
   tty-browserify@0.0.1: {}
 
@@ -4880,7 +4869,6 @@ snapshots:
   typedarray-to-buffer@3.1.5:
     dependencies:
       is-typedarray: 1.0.0
-    optional: true
 
   typescript-eslint@8.14.0(eslint@9.14.0)(typescript@5.6.3):
     dependencies:
@@ -5097,16 +5085,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-vue-layouts@0.11.0(vite@5.4.11(@types/node@22.9.0))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue@3.5.12(typescript@5.6.3)):
-    dependencies:
-      debug: 4.3.7
-      fast-glob: 3.3.2
-      vite: 5.4.11(@types/node@22.9.0)
-      vue: 3.5.12(typescript@5.6.3)
-      vue-router: 4.4.5(vue@3.5.12(typescript@5.6.3))
-    transitivePeerDependencies:
-      - supports-color
-
   vite-plugin-vuetify@2.0.4(vite@5.4.11(@types/node@22.9.0))(vue@3.5.12(typescript@5.6.3))(vuetify@3.7.4):
     dependencies:
       '@vuetify/loader-shared': 2.0.3(vue@3.5.12(typescript@5.6.3))(vuetify@3.7.4)
@@ -5208,8 +5186,7 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  ws@7.5.3:
-    optional: true
+  ws@7.5.3: {}
 
   xml-name-validator@4.0.0: {}
 
