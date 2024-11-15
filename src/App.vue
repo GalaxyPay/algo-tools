@@ -4,6 +4,9 @@
     <v-main>
       <router-view />
     </v-main>
+    <v-overlay v-model="store.overlay" persistent />
+    <DonateDialog />
+    <Snackbar />
     <AppFooter />
   </v-app>
 </template>
