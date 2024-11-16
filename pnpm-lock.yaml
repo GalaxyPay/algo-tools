@@ -15,8 +15,8 @@ importers:
         specifier: ^7.4.47
         version: 7.4.47
       '@txnlab/use-wallet-vue':
-        specifier: ^3.10.0
-        version: 3.10.0(algosdk@3.0.0)(vue@3.5.12(typescript@5.6.3))
+        specifier: ^4.0.0-beta.1
+        version: 4.0.0-beta.1(algosdk@3.0.0)(vue@3.5.12(typescript@5.6.3))
       algosdk:
         specifier: ^3.0.0
         version: 3.0.0
@@ -692,8 +692,8 @@ packages:
   '@tsconfig/node22@22.0.0':
     resolution: {integrity: sha512-twLQ77zevtxobBOD4ToAtVmuYrpeYUh3qh+TEp+08IWhpsrIflVHqQ1F1CiPxQGL7doCdBIOOCF+1Tm833faNg==}
 
-  '@txnlab/use-wallet-vue@3.10.0':
-    resolution: {integrity: sha512-01Hm01CsucZgTUpZmNU+nb0+BRTbPFfWduNOfIyvNhI1qRTyZPmXlvoL+d318SFA2feoJWuQSEliN6yaRWSA3Q==}
+  '@txnlab/use-wallet-vue@4.0.0-beta.1':
+    resolution: {integrity: sha512-1EUlIk7R1G+R7TaYqCSzYKI5K5RFMQvZnoEqYMTWJWl6KgI8e31z3o5C5JSFkTD9PciI7l+aXzCIw+WFfmwodA==}
     peerDependencies:
       '@blockshake/defly-connect': ^1.1.6
       '@magic-ext/algorand': ^23.13.0
@@ -701,7 +701,7 @@ packages:
       '@perawallet/connect-beta': ^2.0.21
       '@walletconnect/modal': ^2.7.0
       '@walletconnect/sign-client': ^2.17.1
-      algosdk: ^2.7.0
+      algosdk: ^3.0.0
       lute-connect: ^1.4.1
       magic-sdk: ^28.13.0
       vue: ^3.0.0
@@ -723,8 +723,8 @@ packages:
       magic-sdk:
         optional: true
 
-  '@txnlab/use-wallet@3.10.0':
-    resolution: {integrity: sha512-dgXsEeueKKeGGCZtwSX+OxifuovMguW+NJAs036wNQhMtnDzwxc5XVMZws9npK2mF/NK8xV0P8Y6aBc1E+0b8A==}
+  '@txnlab/use-wallet@4.0.0-beta.1':
+    resolution: {integrity: sha512-5X08lmq3QDODVBLWfkiYbt/lKIFy4eBP2i6qba+Qa/6mnZUNsV9u3PJXUfo+CejpygAjQgQckI3zFRpsBwMU1A==}
     peerDependencies:
       '@agoralabs-sh/avm-web-provider': ^1.7.0
       '@algorandfoundation/liquid-auth-use-wallet-client': 1.1.0
@@ -733,7 +733,7 @@ packages:
       '@perawallet/connect-beta': ^2.0.21
       '@walletconnect/modal': ^2.7.0
       '@walletconnect/sign-client': ^2.17.1
-      algosdk: ^2.7.0
+      algosdk: ^3.0.0
       lute-connect: ^1.4.1
     peerDependenciesMeta:
       '@agoralabs-sh/avm-web-provider':
@@ -2970,10 +2970,10 @@ snapshots:
 
   '@tsconfig/node22@22.0.0': {}
 
-  '@txnlab/use-wallet-vue@3.10.0(algosdk@3.0.0)(vue@3.5.12(typescript@5.6.3))':
+  '@txnlab/use-wallet-vue@4.0.0-beta.1(algosdk@3.0.0)(vue@3.5.12(typescript@5.6.3))':
     dependencies:
       '@tanstack/vue-store': 0.5.5(vue@3.5.12(typescript@5.6.3))
-      '@txnlab/use-wallet': 3.10.0(algosdk@3.0.0)
+      '@txnlab/use-wallet': 4.0.0-beta.1(algosdk@3.0.0)
       algosdk: 3.0.0
       vue: 3.5.12(typescript@5.6.3)
     transitivePeerDependencies:
@@ -2981,7 +2981,7 @@ snapshots:
       - '@algorandfoundation/liquid-auth-use-wallet-client'
       - '@vue/composition-api'
 
-  '@txnlab/use-wallet@3.10.0(algosdk@3.0.0)':
+  '@txnlab/use-wallet@4.0.0-beta.1(algosdk@3.0.0)':
     dependencies:
       '@tanstack/store': 0.5.5
       algosdk: 3.0.0

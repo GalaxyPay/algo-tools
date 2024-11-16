@@ -11,7 +11,7 @@
   "dependencies": {
     "@algorandfoundation/algokit-utils": "^6.2.1",
     "@mdi/js": "^7.4.47",
-    "@txnlab/use-wallet-vue": "^3.10.0",
+    "@txnlab/use-wallet-vue": "^4.0.0-beta.1",
     "algosdk": "^3.0.0",
     "core-js": "^3.39.0",
     "idb-keyval": "^6.2.1",
