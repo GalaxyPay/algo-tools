@@ -125,8 +125,8 @@ async function claim() {
     const suggestedParams = await getParams();
     if (!claimerOptedIn) {
       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        sender: claimer!,
-        receiver: claimer!,
+        sender: store.account.address,
+        receiver: store.account.address,
         amount: 0,
         assetIndex: Number(asset.assetId),
         suggestedParams,
