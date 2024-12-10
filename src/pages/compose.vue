@@ -116,18 +116,14 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col
-                v-if="store.network.name === 'FNet'"
-                cols="12"
-                class="pt-0"
-              >
+              <v-col v-if="false" cols="12" class="pt-0">
                 <v-checkbox
                   v-model.number="incentiveEligible"
                   label="Make Incentive Eligible"
                   density="comfortable"
                   :hint="incentiveHint"
                   persistent-hint
-                  :disabled="store.account.incentiveEligible"
+                  :disabled="store.account?.incentiveEligible"
                 />
               </v-col>
               <v-col cols="12" sm="4">
