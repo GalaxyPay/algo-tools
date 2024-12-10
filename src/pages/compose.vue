@@ -116,6 +116,16 @@
               </v-col>
             </v-row>
             <v-row>
+              <v-col v-if="false" cols="12" class="pt-0">
+                <v-checkbox
+                  v-model.number="incentiveEligible"
+                  label="Make Incentive Eligible"
+                  density="comfortable"
+                  :hint="incentiveHint"
+                  persistent-hint
+                  :disabled="store.account?.incentiveEligible"
+                />
+              </v-col>
               <v-col cols="12" sm="4">
                 <v-text-field
                   v-model.number="part.voteFirst"
@@ -241,7 +251,15 @@ const txnTypes = ref([
 ]);
 const txnType = ref();
 const part = ref<KeyRegTxn>({} as KeyRegTxn);
+const incentiveEligible = ref(false);
 const showInboxWarning = ref(false);
+const incentiveHint = computed(() =>
+  store.account?.incentiveEligible
+    ? "Already Eligible"
+    : incentiveEligible.value
+    ? "This will increase the fee of this transaction to 2 Algo"
+    : ""
+);
 
 const amountLabel = computed(() => {
   let val = "Amount";
@@ -395,6 +413,10 @@ async function compose() {
       }
       case "Key Registration": {
         part.value.from = activeAccount.value!.address;
+        if (incentiveEligible.value) {
+          suggestedParams.flatFee = true;
+          suggestedParams.fee = 2 * 10 ** 6;
+        }
         const obj = {
           ...(part.value as any),
           suggestedParams,
