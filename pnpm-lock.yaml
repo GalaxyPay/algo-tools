@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@algorandfoundation/algokit-utils':
-        specifier: ^6.2.1
-        version: 6.2.1(algosdk@3.0.0)
+        specifier: ^8.0.2
+        version: 8.0.2(algosdk@3.0.0)
       '@mdi/js':
         specifier: ^7.4.47
         version: 7.4.47
@@ -18,8 +18,8 @@ importers:
         specifier: ^1.3.5
         version: 1.3.5(algosdk@3.0.0)
       '@txnlab/use-wallet-vue':
-        specifier: ^4.0.0-beta.1
-        version: 4.0.0-beta.1(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)(vue@3.5.12(typescript@5.6.3))
+        specifier: ^4.0.0-beta.3
+        version: 4.0.0-beta.3(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)(vue@3.5.12(typescript@5.6.3))
       algosdk:
         specifier: ^3.0.0
         version: 3.0.0
@@ -111,11 +111,11 @@ importers:
 
 packages:
 
-  '@algorandfoundation/algokit-utils@6.2.1':
-    resolution: {integrity: sha512-oJbqT91KJp34OasYID2guWHysCLdgZ/4GVb06sdgXxORWKKMhZa/Uj12UiACo4VzZJBOUZEJCh/QrSuHmu/m2g==}
-    engines: {node: '>=18.0'}
+  '@algorandfoundation/algokit-utils@8.0.2':
+    resolution: {integrity: sha512-Tn8lhRzalIS7cLS/GPKnPr2//+cGduuDovqpe0Mnik7+KJJ73kimDwSRWY4JPbCTASHlA2j060DGK85+il//ew==}
+    engines: {node: '>=20.0'}
     peerDependencies:
-      algosdk: ^2.7.0
+      algosdk: ^3.0.0
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -685,11 +685,11 @@ packages:
   '@scure/bip39@1.3.0':
     resolution: {integrity: sha512-disdg7gHuTDZtY+ZdkmLpPCk7fxZSu3gBiEGuoC1XYxv9cGx3Z6cpTggCgW6odSOOIXCiDjuGejW+aJKCY/pIQ==}
 
-  '@tanstack/store@0.5.5':
-    resolution: {integrity: sha512-EOSrgdDAJExbvRZEQ/Xhh9iZchXpMN+ga1Bnk8Nmygzs8TfiE6hbzThF+Pr2G19uHL6+DTDTHhJ8VQiOd7l4tA==}
+  '@tanstack/store@0.6.0':
+    resolution: {integrity: sha512-+m2OBglsjXcLmmKOX6/9v8BDOCtyxhMmZLsRUDswOOSdIIR9mvv6i0XNKsmTh3AlYU8c1mRcodC8/Vyf+69VlQ==}
 
-  '@tanstack/vue-store@0.5.5':
-    resolution: {integrity: sha512-j+CDrxVhtQQNOjWzLmCqJeDwmmTAQGvEaNbLr1uPJ9rxJITodJtFNdBFj7l+Nd5o34v2ayEv64Ugh6+1BtuGNg==}
+  '@tanstack/vue-store@0.6.0':
+    resolution: {integrity: sha512-QcvBEOG2dPiFw06LqEk1ehL7ZY0CJS8AKlW7uqmFFFzVost+Oj1oiQne9hW+L6O8f0ZnwFlD9fA5a7pTum8YeQ==}
     peerDependencies:
       '@vue/composition-api': ^1.2.1
       vue: ^2.5.0 || ^3.0.0
@@ -700,18 +700,18 @@ packages:
   '@tsconfig/node22@22.0.0':
     resolution: {integrity: sha512-twLQ77zevtxobBOD4ToAtVmuYrpeYUh3qh+TEp+08IWhpsrIflVHqQ1F1CiPxQGL7doCdBIOOCF+1Tm833faNg==}
 
-  '@txnlab/use-wallet-vue@4.0.0-beta.1':
-    resolution: {integrity: sha512-1EUlIk7R1G+R7TaYqCSzYKI5K5RFMQvZnoEqYMTWJWl6KgI8e31z3o5C5JSFkTD9PciI7l+aXzCIw+WFfmwodA==}
+  '@txnlab/use-wallet-vue@4.0.0-beta.3':
+    resolution: {integrity: sha512-SXeu/MryBJIKjVK55L23qI2jUAmWtY8TUdyZUoApzRvJcvKZIi25YSonSr4tF8dMET4JKede49ZofD3NOVI1sg==}
     peerDependencies:
       '@blockshake/defly-connect': ^1.1.6
-      '@magic-ext/algorand': ^23.13.0
+      '@magic-ext/algorand': ^23.18.0
       '@perawallet/connect': ^1.3.5
       '@perawallet/connect-beta': ^2.0.21
       '@walletconnect/modal': ^2.7.0
-      '@walletconnect/sign-client': ^2.17.1
+      '@walletconnect/sign-client': ^2.17.2
       algosdk: ^3.0.0
       lute-connect: ^1.4.1
-      magic-sdk: ^28.13.0
+      magic-sdk: ^28.19.0
       vue: ^3.0.0
     peerDependenciesMeta:
       '@blockshake/defly-connect':
@@ -731,8 +731,8 @@ packages:
       magic-sdk:
         optional: true
 
-  '@txnlab/use-wallet@4.0.0-beta.1':
-    resolution: {integrity: sha512-5X08lmq3QDODVBLWfkiYbt/lKIFy4eBP2i6qba+Qa/6mnZUNsV9u3PJXUfo+CejpygAjQgQckI3zFRpsBwMU1A==}
+  '@txnlab/use-wallet@4.0.0-beta.3':
+    resolution: {integrity: sha512-F6ucgfwyvFVuWk4k06OjjRzUsc8qvajePohsD8EsAZiqkgwvtIDKIHktdcbSIh/i0zanfOwffIC+JAUoXbER8g==}
     peerDependencies:
       '@agoralabs-sh/avm-web-provider': ^1.7.0
       '@algorandfoundation/liquid-auth-use-wallet-client': 1.1.0
@@ -740,7 +740,7 @@ packages:
       '@perawallet/connect': ^1.3.5
       '@perawallet/connect-beta': ^2.0.21
       '@walletconnect/modal': ^2.7.0
-      '@walletconnect/sign-client': ^2.17.1
+      '@walletconnect/sign-client': ^2.17.2
       algosdk: ^3.0.0
       lute-connect: ^1.4.1
     peerDependenciesMeta:
@@ -2552,7 +2552,7 @@ packages:
 
 snapshots:
 
-  '@algorandfoundation/algokit-utils@6.2.1(algosdk@3.0.0)':
+  '@algorandfoundation/algokit-utils@8.0.2(algosdk@3.0.0)':
     dependencies:
       algosdk: 3.0.0
       buffer: 6.0.3
@@ -3084,20 +3084,20 @@ snapshots:
       '@noble/hashes': 1.4.0
       '@scure/base': 1.1.9
 
-  '@tanstack/store@0.5.5': {}
+  '@tanstack/store@0.6.0': {}
 
-  '@tanstack/vue-store@0.5.5(vue@3.5.12(typescript@5.6.3))':
+  '@tanstack/vue-store@0.6.0(vue@3.5.12(typescript@5.6.3))':
     dependencies:
-      '@tanstack/store': 0.5.5
+      '@tanstack/store': 0.6.0
       vue: 3.5.12(typescript@5.6.3)
       vue-demi: 0.14.10(vue@3.5.12(typescript@5.6.3))
 
   '@tsconfig/node22@22.0.0': {}
 
-  '@txnlab/use-wallet-vue@4.0.0-beta.1(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)(vue@3.5.12(typescript@5.6.3))':
+  '@txnlab/use-wallet-vue@4.0.0-beta.3(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)(vue@3.5.12(typescript@5.6.3))':
     dependencies:
-      '@tanstack/vue-store': 0.5.5(vue@3.5.12(typescript@5.6.3))
-      '@txnlab/use-wallet': 4.0.0-beta.1(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)
+      '@tanstack/vue-store': 0.6.0(vue@3.5.12(typescript@5.6.3))
+      '@txnlab/use-wallet': 4.0.0-beta.3(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)
       algosdk: 3.0.0
       vue: 3.5.12(typescript@5.6.3)
     optionalDependencies:
@@ -3107,9 +3107,9 @@ snapshots:
       - '@algorandfoundation/liquid-auth-use-wallet-client'
       - '@vue/composition-api'
 
-  '@txnlab/use-wallet@4.0.0-beta.1(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)':
+  '@txnlab/use-wallet@4.0.0-beta.3(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)':
     dependencies:
-      '@tanstack/store': 0.5.5
+      '@tanstack/store': 0.6.0
       algosdk: 3.0.0
     optionalDependencies:
       '@perawallet/connect': 1.3.5(algosdk@3.0.0)

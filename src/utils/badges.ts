@@ -67,7 +67,7 @@ export async function getBadges() {
   );
   await Promise.all(
     assets.map(async (id) => {
-      let assetInfo = await getAssetInfo(id);
+      const assetInfo = await getAssetInfo(id);
       if (!assetInfo) throw Error("Invalid Badge Asset");
       if (!assetInfo.params.url) throw Error("Invalid Badge URL");
       const arc3 = await getIpfsJson(assetInfo.params.url);

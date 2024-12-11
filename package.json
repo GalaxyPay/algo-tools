@@ -9,10 +9,10 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@algorandfoundation/algokit-utils": "^6.2.1",
+    "@algorandfoundation/algokit-utils": "^8.0.2",
     "@mdi/js": "^7.4.47",
     "@perawallet/connect": "^1.3.5",
-    "@txnlab/use-wallet-vue": "^4.0.0-beta.1",
+    "@txnlab/use-wallet-vue": "^4.0.0-beta.3",
     "algosdk": "^3.0.0",
     "core-js": "^3.39.0",
     "idb-keyval": "^6.2.1",

@@ -100,7 +100,10 @@ function formatAmount() {
 function getAppClient() {
   if (!store.account?.address) throw Error("Invalid Claimer");
   if (!store.network.inboxRouter) throw Error("Invalid Router");
-  const sender = { addr: store.account.address, signer: transactionSigner };
+  const sender = {
+    addr: algosdk.Address.fromString(store.account.address),
+    signer: transactionSigner,
+  };
   return new Arc59Client(
     { sender, resolveBy: "id", id: store.network.inboxRouter },
     Algo.algod

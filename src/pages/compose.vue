@@ -415,7 +415,7 @@ async function compose() {
         part.value.from = activeAccount.value!.address;
         if (incentiveEligible.value) {
           suggestedParams.flatFee = true;
-          suggestedParams.fee = 2 * 10 ** 6;
+          suggestedParams.fee = 2n * 10n ** 6n;
         }
         const obj = {
           ...(part.value as any),
@@ -476,13 +476,16 @@ async function arc59SendAsset() {
     if (!asset.value) throw Error("Invalid Asset");
     if (!store.network.inboxRouter) throw Error("Invalid Router");
     const suggestedParams = await Algo.algod.getTransactionParams().do();
-    const sender = { addr: store.account.address, signer: transactionSigner };
+    const sender = {
+      addr: algosdk.Address.fromString(store.account.address),
+      signer: transactionSigner,
+    };
     const appClient = new Arc59Client(
       { sender, resolveBy: "id", id: store.network.inboxRouter },
       Algo.algod
     );
     const simSender = {
-      addr: store.account.address,
+      addr: algosdk.Address.fromString(store.account.address),
       signer: algosdk.makeEmptyTransactionSigner(),
     };
     const simParams = {

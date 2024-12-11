@@ -92,7 +92,10 @@ async function createRouter() {
   try {
     store.overlay = true;
     if (!store.account) throw Error("Invalid Account");
-    const sender = { addr: store.account.address, signer: transactionSigner };
+    const sender = {
+      addr: algosdk.Address.fromString(store.account.address),
+      signer: transactionSigner,
+    };
     const appClient = new Arc59Client(
       { sender, resolveBy: "id", id: 0 },
       Algo.algod
