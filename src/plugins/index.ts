@@ -32,7 +32,7 @@ export function registerPlugins(app: App) {
         WalletId.PERA,
         WalletId.KIBISIS,
       ],
-      network: NetworkId.MAINNET,
+      defaultNetwork: NetworkId.MAINNET,
     });
 }
 
