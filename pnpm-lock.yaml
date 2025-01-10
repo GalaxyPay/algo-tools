@@ -8,18 +8,24 @@ importers:
 
   .:
     dependencies:
+      '@agoralabs-sh/avm-web-provider':
+        specifier: ^1.7.0
+        version: 1.7.0
       '@algorandfoundation/algokit-utils':
         specifier: ^8.0.2
         version: 8.0.2(algosdk@3.0.0)
+      '@blockshake/defly-connect':
+        specifier: ^1.2.1
+        version: 1.2.1(algosdk@3.0.0)
       '@mdi/js':
         specifier: ^7.4.47
         version: 7.4.47
       '@perawallet/connect':
-        specifier: ^1.3.5
-        version: 1.3.5(algosdk@3.0.0)
+        specifier: ^1.4.1
+        version: 1.4.1(algosdk@3.0.0)
       '@txnlab/use-wallet-vue':
-        specifier: ^4.0.0-beta.3
-        version: 4.0.0-beta.3(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)(vue@3.5.12(typescript@5.6.3))
+        specifier: ^4.0.0-beta.4
+        version: 4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.0.0))(@perawallet/connect@1.4.1(algosdk@3.0.0))(algosdk@3.0.0)(lute-connect@1.4.1)(vue@3.5.12(typescript@5.6.3))
       algosdk:
         specifier: ^3.0.0
         version: 3.0.0
@@ -29,6 +35,9 @@ importers:
       idb-keyval:
         specifier: ^6.2.1
         version: 6.2.1
+      lute-connect:
+        specifier: ^1.4.1
+        version: 1.4.1
       merkletreejs:
         specifier: ^0.4.0
         version: 0.4.0
@@ -110,6 +119,10 @@ importers:
         version: 2.1.10(typescript@5.6.3)
 
 packages:
+
+  '@agoralabs-sh/avm-web-provider@1.7.0':
+    resolution: {integrity: sha512-AfMdBdFS3EW1RunzHVEwNFucS6UIALs661d+zL6AHFDdxOTvUgahRC4l163VoGWA0UEpnayT1jGObci8nitZeA==}
+    engines: {node: '>=18.20.3'}
 
   '@algorandfoundation/algokit-utils@8.0.2':
     resolution: {integrity: sha512-Tn8lhRzalIS7cLS/GPKnPr2//+cGduuDovqpe0Mnik7+KJJ73kimDwSRWY4JPbCTASHlA2j060DGK85+il//ew==}
@@ -259,6 +272,11 @@ packages:
   '@babel/types@7.26.0':
     resolution: {integrity: sha512-Z/yiTPj+lDVnF7lWeKCIJzaIkI0vYO87dMpZ4bg4TDrFe4XXLFWL1TbXU27gBP3QccxV9mZICCrnjnYlJjXHOA==}
     engines: {node: '>=6.9.0'}
+
+  '@blockshake/defly-connect@1.2.1':
+    resolution: {integrity: sha512-T9wAjPTFdc8iRiDzTqmeBRCIroWLgXmqZHwnpzuchjYZXXqbnj+zge+HS7UaNunpxGVjDUNK1ah7OR6hEqtJoQ==}
+    peerDependencies:
+      algosdk: ^3.0.0
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -482,6 +500,9 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
+  '@likecoin/qr-code-styling@1.6.6':
+    resolution: {integrity: sha512-RbGK/+20bJhFZR70r8MeDvfyz3W7U5zXpykSTYOYxZGyo6wC+Y4QnbUpL+YdAtzT2ZIFeCNOcRs2W2FNrKPoaA==}
+
   '@mdi/js@7.4.47':
     resolution: {integrity: sha512-KPnNOtm5i2pMabqZxpUz7iQf+mfrYZyKCZ8QNz85czgEt7cuHcGorWfdzUMWYA0SD+a6Hn4FmJ+YhzzzjkTZrQ==}
 
@@ -560,10 +581,10 @@ packages:
   '@octokit/types@13.6.1':
     resolution: {integrity: sha512-PHZE9Z+kWXb23Ndik8MKPirBPziOc0D2/3KH1P+6jK5nGWe96kadZuE4jev2/Jq7FvIfTlT2Ltg8Fv2x1v0a5g==}
 
-  '@perawallet/connect@1.3.5':
-    resolution: {integrity: sha512-JBaaS0tjipo3DcS2v5Q1lcQXqxYkVpKB3YiqV7okBnd1KQ54zcATvPwRXvpsbxttec1OpdHmkWymuTpxpx+2Ng==}
+  '@perawallet/connect@1.4.1':
+    resolution: {integrity: sha512-yXfpQ2SzblOBp0P2Xsneq4f0d1YsSuYrdpw2fSwivlTbc5a40hQfYiJMql+b3UdfSID/wcaPl9Vkb5cMSBxNwQ==}
     peerDependencies:
-      algosdk: ^2.1.0
+      algosdk: ^3.0.0
 
   '@polka/url@1.0.0-next.28':
     resolution: {integrity: sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==}
@@ -700,13 +721,12 @@ packages:
   '@tsconfig/node22@22.0.0':
     resolution: {integrity: sha512-twLQ77zevtxobBOD4ToAtVmuYrpeYUh3qh+TEp+08IWhpsrIflVHqQ1F1CiPxQGL7doCdBIOOCF+1Tm833faNg==}
 
-  '@txnlab/use-wallet-vue@4.0.0-beta.3':
-    resolution: {integrity: sha512-SXeu/MryBJIKjVK55L23qI2jUAmWtY8TUdyZUoApzRvJcvKZIi25YSonSr4tF8dMET4JKede49ZofD3NOVI1sg==}
+  '@txnlab/use-wallet-vue@4.0.0-beta.4':
+    resolution: {integrity: sha512-rZbQN1YEQfRgZgMzodgDhidQxaPOBburJceHSv85iQpOUj3qf/b1/x5HY+83SAFNdSM1QH4uH07Pne8asvulmQ==}
     peerDependencies:
-      '@blockshake/defly-connect': ^1.1.6
+      '@blockshake/defly-connect': ^1.2.1
       '@magic-ext/algorand': ^23.18.0
-      '@perawallet/connect': ^1.3.5
-      '@perawallet/connect-beta': ^2.0.21
+      '@perawallet/connect': ^1.4.1
       '@walletconnect/modal': ^2.7.0
       '@walletconnect/sign-client': ^2.17.2
       algosdk: ^3.0.0
@@ -720,8 +740,6 @@ packages:
         optional: true
       '@perawallet/connect':
         optional: true
-      '@perawallet/connect-beta':
-        optional: true
       '@walletconnect/modal':
         optional: true
       '@walletconnect/sign-client':
@@ -731,14 +749,13 @@ packages:
       magic-sdk:
         optional: true
 
-  '@txnlab/use-wallet@4.0.0-beta.3':
-    resolution: {integrity: sha512-F6ucgfwyvFVuWk4k06OjjRzUsc8qvajePohsD8EsAZiqkgwvtIDKIHktdcbSIh/i0zanfOwffIC+JAUoXbER8g==}
+  '@txnlab/use-wallet@4.0.0-beta.4':
+    resolution: {integrity: sha512-5dFvUUJEUcRLP0QnG2K5cFKG7bLQzUFgAnGXNChlm1AG62BgaqxDQtWze8i8gKWfOQijXJ2mg5pnTOaVHg5dPw==}
     peerDependencies:
       '@agoralabs-sh/avm-web-provider': ^1.7.0
       '@algorandfoundation/liquid-auth-use-wallet-client': 1.1.0
-      '@blockshake/defly-connect': ^1.1.6
-      '@perawallet/connect': ^1.3.5
-      '@perawallet/connect-beta': ^2.0.21
+      '@blockshake/defly-connect': ^1.2.1
+      '@perawallet/connect': ^1.4.1
       '@walletconnect/modal': ^2.7.0
       '@walletconnect/sign-client': ^2.17.2
       algosdk: ^3.0.0
@@ -751,8 +768,6 @@ packages:
       '@blockshake/defly-connect':
         optional: true
       '@perawallet/connect':
-        optional: true
-      '@perawallet/connect-beta':
         optional: true
       '@walletconnect/modal':
         optional: true
@@ -1761,8 +1776,14 @@ packages:
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
 
+  lottie-web@5.12.2:
+    resolution: {integrity: sha512-uvhvYPC8kGPjXT3MyKMrL3JitEAmDMp30lVkuq/590Mw9ok6pWcFCwXJveo0t5uqYw1UREQHofD+jVpdjBv8wg==}
+
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  lute-connect@1.4.1:
+    resolution: {integrity: sha512-mOiu0NzXR4Ep8w8xBBVX3naoM9/VMPudZZWrtRS6pk+g83czfzmoMwlsuzUltC/t+UrNFlSP8xKp2M9bmYtf8Q==}
 
   magic-string-ast@0.6.2:
     resolution: {integrity: sha512-oN3Bcd7ZVt+0VGEs7402qR/tjgjbM7kPlH/z7ufJnzTLVBzXJITRHOJiwMmmYMgZfdoWQsfQcY+iKlxiBppnMA==}
@@ -2358,6 +2379,10 @@ packages:
   util@0.12.5:
     resolution: {integrity: sha512-kZf/K6hEIrWHI6XqOFUiiMa+79wE/D8Q+NCNAWclkyg3b4d2k7s0QGepNjiABc+aR3N1PAyHL7p6UcLY6LmrnA==}
 
+  uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
+
   vite-hot-client@0.2.3:
     resolution: {integrity: sha512-rOGAV7rUlUHX89fP2p2v0A2WWvV3QMX2UYq0fRqsWSvFvev4atHWqjwGoKaZT1VTKyLGk533ecu3eyd0o59CAg==}
     peerDependencies:
@@ -2551,6 +2576,10 @@ packages:
     engines: {node: '>=10'}
 
 snapshots:
+
+  '@agoralabs-sh/avm-web-provider@1.7.0':
+    dependencies:
+      uuid: 9.0.1
 
   '@algorandfoundation/algokit-utils@8.0.2(algosdk@3.0.0)':
     dependencies:
@@ -2753,6 +2782,19 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
+  '@blockshake/defly-connect@1.2.1(algosdk@3.0.0)':
+    dependencies:
+      '@likecoin/qr-code-styling': 1.6.6
+      '@walletconnect/client': 1.8.0
+      '@walletconnect/types': 1.8.0
+      algosdk: 3.0.0
+      bowser: 2.11.0
+      buffer: 6.0.3
+      lottie-web: 5.12.2
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
 
@@ -2901,6 +2943,10 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
+  '@likecoin/qr-code-styling@1.6.6':
+    dependencies:
+      qrcode-generator: 1.4.4
+
   '@mdi/js@7.4.47': {}
 
   '@noble/curves@1.4.2':
@@ -2986,7 +3032,7 @@ snapshots:
     dependencies:
       '@octokit/openapi-types': 22.2.0
 
-  '@perawallet/connect@1.3.5(algosdk@3.0.0)':
+  '@perawallet/connect@1.4.1(algosdk@3.0.0)':
     dependencies:
       '@evanhahn/lottie-web-light': 5.8.1
       '@walletconnect/client': 1.8.0
@@ -3094,25 +3140,30 @@ snapshots:
 
   '@tsconfig/node22@22.0.0': {}
 
-  '@txnlab/use-wallet-vue@4.0.0-beta.3(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)(vue@3.5.12(typescript@5.6.3))':
+  '@txnlab/use-wallet-vue@4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.0.0))(@perawallet/connect@1.4.1(algosdk@3.0.0))(algosdk@3.0.0)(lute-connect@1.4.1)(vue@3.5.12(typescript@5.6.3))':
     dependencies:
       '@tanstack/vue-store': 0.6.0(vue@3.5.12(typescript@5.6.3))
-      '@txnlab/use-wallet': 4.0.0-beta.3(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)
+      '@txnlab/use-wallet': 4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.0.0))(@perawallet/connect@1.4.1(algosdk@3.0.0))(algosdk@3.0.0)(lute-connect@1.4.1)
       algosdk: 3.0.0
       vue: 3.5.12(typescript@5.6.3)
     optionalDependencies:
-      '@perawallet/connect': 1.3.5(algosdk@3.0.0)
+      '@blockshake/defly-connect': 1.2.1(algosdk@3.0.0)
+      '@perawallet/connect': 1.4.1(algosdk@3.0.0)
+      lute-connect: 1.4.1
     transitivePeerDependencies:
       - '@agoralabs-sh/avm-web-provider'
       - '@algorandfoundation/liquid-auth-use-wallet-client'
       - '@vue/composition-api'
 
-  '@txnlab/use-wallet@4.0.0-beta.3(@perawallet/connect@1.3.5(algosdk@3.0.0))(algosdk@3.0.0)':
+  '@txnlab/use-wallet@4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.0.0))(@perawallet/connect@1.4.1(algosdk@3.0.0))(algosdk@3.0.0)(lute-connect@1.4.1)':
     dependencies:
       '@tanstack/store': 0.6.0
       algosdk: 3.0.0
     optionalDependencies:
-      '@perawallet/connect': 1.3.5(algosdk@3.0.0)
+      '@agoralabs-sh/avm-web-provider': 1.7.0
+      '@blockshake/defly-connect': 1.2.1(algosdk@3.0.0)
+      '@perawallet/connect': 1.4.1(algosdk@3.0.0)
+      lute-connect: 1.4.1
 
   '@types/estree@1.0.6': {}
 
@@ -4328,9 +4379,13 @@ snapshots:
 
   lodash@4.17.21: {}
 
+  lottie-web@5.12.2: {}
+
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  lute-connect@1.4.1: {}
 
   magic-string-ast@0.6.2:
     dependencies:
@@ -4984,6 +5039,8 @@ snapshots:
       is-generator-function: 1.0.10
       is-typed-array: 1.1.13
       which-typed-array: 1.1.15
+
+  uuid@9.0.1: {}
 
   vite-hot-client@0.2.3(vite@5.4.11(@types/node@22.9.0)):
     dependencies:

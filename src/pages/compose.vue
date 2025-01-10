@@ -279,14 +279,15 @@ const closeRemainderToTip = computed(() =>
       paid, to this address.`
 );
 
-const lastRound = ref();
+const lastRound = ref<bigint>();
 const avgBlockTime = ref();
 
 const expireDt = computed(() => {
   if (!store.account?.participation || store.account.status !== "Online")
     return undefined;
   const expireMs =
-    (Number(store.account.participation.voteLastValid) - lastRound.value) *
+    (Number(store.account.participation.voteLastValid) -
+      Number(lastRound.value)) *
     avgBlockTime.value;
   return `${new Date(Date.now() + expireMs).toLocaleString()} (${Math.round(
     expireMs / (24 * 60 * 60 * 1000)
@@ -440,7 +441,7 @@ async function calcAvgBlockTime() {
   const status = await Algo.algod.status().do();
   lastRound.value = status.lastRound;
   const currentRound = await Algo.algod.block(lastRound.value).do();
-  const oldRound = await Algo.algod.block(lastRound.value - 100).do();
+  const oldRound = await Algo.algod.block(lastRound.value - 100n).do();
   avgBlockTime.value =
     Math.floor(
       Number(

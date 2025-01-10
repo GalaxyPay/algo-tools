@@ -9,13 +9,16 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@agoralabs-sh/avm-web-provider": "^1.7.0",
     "@algorandfoundation/algokit-utils": "^8.0.2",
+    "@blockshake/defly-connect": "^1.2.1",
     "@mdi/js": "^7.4.47",
-    "@perawallet/connect": "^1.3.5",
-    "@txnlab/use-wallet-vue": "^4.0.0-beta.3",
+    "@perawallet/connect": "^1.4.1",
+    "@txnlab/use-wallet-vue": "^4.0.0-beta.4",
     "algosdk": "^3.0.0",
     "core-js": "^3.39.0",
     "idb-keyval": "^6.2.1",
+    "lute-connect": "^1.4.1",
     "merkletreejs": "^0.4.0",
     "multiformats": "^13.3.1",
     "pinia": "^2.2.6",
