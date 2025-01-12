@@ -47,7 +47,7 @@
 <script lang="ts" setup>
 import { vanityAbi } from "@/data";
 import Algo, { getParams } from "@/services/Algo";
-import { delay, execAtc } from "@/utils";
+import { bigintAmount, delay, execAtc } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
 
@@ -108,8 +108,8 @@ async function sell() {
     suggestedParams.fee = suggestedParams.minFee * 2n;
     suggestedParams.flatFee = true;
     const appAddr = algosdk.getApplicationAddress(store.network.vanityId);
-    const price = vanity.value.price! * 10 ** 6;
-    const tax = Math.floor(price / 20);
+    const price = bigintAmount(vanity.value.price!, 6);
+    const tax = Math.floor(Number(price) / 20);
 
     const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       sender: activeAccount.value!.address,

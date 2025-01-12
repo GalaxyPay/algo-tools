@@ -120,7 +120,7 @@
 <script lang="ts" setup>
 import Algo, { getParams } from "@/services/Algo";
 import burnTeal from "@/teal/burn.teal?raw";
-import { execAtc } from "@/utils";
+import { bigintAmount, execAtc } from "@/utils";
 import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { IntDecoding, parseJSON, stringifyJSON } from "algosdk";
@@ -243,7 +243,7 @@ async function burn() {
         receiver: lsig.value.hash,
         suggestedParams,
         assetIndex: assetId.value,
-        amount: amount.value * 10 ** asset.value.params.decimals || 0,
+        amount: bigintAmount(amount.value, asset.value.params.decimals) || 0,
       };
       if (closeout.value) burnObj.closeRemainderTo = lsig.value.hash;
       const txn =

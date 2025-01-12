@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { getParams } from "@/services/Algo";
-import { execAtc } from "@/utils";
+import { bigintAmount, execAtc } from "@/utils";
 import { mdiClose } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
@@ -51,7 +51,7 @@ async function donate() {
     const enc = new TextEncoder();
     const suggestedParams = await getParams();
     const note64 = note.value ? enc.encode(note.value) : undefined;
-    const microAlgo = amount.value * 10 ** 6;
+    const microAlgo = bigintAmount(amount.value, 6);
     const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       receiver: "TOOLSGOIPA6BC2JHR4QZYWNYJQRKLTA7NQ44EDRUQCR2R26Y4Y5OAIE6MM",
       sender: activeAccount.value!.address,

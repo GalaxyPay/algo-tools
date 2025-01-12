@@ -218,7 +218,7 @@
 import { Arc59Client } from "@/clients/Arc59Client";
 import Algo, { getParams } from "@/services/Algo";
 import type { KeyRegTxn } from "@/types";
-import { execAtc, getAssetInfo } from "@/utils";
+import { bigintAmount, execAtc, getAssetInfo } from "@/utils";
 import { mdiContentPaste, mdiInformation } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
@@ -375,7 +375,7 @@ async function compose() {
           sender: activeAccount.value!.address,
           note: note64,
           suggestedParams,
-          amount: amount.value * 10 ** 6,
+          amount: bigintAmount(amount.value, 6),
           closeRemainderTo: closeRemainderTo.value,
         });
         break;
@@ -397,7 +397,7 @@ async function compose() {
           sender: activeAccount.value!.address,
           note: note64,
           suggestedParams,
-          amount: amount.value * 10 ** Number(asset.value.params.decimals),
+          amount: bigintAmount(amount.value, asset.value.params.decimals),
           closeRemainderTo: closeRemainderTo.value,
           assetSender: assetSender.value,
         });
@@ -520,7 +520,7 @@ async function arc59SendAsset() {
         sender: store.account.address,
         note: note64,
         suggestedParams,
-        amount: amount.value * 10 ** Number(asset.value.params.decimals),
+        amount: bigintAmount(amount.value, asset.value.params.decimals),
         closeRemainderTo: closeRemainderTo.value,
         assetSender: assetSender.value,
       });
