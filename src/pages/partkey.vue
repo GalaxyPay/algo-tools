@@ -32,7 +32,7 @@
             />
           </template>
           <template #[`item.expire`]="{ item }">
-            {{ expireDt(item.key.voteLastValid) }}
+            {{ expireDt(Number(item.key.voteLastValid)) }}
           </template>
           <template #[`item.actions`]="{ item }">
             <span>
@@ -148,7 +148,7 @@ import {
   mdiPlus,
 } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import algosdk, { modelsv2 } from "algosdk";
+import algosdk, { decodeJSON, modelsv2, stringifyJSON } from "algosdk";
 
 const store = useAppStore();
 const { activeAccount, transactionSigner } = useWallet();
@@ -159,7 +159,7 @@ const keys = ref<any[]>();
 const showGenerate = ref(false);
 const form = ref();
 const gen = ref<{ first?: number; last?: number }>({});
-const lastRound = ref();
+const lastRound = ref<number>();
 
 const altForm = ref();
 const manageAlt = ref(false);
@@ -221,7 +221,7 @@ async function getKeys() {
       ?.filter((p: any) => p.address === addr)
       .map((p: any) => ({
         ...p,
-        key: modelsv2.AccountParticipation.from_obj_for_encoding(p.key),
+        key: decodeJSON(stringifyJSON(p.key), modelsv2.AccountParticipation),
       }))
       .sort((a: any, b: any) => b.key.voteLastValid - a.key.voteLastValid);
   } else {
@@ -237,13 +237,13 @@ onMounted(() => {
 
 function loadDefaults() {
   gen.value.first = lastRound.value;
-  gen.value.last = lastRound.value + 3 * 10 ** 6;
+  gen.value.last = lastRound.value! + 3 * 10 ** 6;
 }
 
-function isActiveKey(key: modelsv2.AccountParticipation) {
+function isActiveKey(key: any) {
   if (!store.account) return false;
   return (
-    key.voteParticipationKey.toString() ==
+    key.voteParticipationKey.toString() ===
     store.account.participation?.voteParticipationKey.toString()
   );
 }
@@ -265,7 +265,7 @@ async function generateDialog() {
 
 async function getLastRound() {
   const status = await Algo.algod.status().do();
-  lastRound.value = status["last-round"];
+  lastRound.value = Number(status.lastRound);
 }
 
 async function generateKey() {
@@ -319,7 +319,7 @@ async function registerKey(item: any) {
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await getParams();
     const txn = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject({
-      from: item.address,
+      sender: item.address,
       suggestedParams,
       voteFirst: item.key.voteFirstValid,
       voteLast: item.key.voteLastValid,
@@ -344,7 +344,7 @@ async function offline() {
       const suggestedParams = await getParams();
       const atc = new algosdk.AtomicTransactionComposer();
       const txn = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject({
-        from: activeAccount.value!.address,
+        sender: activeAccount.value!.address,
         suggestedParams,
         nonParticipation: false,
       });
@@ -362,13 +362,18 @@ const avgBlockTime = ref();
 
 async function calcAvgBlockTime() {
   await getLastRound();
-  const currentRound = await Algo.algod.block(lastRound.value).do();
-  const oldRound = await Algo.algod.block(lastRound.value - 100).do();
+  const currentRound = await Algo.algod.block(lastRound.value!).do();
+  const oldRound = await Algo.algod.block(lastRound.value! - 100).do();
   avgBlockTime.value =
-    Math.floor(currentRound.block.ts - oldRound.block.ts) * 10;
+    Math.floor(
+      Number(
+        currentRound.block.header.timestamp - oldRound.block.header.timestamp
+      )
+    ) * 10;
 }
 
 function expireDt(lastValid: number) {
+  if (!lastRound.value) return "";
   const expireMs = (lastValid - lastRound.value) * avgBlockTime.value;
   return new Date(Date.now() + expireMs).toLocaleString();
 }
@@ -390,7 +395,7 @@ watch(
 );
 
 function copyToClipboard(key: modelsv2.AccountParticipation) {
-  navigator.clipboard.writeText(JSON.stringify(key.get_obj_for_encoding()));
+  navigator.clipboard.writeText(algosdk.encodeJSON(key));
   store.setSnackbar("Key Copied", "info", 1000);
 }
 

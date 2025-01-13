@@ -100,7 +100,10 @@ function formatAmount() {
 function getAppClient() {
   if (!store.account?.address) throw Error("Invalid Claimer");
   if (!store.network.inboxRouter) throw Error("Invalid Router");
-  const sender = { addr: store.account.address, signer: transactionSigner };
+  const sender = {
+    addr: algosdk.Address.fromString(store.account.address),
+    signer: transactionSigner,
+  };
   return new Arc59Client(
     { sender, resolveBy: "id", id: store.network.inboxRouter },
     Algo.algod
@@ -122,18 +125,18 @@ async function claim() {
       composer.arc59ClaimAlgo({}, { sendParams: { fee: (0).microAlgos() } });
     }
     // If the claimer hasn't already opted in, add a transaction to do so
+    const suggestedParams = await getParams();
     if (!claimerOptedIn) {
-      const suggestedParams = await getParams();
       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        from: store.account.address,
-        to: store.account.address,
+        sender: store.account.address,
+        receiver: store.account.address,
         amount: 0,
         assetIndex: Number(asset.assetId),
         suggestedParams,
       });
       composer.addTransaction({ txn, signer: transactionSigner });
     }
-    const fee = (algosdk.ALGORAND_MIN_TX_FEE * totalTxns).microAlgos();
+    const fee = (Number(suggestedParams.minFee) * totalTxns).microAlgos();
     composer.arc59Claim({ asa: asset.assetId }, { sendParams: { fee } });
     const atc = await populateAppCallResources(
       await composer.atc(),
@@ -151,7 +154,8 @@ async function reject() {
   try {
     store.overlay = true;
     const appClient = getAppClient();
-    const fee = (algosdk.ALGORAND_MIN_TX_FEE * 3).microAlgos();
+    const suggestedParams = await getParams();
+    const fee = (Number(suggestedParams.minFee) * 3).microAlgos();
     const composer = appClient.compose();
     composer.arc59Reject({ asa: asset.assetId }, { sendParams: { fee } });
     const atc = await populateAppCallResources(

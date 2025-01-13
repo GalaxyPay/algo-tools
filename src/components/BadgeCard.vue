@@ -59,24 +59,29 @@ async function claim() {
     store.overlay = true;
     const assetId = Number(props.badge.index);
     if (!props.badge) throw Error("Badge not found");
-    const sender = { addr: store.account.address, signer: transactionSigner };
+    const sender = {
+      addr: algosdk.Address.fromString(store.account.address),
+      signer: transactionSigner,
+    };
     const appClient = new LuteGovClient(
       { sender, resolveBy: "id", id: props.badge.properties.appId },
       Algo.algod
     );
     const composer = appClient.compose();
     const suggestedParams = await Algo.algod.getTransactionParams().do();
-    if (!store.account.assets?.some((a) => a.assetId === assetId)) {
+    if (!store.account.assets?.some((a) => Number(a.assetId) === assetId)) {
       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         assetIndex: assetId,
-        to: sender.addr,
-        from: sender.addr,
+        receiver: sender.addr,
+        sender: sender.addr,
         suggestedParams,
         amount: 0,
       });
       composer.addTransaction({ txn, signer: transactionSigner });
     }
-    const leaf = Buffer.from(algosdk.decodeAddress(sender.addr).publicKey);
+    const leaf = Buffer.from(
+      algosdk.decodeAddress(sender.addr.toString()).publicKey
+    );
     const leaves = props.badge.addrs.map(
       (x) => algosdk.decodeAddress(x).publicKey
     );

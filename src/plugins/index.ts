@@ -32,6 +32,17 @@ export function registerPlugins(app: App) {
         WalletId.PERA,
         WalletId.KIBISIS,
       ],
-      network: NetworkId.MAINNET,
+      defaultNetwork: NetworkId.MAINNET,
     });
 }
+
+// handle bigints in JSON
+declare global {
+  interface BigInt {
+    toJSON(): number;
+  }
+}
+
+BigInt.prototype.toJSON = function () {
+  return Number(this);
+};

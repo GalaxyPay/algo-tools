@@ -75,7 +75,7 @@
 
 <script lang="ts" setup>
 import Algo from "@/services/Algo";
-import { execAtc } from "@/utils";
+import { bigintAmount, execAtc } from "@/utils";
 import { mdiCancel, mdiCircleOutline, mdiClose } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
@@ -122,7 +122,7 @@ async function sendAsset() {
       Algo.indexer,
       { acc: { addr: activeAccount.value.address, sk: new Uint8Array() } }
     );
-    const amt = BigInt(amount.value * 10 ** props.asset.params.decimals);
+    const amt = bigintAmount(amount.value, props.asset.params.decimals);
     const sim = await contract.arc200_transfer(receiver.value, amt, true, true);
     if (sim.success) {
       const atc = new algosdk.AtomicTransactionComposer();

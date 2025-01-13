@@ -14,14 +14,14 @@ export async function getAssetInfo(
     if (appStore.network.networkId === "mainnet" || id === 0) {
       tiny = appStore.tinyman?.[Number(id)];
       if (tiny && id === 0) {
-        assetInfo = modelsv2.Asset.from_obj_for_encoding({
-          index: Number(tiny.id),
+        assetInfo = new modelsv2.Asset({
+          index: BigInt(tiny.id),
+          // @ts-expect-error
           params: {
-            creator: "",
             decimals: tiny.decimals,
             name: tiny.name,
-            total: tiny.total_amount,
-            "unit-name": tiny.unit_name,
+            total: BigInt(tiny.total_amount),
+            unitName: tiny.unit_name,
             url: tiny.logo.png,
           },
         });
@@ -37,8 +37,7 @@ export async function getAssetInfo(
       !assetInfo ||
       (assetInfo.params.url?.startsWith("template-ipfs") && getImage)
     ) {
-      const asset = await Algo.algod.getAssetByID(numId).do();
-      assetInfo = modelsv2.Asset.from_obj_for_encoding(asset);
+      assetInfo = await Algo.algod.getAssetByID(numId).do();
       await set(numId, assetInfo, customStore);
     }
     if (tiny) assetInfo.params.url = tiny.logo.png;

@@ -8,27 +8,36 @@ importers:
 
   .:
     dependencies:
+      '@agoralabs-sh/avm-web-provider':
+        specifier: ^1.7.0
+        version: 1.7.0
       '@algorandfoundation/algokit-utils':
-        specifier: ^6.2.1
-        version: 6.2.1(algosdk@2.9.0)
+        specifier: ^8.0.2
+        version: 8.0.2(algosdk@3.0.0)
+      '@blockshake/defly-connect':
+        specifier: ^1.2.1
+        version: 1.2.1(algosdk@3.0.0)
       '@mdi/js':
         specifier: ^7.4.47
         version: 7.4.47
       '@perawallet/connect':
-        specifier: ^1.3.5
-        version: 1.3.5(algosdk@2.9.0)
+        specifier: ^1.4.1
+        version: 1.4.1(algosdk@3.0.0)
       '@txnlab/use-wallet-vue':
-        specifier: ^3.10.0
-        version: 3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.5(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)(vue@3.5.12(typescript@5.6.3))
+        specifier: ^4.0.0-beta.4
+        version: 4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.0.0))(@perawallet/connect@1.4.1(algosdk@3.0.0))(algosdk@3.0.0)(lute-connect@1.4.1)(vue@3.5.12(typescript@5.6.3))
       algosdk:
-        specifier: ^2.9.0
-        version: 2.9.0
+        specifier: ^3.0.0
+        version: 3.0.0
       core-js:
         specifier: ^3.39.0
         version: 3.39.0
       idb-keyval:
         specifier: ^6.2.1
         version: 6.2.1
+      lute-connect:
+        specifier: ^1.4.1
+        version: 1.4.1
       merkletreejs:
         specifier: ^0.4.0
         version: 0.4.0
@@ -115,11 +124,11 @@ packages:
     resolution: {integrity: sha512-AfMdBdFS3EW1RunzHVEwNFucS6UIALs661d+zL6AHFDdxOTvUgahRC4l163VoGWA0UEpnayT1jGObci8nitZeA==}
     engines: {node: '>=18.20.3'}
 
-  '@algorandfoundation/algokit-utils@6.2.1':
-    resolution: {integrity: sha512-oJbqT91KJp34OasYID2guWHysCLdgZ/4GVb06sdgXxORWKKMhZa/Uj12UiACo4VzZJBOUZEJCh/QrSuHmu/m2g==}
-    engines: {node: '>=18.0'}
+  '@algorandfoundation/algokit-utils@8.0.2':
+    resolution: {integrity: sha512-Tn8lhRzalIS7cLS/GPKnPr2//+cGduuDovqpe0Mnik7+KJJ73kimDwSRWY4JPbCTASHlA2j060DGK85+il//ew==}
+    engines: {node: '>=20.0'}
     peerDependencies:
-      algosdk: ^2.7.0
+      algosdk: ^3.0.0
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -264,10 +273,10 @@ packages:
     resolution: {integrity: sha512-Z/yiTPj+lDVnF7lWeKCIJzaIkI0vYO87dMpZ4bg4TDrFe4XXLFWL1TbXU27gBP3QccxV9mZICCrnjnYlJjXHOA==}
     engines: {node: '>=6.9.0'}
 
-  '@blockshake/defly-connect@1.1.6':
-    resolution: {integrity: sha512-pgibHfWjTkfyjQhRVKR2mnnG7Vv/oBJGowphrIwdF62TkElRspsCrv/GcasZ2ipw+Wrqp3cdsE1W7GU0ZjgPwg==}
+  '@blockshake/defly-connect@1.2.1':
+    resolution: {integrity: sha512-T9wAjPTFdc8iRiDzTqmeBRCIroWLgXmqZHwnpzuchjYZXXqbnj+zge+HS7UaNunpxGVjDUNK1ah7OR6hEqtJoQ==}
     peerDependencies:
-      algosdk: ^2.1.0
+      algosdk: ^3.0.0
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -491,6 +500,9 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
+  '@likecoin/qr-code-styling@1.6.6':
+    resolution: {integrity: sha512-RbGK/+20bJhFZR70r8MeDvfyz3W7U5zXpykSTYOYxZGyo6wC+Y4QnbUpL+YdAtzT2ZIFeCNOcRs2W2FNrKPoaA==}
+
   '@mdi/js@7.4.47':
     resolution: {integrity: sha512-KPnNOtm5i2pMabqZxpUz7iQf+mfrYZyKCZ8QNz85czgEt7cuHcGorWfdzUMWYA0SD+a6Hn4FmJ+YhzzzjkTZrQ==}
 
@@ -569,10 +581,10 @@ packages:
   '@octokit/types@13.6.1':
     resolution: {integrity: sha512-PHZE9Z+kWXb23Ndik8MKPirBPziOc0D2/3KH1P+6jK5nGWe96kadZuE4jev2/Jq7FvIfTlT2Ltg8Fv2x1v0a5g==}
 
-  '@perawallet/connect@1.3.5':
-    resolution: {integrity: sha512-JBaaS0tjipo3DcS2v5Q1lcQXqxYkVpKB3YiqV7okBnd1KQ54zcATvPwRXvpsbxttec1OpdHmkWymuTpxpx+2Ng==}
+  '@perawallet/connect@1.4.1':
+    resolution: {integrity: sha512-yXfpQ2SzblOBp0P2Xsneq4f0d1YsSuYrdpw2fSwivlTbc5a40hQfYiJMql+b3UdfSID/wcaPl9Vkb5cMSBxNwQ==}
     peerDependencies:
-      algosdk: ^2.1.0
+      algosdk: ^3.0.0
 
   '@polka/url@1.0.0-next.28':
     resolution: {integrity: sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==}
@@ -694,11 +706,11 @@ packages:
   '@scure/bip39@1.3.0':
     resolution: {integrity: sha512-disdg7gHuTDZtY+ZdkmLpPCk7fxZSu3gBiEGuoC1XYxv9cGx3Z6cpTggCgW6odSOOIXCiDjuGejW+aJKCY/pIQ==}
 
-  '@tanstack/store@0.5.5':
-    resolution: {integrity: sha512-EOSrgdDAJExbvRZEQ/Xhh9iZchXpMN+ga1Bnk8Nmygzs8TfiE6hbzThF+Pr2G19uHL6+DTDTHhJ8VQiOd7l4tA==}
+  '@tanstack/store@0.6.0':
+    resolution: {integrity: sha512-+m2OBglsjXcLmmKOX6/9v8BDOCtyxhMmZLsRUDswOOSdIIR9mvv6i0XNKsmTh3AlYU8c1mRcodC8/Vyf+69VlQ==}
 
-  '@tanstack/vue-store@0.5.5':
-    resolution: {integrity: sha512-j+CDrxVhtQQNOjWzLmCqJeDwmmTAQGvEaNbLr1uPJ9rxJITodJtFNdBFj7l+Nd5o34v2ayEv64Ugh6+1BtuGNg==}
+  '@tanstack/vue-store@0.6.0':
+    resolution: {integrity: sha512-QcvBEOG2dPiFw06LqEk1ehL7ZY0CJS8AKlW7uqmFFFzVost+Oj1oiQne9hW+L6O8f0ZnwFlD9fA5a7pTum8YeQ==}
     peerDependencies:
       '@vue/composition-api': ^1.2.1
       vue: ^2.5.0 || ^3.0.0
@@ -709,18 +721,17 @@ packages:
   '@tsconfig/node22@22.0.0':
     resolution: {integrity: sha512-twLQ77zevtxobBOD4ToAtVmuYrpeYUh3qh+TEp+08IWhpsrIflVHqQ1F1CiPxQGL7doCdBIOOCF+1Tm833faNg==}
 
-  '@txnlab/use-wallet-vue@3.10.0':
-    resolution: {integrity: sha512-01Hm01CsucZgTUpZmNU+nb0+BRTbPFfWduNOfIyvNhI1qRTyZPmXlvoL+d318SFA2feoJWuQSEliN6yaRWSA3Q==}
+  '@txnlab/use-wallet-vue@4.0.0-beta.4':
+    resolution: {integrity: sha512-rZbQN1YEQfRgZgMzodgDhidQxaPOBburJceHSv85iQpOUj3qf/b1/x5HY+83SAFNdSM1QH4uH07Pne8asvulmQ==}
     peerDependencies:
-      '@blockshake/defly-connect': ^1.1.6
-      '@magic-ext/algorand': ^23.13.0
-      '@perawallet/connect': ^1.3.5
-      '@perawallet/connect-beta': ^2.0.21
+      '@blockshake/defly-connect': ^1.2.1
+      '@magic-ext/algorand': ^23.18.0
+      '@perawallet/connect': ^1.4.1
       '@walletconnect/modal': ^2.7.0
-      '@walletconnect/sign-client': ^2.17.1
-      algosdk: ^2.7.0
+      '@walletconnect/sign-client': ^2.17.2
+      algosdk: ^3.0.0
       lute-connect: ^1.4.1
-      magic-sdk: ^28.13.0
+      magic-sdk: ^28.19.0
       vue: ^3.0.0
     peerDependenciesMeta:
       '@blockshake/defly-connect':
@@ -728,8 +739,6 @@ packages:
       '@magic-ext/algorand':
         optional: true
       '@perawallet/connect':
-        optional: true
-      '@perawallet/connect-beta':
         optional: true
       '@walletconnect/modal':
         optional: true
@@ -740,17 +749,16 @@ packages:
       magic-sdk:
         optional: true
 
-  '@txnlab/use-wallet@3.10.0':
-    resolution: {integrity: sha512-dgXsEeueKKeGGCZtwSX+OxifuovMguW+NJAs036wNQhMtnDzwxc5XVMZws9npK2mF/NK8xV0P8Y6aBc1E+0b8A==}
+  '@txnlab/use-wallet@4.0.0-beta.4':
+    resolution: {integrity: sha512-5dFvUUJEUcRLP0QnG2K5cFKG7bLQzUFgAnGXNChlm1AG62BgaqxDQtWze8i8gKWfOQijXJ2mg5pnTOaVHg5dPw==}
     peerDependencies:
       '@agoralabs-sh/avm-web-provider': ^1.7.0
       '@algorandfoundation/liquid-auth-use-wallet-client': 1.1.0
-      '@blockshake/defly-connect': ^1.1.6
-      '@perawallet/connect': ^1.3.5
-      '@perawallet/connect-beta': ^2.0.21
+      '@blockshake/defly-connect': ^1.2.1
+      '@perawallet/connect': ^1.4.1
       '@walletconnect/modal': ^2.7.0
-      '@walletconnect/sign-client': ^2.17.1
-      algosdk: ^2.7.0
+      '@walletconnect/sign-client': ^2.17.2
+      algosdk: ^3.0.0
       lute-connect: ^1.4.1
     peerDependenciesMeta:
       '@agoralabs-sh/avm-web-provider':
@@ -760,8 +768,6 @@ packages:
       '@blockshake/defly-connect':
         optional: true
       '@perawallet/connect':
-        optional: true
-      '@perawallet/connect-beta':
         optional: true
       '@walletconnect/modal':
         optional: true
@@ -1021,8 +1027,16 @@ packages:
     resolution: {integrity: sha512-F1tGh056XczEaEAqu7s+hlZUDWwOBT70Eq0lfMpBP2YguSQVyxRbprLq5rELXKQOyOaixTWYhMeMQMzP0U5FoQ==}
     engines: {node: '>= 10'}
 
+  algorand-msgpack@1.1.0:
+    resolution: {integrity: sha512-08k7pBQnkaUB5p+jL7f1TRaUIlTSDE0cesFu1mD7llLao+1cAhtvvZmGE3OnisTd0xOn118QMw74SRqddqaYvw==}
+    engines: {node: '>= 14'}
+
   algosdk@2.9.0:
     resolution: {integrity: sha512-o0n0nLMbTX6SFQdMUk2/2sy50jmEmZk5OTPYSh2aAeP8DUPxrhjMPfwGsYNvaO+qk75MixC2eWpfA9vygCQ/Mg==}
+    engines: {node: '>=18.0.0'}
+
+  algosdk@3.0.0:
+    resolution: {integrity: sha512-PIKZ/YvbBpCudduug4KSH1CY/pTotI7/ccbUIbXKtcI9Onevl+57E+K5X4ow4gsCdysZ8zVvSLdxuCcXvsmPOw==}
     engines: {node: '>=18.0.0'}
 
   alien-signals@0.2.1:
@@ -2566,11 +2580,10 @@ snapshots:
   '@agoralabs-sh/avm-web-provider@1.7.0':
     dependencies:
       uuid: 9.0.1
-    optional: true
 
-  '@algorandfoundation/algokit-utils@6.2.1(algosdk@2.9.0)':
+  '@algorandfoundation/algokit-utils@8.0.2(algosdk@3.0.0)':
     dependencies:
-      algosdk: 2.9.0
+      algosdk: 3.0.0
       buffer: 6.0.3
 
   '@ampproject/remapping@2.3.0':
@@ -2769,19 +2782,18 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@blockshake/defly-connect@1.1.6(algosdk@2.9.0)':
+  '@blockshake/defly-connect@1.2.1(algosdk@3.0.0)':
     dependencies:
+      '@likecoin/qr-code-styling': 1.6.6
       '@walletconnect/client': 1.8.0
       '@walletconnect/types': 1.8.0
-      algosdk: 2.9.0
+      algosdk: 3.0.0
       bowser: 2.11.0
       buffer: 6.0.3
       lottie-web: 5.12.2
-      qr-code-styling: 1.6.0-rc.1
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-    optional: true
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
@@ -2931,6 +2943,10 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
+  '@likecoin/qr-code-styling@1.6.6':
+    dependencies:
+      qrcode-generator: 1.4.4
+
   '@mdi/js@7.4.47': {}
 
   '@noble/curves@1.4.2':
@@ -3016,12 +3032,12 @@ snapshots:
     dependencies:
       '@octokit/openapi-types': 22.2.0
 
-  '@perawallet/connect@1.3.5(algosdk@2.9.0)':
+  '@perawallet/connect@1.4.1(algosdk@3.0.0)':
     dependencies:
       '@evanhahn/lottie-web-light': 5.8.1
       '@walletconnect/client': 1.8.0
       '@walletconnect/types': 1.8.0
-      algosdk: 2.9.0
+      algosdk: 3.0.0
       bowser: 2.11.0
       buffer: 6.0.3
       qr-code-styling: 1.6.0-rc.1
@@ -3114,39 +3130,39 @@ snapshots:
       '@noble/hashes': 1.4.0
       '@scure/base': 1.1.9
 
-  '@tanstack/store@0.5.5': {}
+  '@tanstack/store@0.6.0': {}
 
-  '@tanstack/vue-store@0.5.5(vue@3.5.12(typescript@5.6.3))':
+  '@tanstack/vue-store@0.6.0(vue@3.5.12(typescript@5.6.3))':
     dependencies:
-      '@tanstack/store': 0.5.5
+      '@tanstack/store': 0.6.0
       vue: 3.5.12(typescript@5.6.3)
       vue-demi: 0.14.10(vue@3.5.12(typescript@5.6.3))
 
   '@tsconfig/node22@22.0.0': {}
 
-  '@txnlab/use-wallet-vue@3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.5(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)(vue@3.5.12(typescript@5.6.3))':
+  '@txnlab/use-wallet-vue@4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.0.0))(@perawallet/connect@1.4.1(algosdk@3.0.0))(algosdk@3.0.0)(lute-connect@1.4.1)(vue@3.5.12(typescript@5.6.3))':
     dependencies:
-      '@tanstack/vue-store': 0.5.5(vue@3.5.12(typescript@5.6.3))
-      '@txnlab/use-wallet': 3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.5(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)
-      algosdk: 2.9.0
+      '@tanstack/vue-store': 0.6.0(vue@3.5.12(typescript@5.6.3))
+      '@txnlab/use-wallet': 4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.0.0))(@perawallet/connect@1.4.1(algosdk@3.0.0))(algosdk@3.0.0)(lute-connect@1.4.1)
+      algosdk: 3.0.0
       vue: 3.5.12(typescript@5.6.3)
     optionalDependencies:
-      '@blockshake/defly-connect': 1.1.6(algosdk@2.9.0)
-      '@perawallet/connect': 1.3.5(algosdk@2.9.0)
+      '@blockshake/defly-connect': 1.2.1(algosdk@3.0.0)
+      '@perawallet/connect': 1.4.1(algosdk@3.0.0)
       lute-connect: 1.4.1
     transitivePeerDependencies:
       - '@agoralabs-sh/avm-web-provider'
       - '@algorandfoundation/liquid-auth-use-wallet-client'
       - '@vue/composition-api'
 
-  '@txnlab/use-wallet@3.10.0(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.1.6(algosdk@2.9.0))(@perawallet/connect@1.3.5(algosdk@2.9.0))(algosdk@2.9.0)(lute-connect@1.4.1)':
+  '@txnlab/use-wallet@4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.0.0))(@perawallet/connect@1.4.1(algosdk@3.0.0))(algosdk@3.0.0)(lute-connect@1.4.1)':
     dependencies:
-      '@tanstack/store': 0.5.5
-      algosdk: 2.9.0
+      '@tanstack/store': 0.6.0
+      algosdk: 3.0.0
     optionalDependencies:
       '@agoralabs-sh/avm-web-provider': 1.7.0
-      '@blockshake/defly-connect': 1.1.6(algosdk@2.9.0)
-      '@perawallet/connect': 1.3.5(algosdk@2.9.0)
+      '@blockshake/defly-connect': 1.2.1(algosdk@3.0.0)
+      '@perawallet/connect': 1.4.1(algosdk@3.0.0)
       lute-connect: 1.4.1
 
   '@types/estree@1.0.6': {}
@@ -3536,10 +3552,23 @@ snapshots:
 
   algo-msgpack-with-bigint@2.1.1: {}
 
+  algorand-msgpack@1.1.0: {}
+
   algosdk@2.9.0:
     dependencies:
       algo-msgpack-with-bigint: 2.1.1
       buffer: 6.0.3
+      hi-base32: 0.5.1
+      js-sha256: 0.9.0
+      js-sha3: 0.8.0
+      js-sha512: 0.8.0
+      json-bigint: 1.0.0
+      tweetnacl: 1.0.3
+      vlq: 2.0.4
+
+  algosdk@3.0.0:
+    dependencies:
+      algorand-msgpack: 1.1.0
       hi-base32: 0.5.1
       js-sha256: 0.9.0
       js-sha3: 0.8.0
@@ -4350,15 +4379,13 @@ snapshots:
 
   lodash@4.17.21: {}
 
-  lottie-web@5.12.2:
-    optional: true
+  lottie-web@5.12.2: {}
 
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
 
-  lute-connect@1.4.1:
-    optional: true
+  lute-connect@1.4.1: {}
 
   magic-string-ast@0.6.2:
     dependencies:
@@ -5013,8 +5040,7 @@ snapshots:
       is-typed-array: 1.1.13
       which-typed-array: 1.1.15
 
-  uuid@9.0.1:
-    optional: true
+  uuid@9.0.1: {}
 
   vite-hot-client@0.2.3(vite@5.4.11(@types/node@22.9.0)):
     dependencies:
