@@ -85,15 +85,17 @@ async function getInbox() {
   } catch {
     return;
   }
-  const info = await Algo.algod.accountInformation(inbox).do();
-  inboxInfo.value = modelsv2.Account.from_obj_for_encoding(info);
+  inboxInfo.value = await Algo.algod.accountInformation(inbox).do();
 }
 
 async function createRouter() {
   try {
     store.overlay = true;
     if (!store.account) throw Error("Invalid Account");
-    const sender = { addr: store.account.address, signer: transactionSigner };
+    const sender = {
+      addr: algosdk.Address.fromString(store.account.address),
+      signer: transactionSigner,
+    };
     const appClient = new Arc59Client(
       { sender, resolveBy: "id", id: 0 },
       Algo.algod

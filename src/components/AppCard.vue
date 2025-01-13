@@ -127,7 +127,7 @@ async function closeOut() {
       const atc = new algosdk.AtomicTransactionComposer();
       const suggestedParams = await getParams();
       const txn = algosdk.makeApplicationCloseOutTxnFromObject({
-        from: activeAccount.value!.address,
+        sender: activeAccount.value!.address,
         suggestedParams,
         appIndex: Number(props.app.id),
       });
@@ -154,7 +154,7 @@ async function clearState() {
       const atc = new algosdk.AtomicTransactionComposer();
       const suggestedParams = await getParams();
       const txn = algosdk.makeApplicationClearStateTxnFromObject({
-        from: activeAccount.value!.address,
+        sender: activeAccount.value!.address,
         suggestedParams,
         appIndex: Number(props.app.id),
       });
@@ -179,7 +179,7 @@ async function deleteApp() {
       const atc = new algosdk.AtomicTransactionComposer();
       const suggestedParams = await getParams();
       const txn = algosdk.makeApplicationDeleteTxnFromObject({
-        from: activeAccount.value!.address,
+        sender: activeAccount.value!.address,
         suggestedParams,
         appIndex: Number(props.app.id),
       });

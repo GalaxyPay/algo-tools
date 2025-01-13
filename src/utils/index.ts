@@ -37,3 +37,7 @@ export function ipfs2http(url: string) {
   const ipfsGateway = "https://ipfs.algonode.xyz/ipfs/";
   return url.replace("ipfs://", ipfsGateway);
 }
+
+export function bigintAmount(amt: number, dec: number | bigint) {
+  return BigInt(Math.round(amt * 10 ** Number(dec)));
+}
