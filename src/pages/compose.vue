@@ -328,7 +328,7 @@ watch(
 function itemProps(item: modelsv2.Asset) {
   return {
     title: item.params.name,
-    subtitle: item.index,
+    subtitle: Number(item.index),
   };
 }
 
@@ -356,6 +356,10 @@ async function pasteFromClipboard() {
   part.value.stateProofKey = clip.match(
     /(?<=^State\sproof\skey:\s*)[^\s]*$/gm
   )![0];
+}
+
+function b64ToUint8(b64: string | undefined) {
+  return b64 ? Buffer.from(b64, "base64") : undefined;
 }
 
 async function compose() {
@@ -413,13 +417,16 @@ async function compose() {
         break;
       }
       case "Key Registration": {
-        part.value.from = activeAccount.value!.address;
+        part.value.sender = activeAccount.value!.address;
         if (incentiveEligible.value) {
           suggestedParams.flatFee = true;
           suggestedParams.fee = 2n * 10n ** 6n;
         }
         const obj = {
           ...(part.value as any),
+          voteKey: b64ToUint8(part.value.voteKey),
+          selectionKey: b64ToUint8(part.value.selectionKey),
+          stateProofKey: b64ToUint8(part.value.stateProofKey),
           suggestedParams,
         };
         txn = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject(obj);

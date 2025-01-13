@@ -260,16 +260,16 @@ async function getForSale() {
       const fs: ForSale = a;
       fs.vanity = {
         owner: algosdk.encodeAddress(
-          kv.find((kv) => kv.key === Buffer.from("b3duZXI=", "base64"))!.value
+          kv.find((kv) => Buffer.from(kv.key).toString() === "owner")!.value
             .bytes
         ),
         price: Number(
-          kv.find((kv) => kv.key === Buffer.from("cHJpY2U=", "base64"))!.value
+          kv.find((kv) => Buffer.from(kv.key).toString() === "price")!.value
             .uint
         ),
         key: algosdk.mnemonicToSecretKey(
           algosdk.secretKeyToMnemonic(
-            kv.find((kv) => kv.key === Buffer.from("a2V5", "base64"))!.value
+            kv.find((kv) => Buffer.from(kv.key).toString() === "key")!.value
               .bytes
           )
         ),

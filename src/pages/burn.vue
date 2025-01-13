@@ -36,7 +36,10 @@
                   </div>
                   <div v-show="!clawback">
                     Previously Burned:
-                    {{ (opted?.amount || 0) / 10 ** asset.params?.decimals }}
+                    {{
+                      (Number(opted?.amount) || 0) /
+                      10 ** asset.params?.decimals
+                    }}
                   </div>
                 </v-card-text>
               </v-col>
@@ -118,6 +121,7 @@
 </template>
 
 <script lang="ts" setup>
+import router from "@/router";
 import Algo, { getParams } from "@/services/Algo";
 import burnTeal from "@/teal/burn.teal?raw";
 import { bigintAmount, execAtc } from "@/utils";
@@ -153,6 +157,10 @@ const needFunding = computed(
 const required = (v: number) => closeout.value || !!v || v === 0 || "Required";
 
 async function getAssets() {
+  if (!store.account) {
+    router.replace("/");
+    return;
+  }
   const account = parseJSON(stringifyJSON(store.account), {
     intDecoding: IntDecoding.MIXED,
   });

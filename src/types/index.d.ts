@@ -29,7 +29,7 @@ export type Base64 = string;
 export type TxHash = string;
 
 interface Txn {
-  from: Address;
+  sender: Address;
   fee: number;
   firstRound: number;
   lastRound: number;
@@ -50,7 +50,7 @@ interface ConfigTxn extends Txn {
 }
 
 interface TransferTxn extends Txn {
-  to: Address;
+  receiver: Address;
   amount: number;
   closeRemainderTo?: Address;
 }
