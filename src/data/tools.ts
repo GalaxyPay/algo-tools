@@ -5,7 +5,6 @@ import {
   mdiHandshake,
   mdiLogout,
   mdiMirror,
-  mdiPencil,
   mdiTrayArrowDown,
 } from "@mdi/js";
 
@@ -39,6 +38,12 @@ export const tools = () => {
 
   val.push(
     {
+      title: "Participation Keys",
+      subtitle: "For node runners. Manage participation keys.",
+      icon: mdiHandshake,
+      path: "/keyreg",
+    },
+    {
       title: "Opt-Out",
       subtitle:
         "Manage your minimum balance by opting out of assets and applications (smart contracts).",
@@ -46,23 +51,10 @@ export const tools = () => {
       path: "/optout",
     },
     {
-      title: "Compose Transaction",
-      subtitle:
-        "Constuct, sign, and send a transaction. Make payments, transfer assets, register participation keys, rekey, and more.",
-      icon: mdiPencil,
-      path: "/compose",
-    },
-    {
       title: "Burn Assets",
       subtitle: "Burn ASAs or NFTs. Trustlessly. Permenantly.",
       icon: mdiFire,
       path: "/burn",
-    },
-    {
-      title: "Participation Keys",
-      subtitle: "For node runners. Manage participation keys on your node.",
-      icon: mdiHandshake,
-      path: "/partkey",
     }
   );
 
