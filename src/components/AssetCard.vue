@@ -141,7 +141,7 @@ function formatAmount() {
 
 async function setReceiver() {
   if (!props.asset.amount && props.asset.assetId) {
-    receiver.value = assetInfo.value?.params.creator;
+    receiver.value = activeAccount.value!.address;
     closeOut();
   } else {
     showReceiver.value = true;
