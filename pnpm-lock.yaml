@@ -24,8 +24,8 @@ importers:
         specifier: ^1.4.1
         version: 1.4.1(algosdk@3.1.0)
       '@txnlab/use-wallet-vue':
-        specifier: 4.0.0-beta.4
-        version: 4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.1.0))(@perawallet/connect@1.4.1(algosdk@3.1.0))(algosdk@3.1.0)(lute-connect@1.4.1)(vue@3.5.13(typescript@5.6.3))
+        specifier: 4.0.0-beta.6
+        version: 4.0.0-beta.6(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.1.0))(@perawallet/connect@1.4.1(algosdk@3.1.0))(algosdk@3.1.0)(lute-connect@1.4.1)(vue@3.5.13(typescript@5.6.3))
       algosdk:
         specifier: ^3.1.0
         version: 3.1.0
@@ -689,11 +689,11 @@ packages:
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
 
-  '@tanstack/store@0.6.0':
-    resolution: {integrity: sha512-+m2OBglsjXcLmmKOX6/9v8BDOCtyxhMmZLsRUDswOOSdIIR9mvv6i0XNKsmTh3AlYU8c1mRcodC8/Vyf+69VlQ==}
+  '@tanstack/store@0.7.0':
+    resolution: {integrity: sha512-CNIhdoUsmD2NolYuaIs8VfWM467RK6oIBAW4nPEKZhg1smZ+/CwtCdpURgp7nxSqOaV9oKkzdWD80+bC66F/Jg==}
 
-  '@tanstack/vue-store@0.6.0':
-    resolution: {integrity: sha512-QcvBEOG2dPiFw06LqEk1ehL7ZY0CJS8AKlW7uqmFFFzVost+Oj1oiQne9hW+L6O8f0ZnwFlD9fA5a7pTum8YeQ==}
+  '@tanstack/vue-store@0.7.0':
+    resolution: {integrity: sha512-oLB/WuD26caR86rxLz39LvS5YdY0KIThJFEHIW/mXujC2+M/z3GxVZFJsZianAzr3tH56sZQ8kkq4NvwwsOBkQ==}
     peerDependencies:
       '@vue/composition-api': ^1.2.1
       vue: ^2.5.0 || ^3.0.0
@@ -704,17 +704,17 @@ packages:
   '@tsconfig/node22@22.0.0':
     resolution: {integrity: sha512-twLQ77zevtxobBOD4ToAtVmuYrpeYUh3qh+TEp+08IWhpsrIflVHqQ1F1CiPxQGL7doCdBIOOCF+1Tm833faNg==}
 
-  '@txnlab/use-wallet-vue@4.0.0-beta.4':
-    resolution: {integrity: sha512-rZbQN1YEQfRgZgMzodgDhidQxaPOBburJceHSv85iQpOUj3qf/b1/x5HY+83SAFNdSM1QH4uH07Pne8asvulmQ==}
+  '@txnlab/use-wallet-vue@4.0.0-beta.6':
+    resolution: {integrity: sha512-zT8TfHdZizaQIvPA2js/vjF8r1/yFVsPQ9bRIi254oYlb7rwXUK0gHydq/+x5PCJj2tJ5qN9LM5r7elE9LBndQ==}
     peerDependencies:
       '@blockshake/defly-connect': ^1.2.1
-      '@magic-ext/algorand': ^23.18.0
+      '@magic-ext/algorand': ^23.20.0
       '@perawallet/connect': ^1.4.1
       '@walletconnect/modal': ^2.7.0
-      '@walletconnect/sign-client': ^2.17.2
+      '@walletconnect/sign-client': ^2.17.3
       algosdk: ^3.0.0
       lute-connect: ^1.4.1
-      magic-sdk: ^28.19.0
+      magic-sdk: ^28.21.0
       vue: ^3.0.0
     peerDependenciesMeta:
       '@blockshake/defly-connect':
@@ -732,21 +732,18 @@ packages:
       magic-sdk:
         optional: true
 
-  '@txnlab/use-wallet@4.0.0-beta.4':
-    resolution: {integrity: sha512-5dFvUUJEUcRLP0QnG2K5cFKG7bLQzUFgAnGXNChlm1AG62BgaqxDQtWze8i8gKWfOQijXJ2mg5pnTOaVHg5dPw==}
+  '@txnlab/use-wallet@4.0.0-beta.6':
+    resolution: {integrity: sha512-tyE1S2eJwHKYR68pYrr9oMbQqxdVf/68uZucbX5ePedL79NLge6v5+SXFJtIQUfR0wCM8AWEhdWqr961Nh+sJg==}
     peerDependencies:
       '@agoralabs-sh/avm-web-provider': ^1.7.0
-      '@algorandfoundation/liquid-auth-use-wallet-client': 1.1.0
       '@blockshake/defly-connect': ^1.2.1
       '@perawallet/connect': ^1.4.1
       '@walletconnect/modal': ^2.7.0
-      '@walletconnect/sign-client': ^2.17.2
+      '@walletconnect/sign-client': ^2.17.3
       algosdk: ^3.0.0
       lute-connect: ^1.4.1
     peerDependenciesMeta:
       '@agoralabs-sh/avm-web-provider':
-        optional: true
-      '@algorandfoundation/liquid-auth-use-wallet-client':
         optional: true
       '@blockshake/defly-connect':
         optional: true
@@ -3108,20 +3105,20 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
-  '@tanstack/store@0.6.0': {}
+  '@tanstack/store@0.7.0': {}
 
-  '@tanstack/vue-store@0.6.0(vue@3.5.13(typescript@5.6.3))':
+  '@tanstack/vue-store@0.7.0(vue@3.5.13(typescript@5.6.3))':
     dependencies:
-      '@tanstack/store': 0.6.0
+      '@tanstack/store': 0.7.0
       vue: 3.5.13(typescript@5.6.3)
       vue-demi: 0.14.10(vue@3.5.13(typescript@5.6.3))
 
   '@tsconfig/node22@22.0.0': {}
 
-  '@txnlab/use-wallet-vue@4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.1.0))(@perawallet/connect@1.4.1(algosdk@3.1.0))(algosdk@3.1.0)(lute-connect@1.4.1)(vue@3.5.13(typescript@5.6.3))':
+  '@txnlab/use-wallet-vue@4.0.0-beta.6(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.1.0))(@perawallet/connect@1.4.1(algosdk@3.1.0))(algosdk@3.1.0)(lute-connect@1.4.1)(vue@3.5.13(typescript@5.6.3))':
     dependencies:
-      '@tanstack/vue-store': 0.6.0(vue@3.5.13(typescript@5.6.3))
-      '@txnlab/use-wallet': 4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.1.0))(@perawallet/connect@1.4.1(algosdk@3.1.0))(algosdk@3.1.0)(lute-connect@1.4.1)
+      '@tanstack/vue-store': 0.7.0(vue@3.5.13(typescript@5.6.3))
+      '@txnlab/use-wallet': 4.0.0-beta.6(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.1.0))(@perawallet/connect@1.4.1(algosdk@3.1.0))(algosdk@3.1.0)(lute-connect@1.4.1)
       algosdk: 3.1.0
       vue: 3.5.13(typescript@5.6.3)
     optionalDependencies:
@@ -3130,12 +3127,11 @@ snapshots:
       lute-connect: 1.4.1
     transitivePeerDependencies:
       - '@agoralabs-sh/avm-web-provider'
-      - '@algorandfoundation/liquid-auth-use-wallet-client'
       - '@vue/composition-api'
 
-  '@txnlab/use-wallet@4.0.0-beta.4(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.1.0))(@perawallet/connect@1.4.1(algosdk@3.1.0))(algosdk@3.1.0)(lute-connect@1.4.1)':
+  '@txnlab/use-wallet@4.0.0-beta.6(@agoralabs-sh/avm-web-provider@1.7.0)(@blockshake/defly-connect@1.2.1(algosdk@3.1.0))(@perawallet/connect@1.4.1(algosdk@3.1.0))(algosdk@3.1.0)(lute-connect@1.4.1)':
     dependencies:
-      '@tanstack/store': 0.6.0
+      '@tanstack/store': 0.7.0
       algosdk: 3.1.0
     optionalDependencies:
       '@agoralabs-sh/avm-web-provider': 1.7.0
