@@ -9,6 +9,7 @@ import vuetify from "./vuetify";
 import pinia from "../stores";
 import router from "../router";
 import {
+  NetworkConfigBuilder,
   NetworkId,
   WalletId,
   WalletManagerPlugin,
@@ -16,6 +17,15 @@ import {
 
 // Types
 import type { App } from "vue";
+
+const networks = new NetworkConfigBuilder()
+  .addNetwork("voimain", {
+    algod: {
+      baseServer: "https://mainnet-api.voi.nodely.dev",
+      token: "",
+    },
+  })
+  .build();
 
 export function registerPlugins(app: App) {
   app
@@ -33,16 +43,6 @@ export function registerPlugins(app: App) {
         WalletId.KIBISIS,
       ],
       defaultNetwork: NetworkId.MAINNET,
+      networks,
     });
 }
-
-// handle bigints in JSON
-declare global {
-  interface BigInt {
-    toJSON(): number;
-  }
-}
-
-BigInt.prototype.toJSON = function () {
-  return Number(this);
-};

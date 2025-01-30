@@ -172,6 +172,7 @@ import {
   NetworkId,
   type Wallet,
   type WalletAccount,
+  useNetwork,
   useWallet,
 } from "@txnlab/use-wallet-vue";
 import { set } from "idb-keyval";
@@ -182,7 +183,8 @@ const { smAndUp } = useDisplay();
 const router = useRouter();
 const drawer = ref(false);
 const showCustomNode = ref(false);
-const { activeAccount, activeWallet, wallets, setActiveNetwork } = useWallet();
+const { activeAccount, activeWallet, wallets } = useWallet();
+const { setActiveNetwork } = useNetwork();
 
 const networkList = networks.map((n) => n.name);
 networkList.push("Custom");

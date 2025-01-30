@@ -40,7 +40,7 @@
 import { networks, nids } from "@/data";
 import { getNetwork } from "@/services/Algo";
 import type { Network, Node } from "@/types";
-import { NetworkId, useWallet } from "@txnlab/use-wallet-vue";
+import { NetworkId, useNetwork } from "@txnlab/use-wallet-vue";
 import { get, set } from "idb-keyval";
 
 const props = defineProps({
@@ -76,7 +76,7 @@ watch(
 );
 
 const store = useAppStore();
-const { setActiveNetwork } = useWallet();
+const { setActiveNetwork } = useNetwork();
 const algod = ref<Node>({
   token: "",
   url: "",
