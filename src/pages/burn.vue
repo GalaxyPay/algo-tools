@@ -23,12 +23,15 @@
               <v-col cols="12" md="8">
                 <v-card-title> Asset Details </v-card-title>
                 <v-card-text class="text-caption">
-                  <div>ID: {{ asset.assetId }}</div>
-                  <div>Name: {{ asset.params.name }}</div>
-                  <div>Unit: {{ asset.params.unitName }}</div>
+                  <div>ID: {{ asset?.assetId }}</div>
+                  <div>Name: {{ asset?.params.name }}</div>
+                  <div>Unit: {{ asset?.params.unitName }}</div>
                   <div>
                     Amount Held:
-                    {{ asset.amount / 10 ** asset.params?.decimals }}
+                    {{
+                      Number(asset?.amount) /
+                      10 ** Number(asset?.params?.decimals)
+                    }}
                   </div>
                   <div>
                     Clawback:
@@ -38,7 +41,7 @@
                     Previously Burned:
                     {{
                       (Number(opted?.amount) || 0) /
-                      10 ** asset.params?.decimals
+                      10 ** Number(asset?.params?.decimals)
                     }}
                   </div>
                 </v-card-text>
@@ -127,31 +130,42 @@ import burnTeal from "@/teal/burn.teal?raw";
 import { bigintAmount, execAtc } from "@/utils";
 import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import algosdk, { IntDecoding, parseJSON, stringifyJSON } from "algosdk";
+import algosdk, {
+  IntDecoding,
+  modelsv2,
+  parseJSON,
+  stringifyJSON,
+} from "algosdk";
 
 const store = useAppStore();
 const { activeAccount, transactionSigner } = useWallet();
 
-const assets = ref();
+interface BurnAsset extends modelsv2.AssetHolding {
+  params?: any;
+  title?: string | bigint;
+}
+
+const assets = ref<BurnAsset[]>();
 const assetId = ref();
 const form = ref();
 const amount = ref();
 const closeout = ref(false);
 const showDetails = ref(false);
 const asset = computed(() =>
-  assets.value?.find((a: any) => a.assetId == assetId.value)
+  assets.value?.find((a) => a.assetId == assetId.value)
 );
 const clawback = computed(
   () =>
-    asset.value.params.clawback &&
-    asset.value.params.clawback !=
+    asset.value?.params.clawback &&
+    asset.value?.params.clawback !=
       "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ"
 );
 const opted = computed(() =>
-  lsigInfo.value?.assets.find((a: any) => a.assetId == assetId.value)
+  lsigInfo.value?.assets?.find((a) => a.assetId == assetId.value)
 );
 const needFunding = computed(
-  () => lsigInfo.value?.amount - lsigInfo.value?.minBalance < 101000
+  () =>
+    (lsigInfo.value?.amount || 0n) - (lsigInfo.value?.minBalance || 0n) < 101000
 );
 
 const required = (v: number) => closeout.value || !!v || v === 0 || "Required";
@@ -161,30 +175,30 @@ async function getAssets() {
     router.replace("/");
     return;
   }
-  const account = parseJSON(stringifyJSON(store.account), {
+  const account: modelsv2.Account = parseJSON(stringifyJSON(store.account), {
     intDecoding: IntDecoding.MIXED,
   });
 
   if (!account) throw Error("Invalid Account");
   if (!account.assets) return;
+  const burnAssets: BurnAsset[] = account.assets;
   await Promise.all(
-    account.assets.map(async (x: any, index: number) => {
-      const id = Number(x.assetId);
-      const ca = account.createdAssets?.find((ca: any) => ca.index == id);
+    burnAssets.map(async (x, index: number) => {
+      const ca = account.createdAssets?.find((ca) => ca.index == x.assetId);
       let params;
       if (ca) {
         params = ca.params;
       } else {
         try {
-          const assetInfo = await Algo.algod.getAssetByID(id).do();
+          const assetInfo = await Algo.algod.getAssetByID(x.assetId).do();
           params = assetInfo.params;
         } catch (err: any) {
           console.error(err);
           params = { creator: account.address };
         }
       }
-      account.assets![index].params = params;
-      account.assets![index].title = params.name || params.unitName || id;
+      burnAssets[index].params = params;
+      burnAssets[index].title = params.name || params.unitName || x.assetId;
     })
   );
   assets.value = account.assets;
@@ -192,7 +206,7 @@ async function getAssets() {
 }
 
 const lsig = ref();
-const lsigInfo = ref();
+const lsigInfo = ref<modelsv2.Account>();
 
 async function getLsig() {
   lsig.value = await Algo.algod.compile(burnTeal).do();
@@ -214,7 +228,7 @@ async function burn() {
 
     if (!opted.value && needFunding.value) {
       suggestedParams.flatFee = true;
-      suggestedParams.fee = suggestedParams.minFee * 2n;
+      suggestedParams.fee = suggestedParams.minFee;
 
       const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
         receiver: lsig.value.hash,
@@ -243,15 +257,16 @@ async function burn() {
     }
 
     suggestedParams.flatFee = true;
-    suggestedParams.fee = suggestedParams.minFee;
-
+    suggestedParams.fee = suggestedParams.minFee * 2n;
     if (amount.value || closeout.value) {
       const burnObj: any = {
         sender: activeAccount.value!.address,
         receiver: lsig.value.hash,
         suggestedParams,
         assetIndex: assetId.value,
-        amount: bigintAmount(amount.value, asset.value.params.decimals) || 0,
+        amount: amount.value
+          ? bigintAmount(amount.value, asset.value?.params.decimals)
+          : 0,
       };
       if (closeout.value) burnObj.closeRemainderTo = lsig.value.hash;
       const txn =
