@@ -1,6 +1,6 @@
 {
   "name": "algo-tools",
-  "version": "4.9.2",
+  "version": "4.9.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,7 @@
     "@blockshake/defly-connect": "^1.2.1",
     "@mdi/js": "^7.4.47",
     "@perawallet/connect": "^1.4.1",
-    "@txnlab/use-wallet-vue": "4.0.0-beta.6",
+    "@txnlab/use-wallet-vue": "4.0.0",
     "algosdk": "^3.1.0",
     "core-js": "^3.40.0",
     "idb-keyval": "^6.2.1",
@@ -50,6 +50,5 @@
   },
   "engines": {
     "node": ">=20.9.0"
-  },
-  "packageManager": "pnpm@9.15.4"
+  }
 }
