@@ -199,7 +199,7 @@ const network = computed({
     } else {
       const network = { ...networks.find((x) => x.name == val) } as Network;
       if (!network) throw Error("Invalid Network");
-      if (val == "Sandbox") {
+      if (val == "LocalNet") {
         network.networkId = await getNetwork(
           network.algod.token,
           network.algod.url,

@@ -28,7 +28,7 @@ export const tools = () => {
       path: "/arc200",
     });
 
-  if (store.network.inboxRouter)
+  if (store.network.inboxRouter || store.network.name === "LocalNet")
     val.push({
       title: "Inbox",
       subtitle: "View and claim assets sent to your inbox.",
@@ -66,12 +66,13 @@ export const tools = () => {
       path: "/vanity",
     });
 
-  val.push({
-    title: "Lute Badges",
-    subtitle: "Claim governance badges issued by Lute Wallet.",
-    icon: LuteLogo,
-    path: "/badge",
-  });
+  if (store.network.name === "MainNet")
+    val.push({
+      title: "Lute Badges",
+      subtitle: "Claim governance badges issued by Lute Wallet.",
+      icon: LuteLogo,
+      path: "/badge",
+    });
 
   return val;
 };

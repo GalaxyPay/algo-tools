@@ -29,3 +29,7 @@ pnpm-debug.log*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+src/auto-imports.d.ts
+src/components.d.ts
+src/typed-router.d.ts

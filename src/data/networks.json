@@ -12,7 +12,7 @@
       "token": ""
     },
     "networkId": "mainnet",
-    "explorer": "https://www.blockpack.app/#/explorer",
+    "explorer": "https://allo.info",
     "vanityId": 1093312673,
     "inboxRouter": 2449590623
   },
@@ -29,12 +29,12 @@
       "token": ""
     },
     "networkId": "testnet",
-    "explorer": "https://testnet.blockpack.app/#/explorer",
+    "explorer": "https://lora.algokit.io/testnet",
     "vanityId": 206059417,
     "inboxRouter": 643020148
   },
   {
-    "name": "Sandbox",
+    "name": "LocalNet",
     "algod": {
       "url": "http://localhost",
       "port": "4001",
@@ -45,7 +45,7 @@
       "port": "8980",
       "token": ""
     },
-    "explorer": "https://local.blockpack.app/#/explorer"
+    "explorer": "https://lora.algokit.io/localnet"
   },
   {
     "name": "Voi MainNet",
@@ -61,6 +61,6 @@
     },
     "nftIndexer": "https://mainnet-idx.nautilus.sh/nft-indexer/v1",
     "networkId": "voimain",
-    "explorer": "https://voimain.blockpack.app/#/explorer"
+    "explorer": "https://explorer.voi.network/explorer"
   }
 ]
