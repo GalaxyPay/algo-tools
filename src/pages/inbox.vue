@@ -26,11 +26,11 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row v-if="store.network.name === 'Sandbox'">
+    <v-row v-if="store.network.name === 'LocalNet'">
       <v-col>
         <v-card>
           <v-container class="pt-1 pb-0 pl-4 text-button">
-            Sandbox Router Config
+            LocalNet Router Config
           </v-container>
           <v-container>
             <v-row class="text-center" align="center">

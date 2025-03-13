@@ -115,7 +115,7 @@ async function setCustomNode() {
   if (!valid) return;
   const custom = {
     ...networks.find(
-      (x) => x.networkId === network.value || x.name === "Sandbox"
+      (x) => x.networkId === network.value || x.name === "LocalNet"
     ),
   } as Network;
   custom.name = "Custom";
