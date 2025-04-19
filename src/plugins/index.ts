@@ -33,15 +33,7 @@ export function registerPlugins(app: App) {
     .use(router)
     .use(pinia)
     .use(WalletManagerPlugin, {
-      wallets: [
-        {
-          id: WalletId.LUTE,
-          options: { siteName: "AlgoTools" },
-        },
-        WalletId.DEFLY,
-        WalletId.PERA,
-        WalletId.KIBISIS,
-      ],
+      wallets: [WalletId.LUTE, WalletId.DEFLY, WalletId.PERA, WalletId.KIBISIS],
       defaultNetwork: NetworkId.MAINNET,
       networks,
     });
