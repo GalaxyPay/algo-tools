@@ -138,7 +138,7 @@ import algosdk, {
 } from "algosdk";
 
 const store = useAppStore();
-const { activeAccount, transactionSigner } = useWallet();
+const { activeAddress, transactionSigner } = useWallet();
 
 interface BurnAsset extends modelsv2.AssetHolding {
   params?: any;
@@ -232,7 +232,7 @@ async function burn() {
 
       const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
         receiver: lsig.value.hash,
-        sender: activeAccount.value!.address,
+        sender: activeAddress.value!,
         suggestedParams,
         amount: 100000,
       });
@@ -260,7 +260,7 @@ async function burn() {
     suggestedParams.fee = suggestedParams.minFee * 2n;
     if (amount.value || closeout.value) {
       const burnObj: any = {
-        sender: activeAccount.value!.address,
+        sender: activeAddress.value!,
         receiver: lsig.value.hash,
         suggestedParams,
         assetIndex: assetId.value,

@@ -37,10 +37,10 @@
 import { tools } from "@/data";
 import { useWallet } from "@txnlab/use-wallet-vue";
 const store = useAppStore();
-const { activeAccount } = useWallet();
+const { activeAddress } = useWallet();
 
 function clickDonate() {
-  if (activeAccount.value) store.showDonate = true;
+  if (activeAddress.value) store.showDonate = true;
   else store.connectMenu = true;
 }
 </script>

@@ -67,7 +67,7 @@
         <v-spacer />
         <v-btn
           text="Add Listing"
-          :disabled="!activeAccount?.address"
+          :disabled="!activeAddress"
           @click="showVanitySell = true"
         />
       </v-card-title>
@@ -104,15 +104,11 @@
           </template>
           <template #[`item.action`]="{ item }">
             <v-btn
-              :text="
-                item.vanity?.owner === activeAccount?.address ? 'Remove' : 'Buy'
-              "
-              :disabled="!activeAccount?.address"
+              :text="item.vanity?.owner === activeAddress ? 'Remove' : 'Buy'"
+              :disabled="!activeAddress"
               size="small"
               @click="
-                item.vanity?.owner === activeAccount?.address
-                  ? rescind(item)
-                  : buy(item)
+                item.vanity?.owner === activeAddress ? rescind(item) : buy(item)
               "
             />
           </template>
@@ -151,7 +147,7 @@ import { useDisplay } from "vuetify";
 
 const store = useAppStore();
 const { smAndUp } = useDisplay();
-const { activeAccount, transactionSigner } = useWallet();
+const { activeAddress, transactionSigner } = useWallet();
 
 const showInstuctions = ref(true);
 const showVanitySell = ref(false);
@@ -181,7 +177,7 @@ async function buy(item: ForSale) {
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await getParams();
     const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      sender: activeAccount.value!.address,
+      sender: activeAddress.value!,
       suggestedParams,
       receiver: item.vanity.owner,
       amount: item.vanity.price,
@@ -193,7 +189,7 @@ async function buy(item: ForSale) {
     if (!method) throw Error("Invalid Method");
     atc.addMethodCall({
       appID: store.network.vanityId,
-      sender: activeAccount.value!.address,
+      sender: activeAddress.value!,
       method,
       methodArgs: [txnWithSigner, item.address],
       suggestedParams,
@@ -223,7 +219,7 @@ async function rescind(item: ForSale) {
     if (!method) throw Error("Invalid Method");
     atc.addMethodCall({
       appID: store.network.vanityId,
-      sender: activeAccount.value!.address,
+      sender: activeAddress.value!,
       method,
       methodArgs: [item.address],
       suggestedParams,

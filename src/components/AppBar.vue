@@ -31,7 +31,7 @@
   </v-navigation-drawer>
   <v-app-bar app :order="0">
     <v-app-bar-nav-icon
-      v-show="activeAccount?.address"
+      v-show="activeAddress"
       color="currentColor"
       @click.stop="drawer = !drawer"
     />
@@ -56,17 +56,13 @@
     </div>
     <v-spacer />
     <v-btn color="primary" variant="outlined" :disabled="!!store.loading">
-      {{ formatAddr(activeAccount?.address) || "Connect Wallet" }}
+      {{ formatAddr(activeAddress) || "Connect Wallet" }}
       <v-menu activator="parent" v-model="store.connectMenu" scrim>
         <v-list>
           <v-container>
-            <v-row v-if="activeAccount">
+            <v-row v-if="activeAddress">
               <v-col class="text-caption" style="font-family: monospace">
-                {{
-                  smAndUp
-                    ? activeAccount?.address
-                    : formatAddr(activeAccount?.address, 16)
-                }}
+                {{ smAndUp ? activeAddress : formatAddr(activeAddress, 16) }}
               </v-col>
               <v-col class="pt-2 text-right">
                 <v-icon
@@ -104,14 +100,14 @@
                 <v-select
                   v-if="wallet.isActive"
                   :items="items"
-                  :model-value="{...activeAccount!, title: formatAddr(activeAccount!.address)}"
+                  :model-value="{address: activeAddress!, title: formatAddr(activeAddress)}"
                   return-object
                   class="pl-2"
                   density="compact"
                   variant="solo-filled"
                   hide-details
                   @click.stop
-                  @update:model-value="(acct) => switchAccount(wallet, acct)"
+                  @update:model-value="(a) => switchAccount(wallet, a.address)"
                 />
               </div>
               <template #append>
@@ -171,7 +167,6 @@ import {
 import {
   NetworkId,
   type Wallet,
-  type WalletAccount,
   useNetwork,
   useWallet,
 } from "@txnlab/use-wallet-vue";
@@ -183,7 +178,7 @@ const { smAndUp } = useDisplay();
 const router = useRouter();
 const drawer = ref(false);
 const showCustomNode = ref(false);
-const { activeAccount, activeWallet, wallets } = useWallet();
+const { activeAddress, activeWallet, wallets } = useWallet();
 const { setActiveNetwork } = useNetwork();
 
 const networkList = networks.map((n) => n.name);
@@ -232,21 +227,21 @@ async function walletAction(wallet: Wallet) {
 
 const items = computed(() => {
   const val = activeWallet.value?.accounts.map((a) => ({
-    ...a,
+    address: a.address,
     title: formatAddr(a.address),
   }));
   return val;
 });
 
-async function switchAccount(wallet: Wallet, acct: WalletAccount) {
-  wallet.setActiveAccount(acct.address);
+async function switchAccount(wallet: Wallet, addr: string) {
+  wallet.setActiveAccount(addr);
   store.refresh++;
   store.connectMenu = false;
 }
 
 function copyToClipboard() {
-  if (!activeAccount.value) return;
-  navigator.clipboard.writeText(activeAccount.value.address);
+  if (!activeAddress.value) return;
+  navigator.clipboard.writeText(activeAddress.value);
   store.setSnackbar("Address Copied", "info", 1000);
 }
 </script>

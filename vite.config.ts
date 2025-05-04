@@ -73,6 +73,18 @@ export default defineConfig({
   server: {
     port: 3030,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          algokit: ["@algorandfoundation/algokit-utils"],
+          useWallet: ["@txnlab/use-wallet-vue"],
+          vuetify: ["vuetify"],
+        },
+      },
+    },
+    target: "esnext",
+  },
   optimizeDeps: {
     include: ["@algorandfoundation/algokit-utils", "merkletreejs"],
     exclude: ["lute-connect", "vuetify"],

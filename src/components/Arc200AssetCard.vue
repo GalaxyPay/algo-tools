@@ -94,7 +94,7 @@ const showSend = ref(false);
 const amount = ref();
 const receiver = ref();
 const creator = ref(false);
-const { activeAccount, transactionSigner } = useWallet();
+const { activeAddress, transactionSigner } = useWallet();
 
 watch(
   creator,
@@ -115,12 +115,12 @@ async function sendAsset() {
 
   try {
     store.overlay = true;
-    if (!activeAccount.value) throw Error("Invalid Account");
+    if (!activeAddress.value) throw Error("Invalid Account");
     const contract = new Contract(
       props.asset.contractId,
       Algo.algod,
       Algo.indexer,
-      { acc: { addr: activeAccount.value.address, sk: new Uint8Array() } }
+      { acc: { addr: activeAddress.value, sk: new Uint8Array() } }
     );
     const amt = bigintAmount(amount.value, props.asset.params.decimals);
     const sim = await contract.arc200_transfer(receiver.value, amt, true, true);

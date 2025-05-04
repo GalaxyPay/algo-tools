@@ -66,18 +66,16 @@ import algosdk, { modelsv2 } from "algosdk";
 import { set } from "idb-keyval";
 
 const store = useAppStore();
-const { activeAccount, transactionSigner } = useWallet();
+const { activeAddress, transactionSigner } = useWallet();
 const inboxInfo = ref<modelsv2.Account>();
 
 async function getInbox() {
-  if (!activeAccount.value?.address) return;
+  if (!activeAddress.value) return;
   if (!store.network.inboxRouter) return;
   let inbox: string;
   inboxInfo.value = undefined;
   try {
-    const boxName = algosdk.decodeAddress(
-      activeAccount.value.address
-    ).publicKey;
+    const boxName = algosdk.decodeAddress(activeAddress.value).publicKey;
     const resp = await Algo.algod
       .getApplicationBoxByName(store.network.inboxRouter, boxName)
       .do();

@@ -16,11 +16,11 @@ const router = createRouter({
 
 router.beforeEach(async (to: any, _from: any, next: any) => {
   const store = useAppStore();
-  const { activeAccount } = useWallet();
+  const { activeAddress } = useWallet();
   // redirect to root if not connected
-  if (!activeAccount.value && to.path != "/") {
+  if (!activeAddress.value && to.path != "/") {
     await store.getCache();
-    if (!activeAccount.value && to.name != "/vanity") {
+    if (!activeAddress.value && to.name != "/vanity") {
       store.connectMenu = true;
       return next({ path: "/" });
     }
