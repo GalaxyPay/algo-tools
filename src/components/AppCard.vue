@@ -93,7 +93,7 @@ const props = defineProps({
   },
 });
 const store = useAppStore();
-const { activeAccount, transactionSigner } = useWallet();
+const { activeAddress, transactionSigner } = useWallet();
 
 const appInfo = ref();
 
@@ -127,7 +127,7 @@ async function closeOut() {
       const atc = new algosdk.AtomicTransactionComposer();
       const suggestedParams = await getParams();
       const txn = algosdk.makeApplicationCloseOutTxnFromObject({
-        sender: activeAccount.value!.address,
+        sender: activeAddress.value!,
         suggestedParams,
         appIndex: Number(props.app.id),
       });
@@ -154,7 +154,7 @@ async function clearState() {
       const atc = new algosdk.AtomicTransactionComposer();
       const suggestedParams = await getParams();
       const txn = algosdk.makeApplicationClearStateTxnFromObject({
-        sender: activeAccount.value!.address,
+        sender: activeAddress.value!,
         suggestedParams,
         appIndex: Number(props.app.id),
       });
@@ -179,7 +179,7 @@ async function deleteApp() {
       const atc = new algosdk.AtomicTransactionComposer();
       const suggestedParams = await getParams();
       const txn = algosdk.makeApplicationDeleteTxnFromObject({
-        sender: activeAccount.value!.address,
+        sender: activeAddress.value!,
         suggestedParams,
         appIndex: Number(props.app.id),
       });

@@ -84,7 +84,7 @@ import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 
 const store = useAppStore();
-const { activeAccount, transactionSigner } = useWallet();
+const { activeAddress, transactionSigner } = useWallet();
 const props = defineProps({
   asset: {
     type: Object as PropType<
@@ -141,7 +141,7 @@ function formatAmount() {
 
 async function setReceiver() {
   if (!props.asset.amount && props.asset.assetId) {
-    receiver.value = activeAccount.value!.address;
+    receiver.value = activeAddress.value!;
     closeOut();
   } else {
     showReceiver.value = true;
@@ -154,7 +154,7 @@ async function destroy() {
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await getParams();
     const txn = algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
-      sender: activeAccount.value!.address,
+      sender: activeAddress.value!,
       suggestedParams,
       assetIndex: Number(props.asset.assetId),
     });
@@ -185,8 +185,8 @@ async function closeOut() {
     let txn;
     if (props.asset.assetId) {
       txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        sender: activeAccount.value!.address,
-        receiver: activeAccount.value!.address,
+        sender: activeAddress.value!,
+        receiver: activeAddress.value!,
         closeRemainderTo: receiver.value,
         amount: 0,
         assetIndex: Number(props.asset.assetId),
@@ -194,8 +194,8 @@ async function closeOut() {
       });
     } else {
       txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        sender: activeAccount.value!.address,
-        receiver: activeAccount.value!.address,
+        sender: activeAddress.value!,
+        receiver: activeAddress.value!,
         closeRemainderTo: receiver.value,
         amount: 0,
         suggestedParams,

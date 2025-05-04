@@ -37,7 +37,7 @@ import { useWallet } from "@txnlab/use-wallet-vue";
 import { get, set } from "idb-keyval";
 
 const store = useAppStore();
-const { activeAccount } = useWallet();
+const { activeAddress } = useWallet();
 const loading = ref(true);
 const showHidden = ref(false);
 const hidden = ref<number[]>([]);
@@ -61,7 +61,7 @@ async function getAssets() {
     );
     const { tokens } = await fetchAsync(`${apiUrl}/arc200/tokens`);
     const { balances } = await fetchAsync(
-      `${apiUrl}/arc200/balances?accountId=${activeAccount.value?.address}`
+      `${apiUrl}/arc200/balances?accountId=${activeAddress.value}`
     );
     assets.value = balances.map((b: any) => ({
       ...b,
@@ -79,7 +79,7 @@ onBeforeMount(async () => {
   const apiUrl = store.network.nftIndexer;
   const { tokens } = await fetchAsync(`${apiUrl}/arc200/tokens`);
   const { balances } = await fetchAsync(
-    `${apiUrl}/arc200/balances?accountId=${activeAccount.value?.address}`
+    `${apiUrl}/arc200/balances?accountId=${activeAddress.value}`
   );
   assets.value = balances.map((b: any) => ({
     ...b,

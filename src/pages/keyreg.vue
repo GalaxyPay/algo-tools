@@ -112,7 +112,7 @@ import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
 
 const store = useAppStore();
-const { activeAccount, transactionSigner } = useWallet();
+const { activeAddress, transactionSigner } = useWallet();
 
 const required = (v: any) => !!v || v === 0 || "Required";
 const form = ref();
@@ -172,7 +172,7 @@ async function compose() {
     store.overlay = true;
     const suggestedParams = await getParams();
     const atc = new algosdk.AtomicTransactionComposer();
-    part.value.sender = activeAccount.value!.address;
+    part.value.sender = activeAddress.value!;
     if (incentiveEligible.value) {
       suggestedParams.flatFee = true;
       suggestedParams.fee = 2n * 10n ** 6n;
@@ -216,7 +216,7 @@ async function offline() {
     const suggestedParams = await getParams();
     const atc = new algosdk.AtomicTransactionComposer();
     const txn = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject({
-      sender: activeAccount.value!.address,
+      sender: activeAddress.value!,
       suggestedParams,
       nonParticipation: false,
     });

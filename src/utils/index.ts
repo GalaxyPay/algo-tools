@@ -4,7 +4,7 @@ import { AtomicTransactionComposer } from "algosdk";
 export { getAssetInfo } from "./assetInfo";
 export { resolveProtocol } from "./resolveProtocol";
 
-export function formatAddr(addr: string | undefined, length: number = 5) {
+export function formatAddr(addr: string | null, length: number = 5) {
   if (!addr) return "";
   return `${addr?.substring(0, length)}...${addr?.substring(58 - length)}`;
 }

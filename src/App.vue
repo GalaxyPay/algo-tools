@@ -18,14 +18,14 @@ import { fetchAsync } from "./utils";
 
 const store = useAppStore();
 const router = useRouter();
-const { activeAccount } = useWallet();
+const { activeAddress } = useWallet();
 
 async function refresh() {
   try {
     store.loading++;
-    if (activeAccount.value?.address) {
+    if (activeAddress.value) {
       store.account = await Algo.algod
-        .accountInformation(activeAccount.value.address)
+        .accountInformation(activeAddress.value)
         .do();
     } else {
       store.account = undefined;

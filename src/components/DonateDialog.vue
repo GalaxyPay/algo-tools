@@ -37,7 +37,7 @@ import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
 
 const store = useAppStore();
-const { activeAccount, transactionSigner } = useWallet();
+const { activeAddress, transactionSigner } = useWallet();
 const required = (v: any) => !!v || "Required";
 const amount = ref();
 const note = ref();
@@ -54,7 +54,7 @@ async function donate() {
     const microAlgo = bigintAmount(amount.value, 6);
     const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       receiver: "TOOLSGOIPA6BC2JHR4QZYWNYJQRKLTA7NQ44EDRUQCR2R26Y4Y5OAIE6MM",
-      sender: activeAccount.value!.address,
+      sender: activeAddress.value!,
       note: note64,
       suggestedParams,
       amount: microAlgo,

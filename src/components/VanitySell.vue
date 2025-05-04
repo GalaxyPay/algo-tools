@@ -69,12 +69,12 @@ const showAddListing = computed({
 });
 
 const store = useAppStore();
-const { activeAccount, transactionSigner } = useWallet();
+const { activeAddress, transactionSigner } = useWallet();
 const vanity = ref<{ mnemonic?: string; price?: number }>({});
 const required = (v: any) => !!v || "Required";
 const validMnemonic = () => !!m2a.value?.addr || "Invalid Mnemonic";
 const notSelf = () =>
-  m2a.value?.addr != activeAccount.value?.address || "Can't List Self";
+  m2a.value?.addr.toString() != activeAddress.value || "Can't List Self";
 const form = ref();
 
 const vanityAddr = computed({
@@ -112,7 +112,7 @@ async function sell() {
     const tax = Math.floor(Number(price) / 20);
 
     const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      sender: activeAccount.value!.address,
+      sender: activeAddress.value!,
       suggestedParams,
       receiver: appAddr,
       amount: tax,
@@ -133,7 +133,7 @@ async function sell() {
       appID: store.network.vanityId,
       sender: m2a.value.addr,
       method,
-      methodArgs: [txnWithSigner, activeAccount.value!.address, price, key],
+      methodArgs: [txnWithSigner, activeAddress.value!, price, key],
       suggestedParams,
       rekeyTo: appAddr,
       onComplete: optinOrNoop,
