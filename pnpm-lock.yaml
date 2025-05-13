@@ -20,9 +20,6 @@ importers:
       '@mdi/js':
         specifier: ^7.4.47
         version: 7.4.47
-      '@noble/ed25519':
-        specifier: ^2.2.3
-        version: 2.2.3
       '@perawallet/connect':
         specifier: ^1.4.2
         version: 1.4.2(algosdk@3.2.0)
@@ -534,9 +531,6 @@ packages:
   '@noble/ciphers@1.2.0':
     resolution: {integrity: sha512-YGdEUzYEd+82jeaVbSKKVp1jFZb8LwaNMIIzHFkihGvYdd/KKAr7KaJHdEdSYGredE3ssSravXIa0Jxg28Sv5w==}
     engines: {node: ^14.21.3 || >=16}
-
-  '@noble/ed25519@2.2.3':
-    resolution: {integrity: sha512-iHV8eI2mRcUmOx159QNrU8vTpQ/Xm70yJ2cTk3Trc86++02usfqFoNl6x0p3JN81ZDS/1gx6xiK0OwrgqCT43g==}
 
   '@noble/hashes@1.7.0':
     resolution: {integrity: sha512-HXydb0DgzTpDPwbVeDGCG1gIu7X6+AuU6Zl6av/E/KG8LMsvPntvq+w17CHRpKBmN6Ybdrt1eP3k4cj8DJa78w==}
@@ -3358,8 +3352,6 @@ snapshots:
       - supports-color
 
   '@noble/ciphers@1.2.0': {}
-
-  '@noble/ed25519@2.2.3': {}
 
   '@noble/hashes@1.7.0': {}
 
