@@ -57,7 +57,7 @@ export async function resolveProtocol(url: string, reserveAddr: string) {
   // No protocol specified, give up
   if (chunks.length < 2) return url;
 
-  const ipfsGateway = "https://ipfs.algonode.xyz/ipfs/";
+  const ipfsGateway = "https://ipfs.algonode.dev/ipfs/";
 
   //Switch on the protocol
   switch (chunks[0]) {

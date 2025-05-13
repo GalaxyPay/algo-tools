@@ -34,7 +34,7 @@ export async function execAtc(atc: AtomicTransactionComposer, success: string) {
 }
 
 export function ipfs2http(url: string) {
-  const ipfsGateway = "https://ipfs.algonode.xyz/ipfs/";
+  const ipfsGateway = "https://ipfs.algonode.dev/ipfs/";
   return url.replace("ipfs://", ipfsGateway);
 }
 
