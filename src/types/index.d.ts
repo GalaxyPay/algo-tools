@@ -1,5 +1,3 @@
-import { modelsv2 } from "algosdk";
-
 export interface SnackBar {
   text: string;
   color: string;
@@ -192,13 +190,4 @@ export interface TinyAsset {
     svg: string;
   };
   deleted: boolean;
-}
-
-export interface Badge extends modelsv2.Asset {
-  description: string;
-  image: string;
-  addrs: string[];
-  properties: {
-    appId: number;
-  };
 }

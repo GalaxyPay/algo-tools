@@ -1,4 +1,3 @@
-import LuteLogo from "@/components/svg/LuteLogo.vue";
 import {
   mdiCircleMultipleOutline,
   mdiFire,
@@ -64,14 +63,6 @@ export const tools = () => {
       subtitle: "Buy and sell vanity addresses.",
       icon: mdiMirror,
       path: "/vanity",
-    });
-
-  if (store.network.name === "MainNet")
-    val.push({
-      title: "Lute Badges",
-      subtitle: "Claim governance badges issued by Lute Wallet.",
-      icon: LuteLogo,
-      path: "/badge",
     });
 
   return val;
