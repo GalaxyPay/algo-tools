@@ -29,7 +29,9 @@ async function refresh() {
         .do();
     } else {
       store.account = undefined;
-      router.push("/");
+      if (!["/", "/gov", "/vanity"].includes(router.currentRoute.value.path)) {
+        router.push("/");
+      }
     }
   } catch (err: any) {
     console.error(err);
