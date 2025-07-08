@@ -20,7 +20,7 @@ router.beforeEach(async (to: any, _from: any, next: any) => {
   // redirect to root if not connected
   if (!activeAddress.value && to.path != "/") {
     await store.getCache();
-    if (!activeAddress.value && to.name != "/vanity") {
+    if (!activeAddress.value && !["/gov", "/vanity"].includes(to.name)) {
       store.connectMenu = true;
       return next({ path: "/" });
     }
