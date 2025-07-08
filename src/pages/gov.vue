@@ -25,6 +25,20 @@
           {{ item.name }}
         </div>
       </template>
+      <template #[`item.score`]="{ value }">
+        <div>
+          {{ (value / 10 ** 12).toLocaleString() }} M
+          <v-tooltip
+            activator="parent"
+            location="top"
+            :text="
+              (value / 10 ** 6).toLocaleString(undefined, {
+                maximumFractionDigits: 6,
+              })
+            "
+          />
+        </div>
+      </template>
       <template #bottom />
     </v-data-table>
   </v-container>
@@ -54,7 +68,7 @@ onBeforeMount(async () => {
       session.value.total_committed_stake_of_voted_governors *
         ((t.topic_options[0].vote_percentage -
           t.topic_options[1].vote_percentage) /
-          10 ** 8)
+          100)
     ),
   }));
   temp.sort((a, b) => b.score - a.score);
