@@ -48,10 +48,10 @@
 </template>
 
 <script lang="ts" setup>
-import { Arc59Client } from "@/clients/Arc59Client";
+import { Arc59Factory } from "@/clients/Arc59Client";
 import Algo, { getParams } from "@/services/Algo";
-import { execAtc, getAssetInfo, resolveProtocol } from "@/utils";
-import { populateAppCallResources } from "@algorandfoundation/algokit-utils";
+import { getAssetInfo, resolveProtocol } from "@/utils";
+import { AlgorandClient } from "@algorandfoundation/algokit-utils";
 import { mdiCheck, mdiClose, mdiInformationOutline } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
@@ -100,14 +100,14 @@ function formatAmount() {
 function getAppClient() {
   if (!store.account?.address) throw Error("Invalid Claimer");
   if (!store.network.inboxRouter) throw Error("Invalid Router");
-  const sender = {
-    addr: algosdk.Address.fromString(store.account.address),
-    signer: transactionSigner,
-  };
-  return new Arc59Client(
-    { sender, resolveBy: "id", id: store.network.inboxRouter },
-    Algo.algod
-  );
+  const algorand = AlgorandClient.fromClients({ algod: Algo.algod });
+  algorand.setDefaultSigner(transactionSigner);
+  algorand.setDefaultValidityWindow(1000);
+  const factory = new Arc59Factory({
+    defaultSender: store.account.address,
+    algorand,
+  });
+  return factory.getAppClientById({ appId: BigInt(store.network.inboxRouter) });
 }
 
 async function claim() {
@@ -115,14 +115,14 @@ async function claim() {
     if (!store.account) throw Error("Invalid Account");
     store.overlay = true;
     const appClient = getAppClient();
-    const composer = appClient.compose();
+    const composer = appClient.newGroup();
     const claimerOptedIn = store.account?.assets?.some(
       (a) => a.assetId === asset.assetId
     );
     let totalTxns = 3;
     if (props.inboxInfo.minBalance < props.inboxInfo.amount) {
       totalTxns += 2;
-      composer.arc59ClaimAlgo({}, { sendParams: { fee: (0).microAlgos() } });
+      composer.arc59ClaimAlgo({ args: {}, staticFee: (0).algo() });
     }
     // If the claimer hasn't already opted in, add a transaction to do so
     const suggestedParams = await getParams();
@@ -134,15 +134,13 @@ async function claim() {
         assetIndex: Number(asset.assetId),
         suggestedParams,
       });
-      composer.addTransaction({ txn, signer: transactionSigner });
+      composer.addTransaction(txn, transactionSigner);
     }
     const fee = (Number(suggestedParams.minFee) * totalTxns).microAlgos();
-    composer.arc59Claim({ asa: asset.assetId }, { sendParams: { fee } });
-    const atc = await populateAppCallResources(
-      await composer.atc(),
-      Algo.algod
-    );
-    await execAtc(atc, "Successfully Claimed Asset");
+    composer.arc59Claim({ args: { asa: asset.assetId }, staticFee: fee });
+    await composer.send({ populateAppCallResources: true });
+    store.refresh++;
+    store.setSnackbar("Successfully Claimed Asset", "success");
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");
@@ -156,13 +154,12 @@ async function reject() {
     const appClient = getAppClient();
     const suggestedParams = await getParams();
     const fee = (Number(suggestedParams.minFee) * 3).microAlgos();
-    const composer = appClient.compose();
-    composer.arc59Reject({ asa: asset.assetId }, { sendParams: { fee } });
-    const atc = await populateAppCallResources(
-      await composer.atc(),
-      Algo.algod
-    );
-    await execAtc(atc, "Successfully Rejected Asset");
+    await appClient
+      .newGroup()
+      .arc59Reject({ args: { asa: asset.assetId }, staticFee: fee })
+      .send({ populateAppCallResources: true });
+    store.refresh++;
+    store.setSnackbar("Successfully Rejected Asset", "success");
   } catch (err: any) {
     console.error(err);
     store.setSnackbar(err.message, "error");

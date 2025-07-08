@@ -57,9 +57,10 @@
 </template>
 
 <script lang="ts" setup>
-import { Arc59Client } from "@/clients/Arc59Client";
+import { Arc59Factory } from "@/clients/Arc59Client";
 import InboxAsset from "@/components/InboxAsset.vue";
 import Algo from "@/services/Algo";
+import { AlgorandClient } from "@algorandfoundation/algokit-utils";
 import { mdiContentSave } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
@@ -90,15 +91,14 @@ async function createRouter() {
   try {
     store.overlay = true;
     if (!store.account) throw Error("Invalid Account");
-    const sender = {
-      addr: algosdk.Address.fromString(store.account.address),
-      signer: transactionSigner,
-    };
-    const appClient = new Arc59Client(
-      { sender, resolveBy: "id", id: 0 },
-      Algo.algod
-    );
-    const result = await appClient.create.createApplication({});
+    const algorand = AlgorandClient.fromClients({ algod: Algo.algod });
+    algorand.setDefaultSigner(transactionSigner);
+    algorand.setDefaultValidityWindow(1000);
+    const factory = new Arc59Factory({
+      defaultSender: store.account.address,
+      algorand,
+    });
+    const { result } = await factory.send.create.createApplication();
     store.network.inboxRouter = Number(result.appId);
     setRouter();
   } catch (err: any) {
