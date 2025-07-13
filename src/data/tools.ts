@@ -1,16 +1,17 @@
 import {
-  mdiCircleMultipleOutline,
-  mdiFire,
-  mdiHandshake,
-  mdiLogout,
-  mdiMirror,
-  mdiTrayArrowDown,
-} from "@mdi/js";
+  CaseUpper,
+  Coins,
+  Download,
+  Flame,
+  Handshake,
+  LogOut,
+} from "lucide-vue-next";
+import type { FunctionalComponent } from "vue";
 
 interface Tool {
   title: string;
   subtitle: string;
-  icon: any;
+  icon: FunctionalComponent;
   path: string;
 }
 
@@ -23,7 +24,7 @@ export const tools = () => {
     val.push({
       title: "ARC200 Assets",
       subtitle: "View and send contract-based assets",
-      icon: mdiCircleMultipleOutline,
+      icon: Coins,
       path: "/arc200",
     });
 
@@ -31,7 +32,7 @@ export const tools = () => {
     val.push({
       title: "Inbox",
       subtitle: "View and claim assets sent to your inbox.",
-      icon: mdiTrayArrowDown,
+      icon: Download,
       path: "/inbox",
     });
 
@@ -39,20 +40,20 @@ export const tools = () => {
     {
       title: "Participation Keys",
       subtitle: "For node runners. Manage participation keys.",
-      icon: mdiHandshake,
+      icon: Handshake,
       path: "/keyreg",
     },
     {
       title: "Opt-Out",
       subtitle:
         "Manage your minimum balance by opting out of assets and applications (smart contracts).",
-      icon: mdiLogout,
+      icon: LogOut,
       path: "/optout",
     },
     {
       title: "Burn Assets",
       subtitle: "Burn ASAs or NFTs. Trustlessly. Permenantly.",
-      icon: mdiFire,
+      icon: Flame,
       path: "/burn",
     }
   );
@@ -61,7 +62,7 @@ export const tools = () => {
     val.push({
       title: "Vanity Marketplace",
       subtitle: "Buy and sell vanity addresses.",
-      icon: mdiMirror,
+      icon: CaseUpper,
       path: "/vanity",
     });
 

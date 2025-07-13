@@ -1,38 +1,6 @@
-<template>
-  <v-dialog v-model="store.showDonate" max-width="400">
-    <v-card>
-      <v-card-title class="d-flex">
-        Donate to AlgoTools <v-spacer />
-        <v-icon
-          color="currentColor"
-          :icon="mdiClose"
-          @click="store.showDonate = false"
-        />
-      </v-card-title>
-      <v-card-text>How much would you like to give?</v-card-text>
-      <v-form ref="form" @submit.prevent="donate()">
-        <v-container>
-          <v-text-field
-            v-model.number="amount"
-            type="number"
-            label="Amount"
-            :rules="[required]"
-          />
-          <v-textarea v-model="note" rows="2" label="Note" />
-        </v-container>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn text="Send" type="submit" />
-        </v-card-actions>
-      </v-form>
-    </v-card>
-  </v-dialog>
-</template>
-
 <script lang="ts" setup>
 import { getParams } from "@/services/Algo";
 import { bigintAmount, execAtc } from "@/utils";
-import { mdiClose } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
 
@@ -76,3 +44,34 @@ watch(
   }
 );
 </script>
+
+<template>
+  <Dialog>
+    <DialogTrigger :as-child="true">
+      <slot />
+    </DialogTrigger>
+    <DialogContent class="w-100">
+      <form ref="form" @submit.prevent="donate()">
+        <DialogHeader>
+          <DialogTitle>Donate to AlgoTools</DialogTitle>
+          <DialogDescription>
+            How much would you like to give?
+          </DialogDescription>
+        </DialogHeader>
+        <div class="flex flex-col px-3 py-6 gap-4">
+          <Input
+            v-model.number="amount"
+            type="number"
+            placeholder="Amount"
+            :rules="[required]"
+          />
+          <Textarea v-model="note" rows="2" placeholder="Note" />
+        </div>
+        <DialogFooter>
+          <DialogClose></DialogClose>
+          <Button variant="outline" type="submit">Send</Button>
+        </DialogFooter>
+      </form>
+    </DialogContent>
+  </Dialog>
+</template>

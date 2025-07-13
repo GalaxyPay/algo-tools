@@ -22,6 +22,7 @@ export const useAppStore = defineStore("app", {
     showDonate: false,
     connectMenu: false,
     tinyman: undefined as undefined | TinyAsset[],
+    nfds: {} as { [key: string]: any },
   }),
   getters: {},
   actions: {

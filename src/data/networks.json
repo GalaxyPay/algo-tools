@@ -13,6 +13,7 @@
     },
     "networkId": "mainnet",
     "explorer": "https://allo.info",
+    "nfdUrl": "https://api.nf.domains",
     "vanityId": 1093312673,
     "inboxRouter": 2449590623
   },
@@ -30,6 +31,7 @@
     },
     "networkId": "testnet",
     "explorer": "https://lora.algokit.io/testnet",
+    "nfdUrl": "https://api.testnet.nf.domains",
     "vanityId": 206059417,
     "inboxRouter": 643020148
   },

@@ -5,7 +5,6 @@
  */
 
 // Plugins
-import vuetify from "./vuetify";
 import pinia from "../stores";
 import router from "../router";
 import {
@@ -29,7 +28,6 @@ const networks = new NetworkConfigBuilder()
 
 export function registerPlugins(app: App) {
   app
-    .use(vuetify)
     .use(router)
     .use(pinia)
     .use(WalletManagerPlugin, {
