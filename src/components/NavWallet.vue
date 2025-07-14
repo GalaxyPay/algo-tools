@@ -64,6 +64,9 @@ function getAvatarUrl(addr: string | null) {
           <SidebarMenuButton
             size="lg"
             class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            :tooltip="
+              store.nfds[activeAddress]?.name || formatAddr(activeAddress)
+            "
           >
             <Avatar class="size-8 rounded-lg">
               <AvatarImage :src="activeAvatar" />
@@ -73,9 +76,9 @@ function getAvatarUrl(addr: string | null) {
             </Avatar>
             <div class="grid flex-1 text-left text-sm leading-tight">
               <span class="font-medium">{{ formatAddr(activeAddress) }}</span>
-              <span class="truncate text-xs">{{
-                store.nfds[activeAddress]?.name
-              }}</span>
+              <span class="truncate text-xs">
+                {{ store.nfds[activeAddress]?.name }}
+              </span>
             </div>
             <ChevronsUpDown class="ml-auto size-4" />
           </SidebarMenuButton>

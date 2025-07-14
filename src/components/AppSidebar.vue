@@ -29,6 +29,7 @@ const props = withDefaults(defineProps<SidebarProps>(), {
     </SidebarHeader>
     <SidebarContent>
       <SidebarGroup>
+        <SidebarGroupLabel>Tools</SidebarGroupLabel>
         <SidebarMenu>
           <SidebarMenuItem v-for="item in tools()" :key="item.title">
             <SidebarMenuButton size="lg" as-child :tooltip="item.title">
@@ -49,6 +50,9 @@ const props = withDefaults(defineProps<SidebarProps>(), {
             </DonateDialog>
           </SidebarMenuItem>
         </SidebarMenu>
+      </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel>Network</SidebarGroupLabel>
       </SidebarGroup>
     </SidebarContent>
     <SidebarFooter>
