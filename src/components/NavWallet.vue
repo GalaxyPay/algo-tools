@@ -97,7 +97,11 @@ function getAvatarUrl(addr: string | null) {
                   />
                 </div>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                  {{ activeWallet?.metadata.name }}
+                  {{
+                    `${activeWallet?.metadata.name} (${formatAddr(
+                      activeAddress
+                    )})`
+                  }}
                 </p>
               </div>
               <div class="flex items-center gap-1 px-1 py-1">
