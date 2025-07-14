@@ -66,7 +66,7 @@ watch(
 
 <template>
   <div class="flex flex-col gap-4 p-4 pt-0">
-    <Card>
+    <Card class="bg-muted/50">
       <CardHeader>
         <CardTitle> Asset Inbox </CardTitle>
         <CardDescription>

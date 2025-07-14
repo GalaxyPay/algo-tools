@@ -51,7 +51,6 @@ watch(
       >
         <div class="flex items-center gap-2 px-4">
           <SidebarTrigger class="-ml-1" />
-          <Separator orientation="vertical" class="mr-2 h-4" />
         </div>
         <div class="ml-auto px-4">
           <ModeSwitcher />
