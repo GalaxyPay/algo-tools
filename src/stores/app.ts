@@ -19,7 +19,6 @@ export const useAppStore = defineStore("app", {
     } as SnackBar,
     refresh: 0,
     network: networks[0] as Network,
-    showDonate: false,
     connectMenu: false,
     tinyman: undefined as undefined | TinyAsset[],
     nfds: {} as { [key: string]: any },
