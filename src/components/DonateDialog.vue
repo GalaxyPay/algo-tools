@@ -5,16 +5,15 @@ import { bigintAmount, execAtc } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import algosdk from "algosdk";
-import { configure, useForm } from "vee-validate";
+import { useForm } from "vee-validate";
 import * as z from "zod";
 
 const store = useAppStore();
 const { activeAddress, transactionSigner } = useWallet();
-configure({ validateOnBlur: false });
 
 const formSchema = toTypedSchema(
   z.object({
-    amount: z.number().min(0),
+    amount: z.number().multipleOf(0.000001).min(0),
     note: z.string().optional(),
   })
 );
@@ -61,13 +60,19 @@ const donate = handleSubmit(async (values) => {
             How much would you like to give?
           </DialogDescription>
         </DialogHeader>
-        <FormField v-slot="{ componentField }" name="amount">
+        <FormField
+          v-slot="{ componentField }"
+          name="amount"
+          :validate-on-blur="false"
+        >
           <FormItem>
             <FormControl>
               <Input
                 type="number"
+                step="any"
                 placeholder="Amount"
                 v-bind="componentField"
+                autocomplete="off"
               />
             </FormControl>
             <FormMessage />

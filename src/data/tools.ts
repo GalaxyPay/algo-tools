@@ -30,7 +30,7 @@ export const tools = () => {
 
   if (store.network.inboxRouter || store.network.name === "LocalNet")
     val.push({
-      title: "Inbox",
+      title: "Asset Inbox",
       subtitle: "View and claim assets sent to your inbox.",
       icon: Download,
       path: "/inbox",
