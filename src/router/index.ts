@@ -12,6 +12,7 @@ import { useWallet } from "@txnlab/use-wallet-vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  linkActiveClass: "bg-accent",
 });
 
 router.beforeEach(async (to: any, _from: any, next: any) => {
