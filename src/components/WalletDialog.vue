@@ -1,26 +1,30 @@
 <script setup lang="ts">
-import { useWallet, type Wallet } from '@txnlab/use-wallet-vue'
-import { Wallet2 } from 'lucide-vue-next'
-import { toast } from 'vue-sonner'
+import { useWallet, type Wallet } from "@txnlab/use-wallet-vue";
+import { Wallet2 } from "lucide-vue-next";
+import { toast } from "vue-sonner";
 
-const { wallets } = useWallet()
+const { wallets } = useWallet();
 
 async function handleWalletClick(wallet: Wallet) {
   try {
-    await wallet.connect()
+    await wallet.connect();
   } catch (err: any) {
-    console.error(`Error connecting to ${wallet.metadata.name}:`, err)
-    toast.error(err.message, { duration: 7000 })
+    console.error(`Error connecting to ${wallet.metadata.name}:`, err);
+    toast.error(err.message, { duration: 7000 });
   }
 }
 </script>
 
 <template>
   <Dialog>
-    <DialogTrigger class="font-medium w-full">
-      <SidebarMenuButton size="lg" class="justify-center">
-        <Wallet2 />
-        Connect Wallet
+    <DialogTrigger as-child>
+      <SidebarMenuButton
+        size="lg"
+        class="justify-center"
+        tooltip="Connect Wallet"
+      >
+        <Wallet2 class="ml-2.5" />
+        <span class="font-medium">Connect Wallet</span>
       </SidebarMenuButton>
     </DialogTrigger>
     <DialogContent class="w-80">
@@ -42,7 +46,9 @@ async function handleWalletClick(wallet: Wallet) {
                 class="h-8 w-8 rounded-md object-contain"
               />
             </div>
-            <span class="wallet-custom-font text-lg font-bold"> {{ wallet.metadata.name }} </span>
+            <span class="wallet-custom-font text-lg font-bold">
+              {{ wallet.metadata.name }}
+            </span>
           </button>
         </DialogDescription>
       </DialogHeader>
