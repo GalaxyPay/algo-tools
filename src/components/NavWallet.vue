@@ -87,25 +87,29 @@ function getAvatarUrl(addr: string | null) {
           :side-offset="4"
         >
           <DropdownMenuGroup>
-            <DropdownMenuLabel class="p-0 font-normal">
-              <div class="mb-2 flex items-center gap-2 px-2 pt-2">
-                <div class="size-6">
-                  <img
-                    :src="activeWallet?.metadata.icon"
-                    :alt="`${activeWallet?.metadata.name} icon`"
-                    class="max-h-full max-w-full"
-                  />
-                </div>
+            <DropdownMenuLabel
+              class="flex flex-col py-0 pl-2 gap-3 font-normal"
+            >
+              <div class="flex items-center gap-2">
+                <img
+                  :src="activeWallet?.metadata.icon"
+                  :alt="`${activeWallet?.metadata.name} icon`"
+                  class="size-6"
+                />
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                  {{
-                    `${activeWallet?.metadata.name} (${formatAddr(
-                      activeAddress
-                    )})`
-                  }}
+                  {{ activeWallet?.metadata.name }}
                 </p>
               </div>
-              <div class="flex items-center gap-1 px-1 py-1">
-                <AlgoSymbol color="currentColor" :height="13" />
+              <div class="flex items-center gap-2 pl-3">
+                <div v-if="getAvatarUrl(activeAddress)">
+                  <img :src="getAvatarUrl(activeAddress)" class="size-4" />
+                </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  {{ formatAddr(activeAddress) }}
+                </p>
+              </div>
+              <div class="flex items-center gap-2 pl-3">
+                <AlgoSymbol color="currentColor" :width="14" />
                 {{
                   store.account?.amount != null
                     ? bigintToString(store.account?.amount, 6, false, 2)

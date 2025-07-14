@@ -12,7 +12,7 @@ import { RouterLink } from "vue-router";
 </script>
 
 <template>
-  <div class="flex flex-col gap-3 p-4 pt-0">
+  <div class="flex flex-col gap-3 p-4 pt-0 max-w-200 mx-auto lg:min-w-200">
     <RouterLink v-for="item in tools()" :key="item.title" :to="item.path">
       <Card class="bg-muted/50 hover:bg-accent">
         <div class="flex items-center pl-6 gap-4">
