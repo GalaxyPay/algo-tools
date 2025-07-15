@@ -5,6 +5,7 @@ import { toast } from "vue-sonner";
 import "vue-sonner/style.css";
 
 const store = useAppStore();
+const router = useRouter();
 const { algodClient, activeAddress, activeWallet } = useWallet();
 
 async function refresh() {
@@ -17,6 +18,9 @@ async function refresh() {
         .do();
     } else {
       store.account = undefined;
+      if (!["/", "/vanity"].includes(router.currentRoute.value.path)) {
+        router.push("/");
+      }
     }
 
     const addrs = activeWallet.value?.accounts.map((a) => a.address);

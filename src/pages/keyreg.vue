@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import type { KeyRegTxn } from "@/types";
 import { execAtc } from "@/utils";
-import { mdiContentPaste } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
+import { ClipboardPaste } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();
 const { algodClient, activeAddress, transactionSigner } = useWallet();
 
-const required = (v: any) => !!v || v === 0 || "Required";
-const form = ref();
+// const required = (v: any) => !!v || v === 0 || "Required";
+// const form = ref();
 const part = ref<KeyRegTxn>({} as KeyRegTxn);
 const incentiveEligible = ref(false);
 const incentiveHint = computed(() =>
@@ -61,8 +61,8 @@ function b64ToUint8(b64: string | undefined) {
 }
 
 async function compose() {
-  const { valid } = await form.value.validate();
-  if (!valid) return;
+  // const { valid } = await form.value.validate();
+  // if (!valid) return;
   try {
     store.overlay = true;
     const suggestedParams = await algodClient.value.getTransactionParams().do();
@@ -84,7 +84,7 @@ async function compose() {
     if (!txn) throw Error("Invalid Transaction");
     atc.addTransaction({ txn, signer: transactionSigner });
     await execAtc(atc, algodClient.value, "Success");
-    form.value.reset();
+    // form.value.reset();
   } catch (err: any) {
     console.error(err);
     toast.error(err.message, { duration: 7000 });
@@ -126,8 +126,69 @@ async function offline() {
 </script>
 
 <template>
+  <div class="flex flex-col gap-4 p-4 pt-0">
+    <Card class="bg-muted/50" v-if="store.account">
+      <CardHeader>
+        <CardTitle>Participation Keys</CardTitle>
+        <CardDescription>
+          {{ `Your account is currently ${store.account.status}.` }}
+          <div class="text-caption">
+            Expire Round:
+            {{ store.account.participation?.voteLastValid }}
+          </div>
+          <div class="text-caption">Expire Date: {{ expireDt }}</div>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div class="items-top flex gap-x-2">
+          <Checkbox
+            id="eligible"
+            class="border-gray-500"
+            v-model="incentiveEligible"
+            :disabled="store.account?.incentiveEligible"
+          />
+          <div class="grid gap-1.5 leading-none">
+            <label
+              for="eligible"
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Make Incentive Eligible
+            </label>
+            <p class="text-sm text-muted-foreground">
+              {{ incentiveHint }}
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-4 pt-4">
+          <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+            <Input placeholder="First Round" />
+            <Input placeholder="Last Round" />
+            <Input placeholder="Key Dilution" />
+          </div>
+          <div class="grid auto-rows-min gap-4 md:grid-cols-2">
+            <Input placeholder="Selection Key" />
+            <Input placeholder="Voting Key" />
+          </div>
+          <Input placeholder="State Proof Key" />
+        </div>
+      </CardContent>
+      <CardFooter class="justify-between">
+        <div class="flex items-center gap-4">
+          <ClipboardPaste @click="pasteFromClipboard()" />
+          <Button
+            v-if="store.account.status == 'Online'"
+            variant="destructive"
+            @click="offline()"
+          >
+            Go Offline
+          </Button>
+        </div>
+        <Button variant="secondary" type="submit">Send</Button>
+      </CardFooter>
+    </Card>
+  </div>
   <!-- TODO -->
-  <v-container>
+  <!-- <v-container>
     <v-card v-if="store.account">
       <v-form ref="form" @submit.prevent="compose()">
         <v-container>
@@ -228,5 +289,5 @@ async function offline() {
         </v-card-actions>
       </v-form>
     </v-card>
-  </v-container>
+  </v-container> -->
 </template>
