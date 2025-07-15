@@ -8,7 +8,7 @@ import { tools } from "@/data";
   >
     <RouterLink v-for="item in tools()" :key="item.title" :to="item.path">
       <Card class="bg-muted/50 hover:bg-accent">
-        <div class="flex items-center pl-6 gap-4">
+        <div class="flex items-center px-6 gap-4">
           <component :is="item.icon" v-if="item.icon" class="text-vuet" />
           <div>
             <CardTitle>

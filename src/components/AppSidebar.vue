@@ -63,7 +63,7 @@ const network = computed(() =>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>
-      <SidebarGroup>
+      <SidebarGroup class="group-data-[collapsible=icon]:hidden">
         <SidebarGroupLabel>Network</SidebarGroupLabel>
         <div class="px-4 pt-2">
           <Select
