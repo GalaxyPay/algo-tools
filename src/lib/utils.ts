@@ -1,10 +1,6 @@
-import { networks } from "@/data";
-import { useNetwork } from "@txnlab/use-wallet-vue";
 import axios from "axios";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-
-//   return networks.find((n) => n.networkId === activeNetwork.value);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -45,10 +41,11 @@ export function bigintToString(
   }
 }
 
-export async function nfdReverseLookup(addrs: string[]) {
-  const { activeNetwork } = useNetwork();
-  const network = networks.find((n) => n.networkId === activeNetwork.value);
-  if (!network?.nfdUrl) return {};
+export async function nfdReverseLookup(
+  addrs: string[],
+  nfdUrl: string | undefined
+) {
+  if (!nfdUrl) return {};
   // break nfd lookup into groups of 20
   const groups = addrs.reduce((all: any, one: any, i: number) => {
     const ch = Math.floor(i / 20);
@@ -59,7 +56,7 @@ export async function nfdReverseLookup(addrs: string[]) {
   await Promise.all(
     groups.map(async (g: string[]) => {
       await axios(
-        `${network.nfdUrl}/nfd/lookup?view=thumbnail&` +
+        `${nfdUrl}/nfd/lookup?view=thumbnail&` +
           new URLSearchParams(g.map((addr) => ["address", addr])).toString()
       )
         .then((resp: any) => {

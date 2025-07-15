@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import { networks } from "@/data";
 import { nfdReverseLookup } from "@/lib/utils";
-import { useWallet } from "@txnlab/use-wallet-vue";
+import { useNetwork, useWallet } from "@txnlab/use-wallet-vue";
 import { toast } from "vue-sonner";
 import "vue-sonner/style.css";
 
 const store = useAppStore();
 const { algodClient, activeAddress, activeWallet } = useWallet();
+const { activeNetwork } = useNetwork();
+const network = computed(() =>
+  networks.find((n) => n.networkId === activeNetwork.value)
+);
 
 async function refresh() {
   try {
@@ -20,7 +25,7 @@ async function refresh() {
 
     const addrs = activeWallet.value?.accounts.map((a) => a.address);
     if (addrs?.length) {
-      store.nfds = await nfdReverseLookup(addrs);
+      store.nfds = await nfdReverseLookup(addrs, network.value?.nfdUrl);
     }
   } catch (err: any) {
     console.error(err);

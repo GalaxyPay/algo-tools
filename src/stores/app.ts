@@ -1,9 +1,6 @@
 // Utilities
-// import { networks } from "@/data";
 import type { TinyAsset } from "@/types";
-// import { useNetwork } from "@txnlab/use-wallet-vue";
 import { modelsv2 } from "algosdk";
-// import { get } from "idb-keyval";
 import { defineStore } from "pinia";
 
 export const useAppStore = defineStore("app", {
@@ -16,11 +13,6 @@ export const useAppStore = defineStore("app", {
     tinyman: undefined as undefined | TinyAsset[],
     nfds: {} as { [key: string]: any },
   }),
-  getters: {
-    // network() {
-    //   const { activeNetwork } = useNetwork();
-    //   return networks.find((n) => n.networkId === activeNetwork.value);
-    // },
-  },
+  getters: {},
   actions: {},
 });
