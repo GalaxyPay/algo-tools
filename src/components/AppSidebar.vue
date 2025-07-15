@@ -2,23 +2,26 @@
 import type { SidebarProps } from "@/components/ui/sidebar";
 import { networks, tools } from "@/data";
 import { NetworkId, useNetwork } from "@txnlab/use-wallet-vue";
+import { set } from "idb-keyval";
 
 const router = useRouter();
 const store = useAppStore();
 const { activeNetwork, setActiveNetwork } = useNetwork();
+const appVersion = __APP_VERSION__;
 
 const props = withDefaults(defineProps<SidebarProps>(), {
   collapsible: "icon",
 });
 
 async function switchNetwork(val: NetworkId) {
+  const network = networks.find((n) => n.networkId === val);
+  if (!network) throw Error("Invalid Network");
+  console.log(network);
   await setActiveNetwork(val);
+  await set("network", network);
+  await store.getCache();
   store.refresh++;
 }
-
-const network = computed(() =>
-  networks.find((n) => n.networkId === activeNetwork.value)
-);
 </script>
 
 <template>
@@ -33,7 +36,7 @@ const network = computed(() =>
             />
             <div class="grid flex-1 text-left text-sm leading-tight">
               <span class="truncate font-medium">AlgoTools</span>
-              <span class="truncate text-xs">{{ network?.name }}</span>
+              <span class="truncate text-xs">{{ store.network?.name }}</span>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>
@@ -85,6 +88,10 @@ const network = computed(() =>
               </SelectGroup>
             </SelectContent>
           </Select>
+        </div>
+        <div class="pt-2 text-center text-gray-400 text text-tiny">
+          &copy; {{ new Date().getFullYear() }} AlgoTools - Version
+          {{ appVersion }}
         </div>
       </SidebarGroup>
     </SidebarContent>

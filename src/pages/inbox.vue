@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import { Arc59Factory } from "@/clients/Arc59Client";
-import Algo from "@/services/Algo";
 import { AlgorandClient } from "@algorandfoundation/algokit-utils";
 import { mdiContentSave } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 import { set } from "idb-keyval";
+import { toast } from "vue-sonner";
 
 const store = useAppStore();
-const { activeAddress, transactionSigner } = useWallet();
+const { algodClient, activeAddress, transactionSigner } = useWallet();
+
 const inboxInfo = ref<modelsv2.Account>();
 
 async function getInbox() {
@@ -18,21 +19,21 @@ async function getInbox() {
   inboxInfo.value = undefined;
   try {
     const boxName = algosdk.decodeAddress(activeAddress.value).publicKey;
-    const resp = await Algo.algod
+    const resp = await algodClient.value
       .getApplicationBoxByName(store.network.inboxRouter, boxName)
       .do();
     inbox = algosdk.encodeAddress(resp.value);
   } catch {
     return;
   }
-  inboxInfo.value = await Algo.algod.accountInformation(inbox).do();
+  inboxInfo.value = await algodClient.value.accountInformation(inbox).do();
 }
 
 async function createRouter() {
   try {
     store.overlay = true;
     if (!store.account) throw Error("Invalid Account");
-    const algorand = AlgorandClient.fromClients({ algod: Algo.algod });
+    const algorand = AlgorandClient.fromClients({ algod: algodClient.value });
     algorand.setDefaultSigner(transactionSigner);
     algorand.setDefaultValidityWindow(1000);
     const factory = new Arc59Factory({
@@ -44,7 +45,7 @@ async function createRouter() {
     setRouter();
   } catch (err: any) {
     console.error(err);
-    store.setSnackbar(err.message, "error");
+    toast.error(err.message, { duration: 7000 });
   }
   store.overlay = false;
 }
@@ -52,7 +53,7 @@ async function createRouter() {
 async function setRouter() {
   await set("network", JSON.parse(JSON.stringify(store.network)));
   store.refresh++;
-  store.setSnackbar("Router ID Set", "success", 2000);
+  toast.success("Router ID Set");
 }
 
 watch(
@@ -74,42 +75,36 @@ watch(
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <v-col
-          v-if="!inboxInfo?.assets?.length"
-          class="text-center font-italic py-12"
-        >
+        <div v-if="!inboxInfo?.assets?.length" class="text-center italic py-12">
           Your Inbox is Empty
-        </v-col>
-        <v-col
-          v-for="n in inboxInfo?.assets?.length"
-          :key="n"
-          cols="12"
-          md="6"
-          lg="4"
-        >
+        </div>
+        <div v-for="n in inboxInfo?.assets?.length" :key="n">
           <InboxAsset :inbox-info="inboxInfo!" :idx="n - 1" />
-        </v-col>
+        </div>
       </CardContent>
     </Card>
-    <Card v-if="store.network.name === 'LocalNet'">
+    <Card v-if="store.network.name === 'LocalNet'" class="bg-muted/50">
       <CardHeader>
         <CardTitle> LocalNet Router Config </CardTitle>
       </CardHeader>
       <CardContent>
-        <v-col>
-          <v-btn text="Create New" @click="createRouter()" />
-        </v-col>
-        <v-col> OR </v-col>
-        <v-col>
-          <v-text-field
-            v-model.number="store.network.inboxRouter"
-            label="Existing App ID"
-            hide-details
-            :append-inner-icon="mdiContentSave"
-            @click:append-inner="setRouter()"
-            @keyup.enter="setRouter()"
-          />
-        </v-col>
+        <div class="flex items-center justify-evenly">
+          <div>
+            <Button variant="outline" @click="createRouter()">
+              Create New
+            </Button>
+          </div>
+          <div>OR</div>
+          <div>
+            <Input
+              v-model.number="store.network.inboxRouter"
+              placeholder="Existing App ID"
+              :append-inner-icon="mdiContentSave"
+              @click:append-inner="setRouter()"
+              @keyup.enter="setRouter()"
+            />
+          </div>
+        </div>
       </CardContent>
     </Card>
   </div>

@@ -1,4 +1,132 @@
+<script lang="ts" setup>
+import type { KeyRegTxn } from "@/types";
+import { execAtc } from "@/utils";
+import { mdiContentPaste } from "@mdi/js";
+import { useWallet } from "@txnlab/use-wallet-vue";
+import algosdk from "algosdk";
+import { toast } from "vue-sonner";
+
+const store = useAppStore();
+const { algodClient, activeAddress, transactionSigner } = useWallet();
+
+const required = (v: any) => !!v || v === 0 || "Required";
+const form = ref();
+const part = ref<KeyRegTxn>({} as KeyRegTxn);
+const incentiveEligible = ref(false);
+const incentiveHint = computed(() =>
+  store.account?.incentiveEligible
+    ? "Already Eligible"
+    : incentiveEligible.value
+    ? "This will increase the fee of this transaction to 2 Algo"
+    : ""
+);
+
+const lastRound = ref<bigint>();
+const avgBlockTime = ref();
+
+const expireDt = computed(() => {
+  if (!store.account?.participation || store.account.status !== "Online")
+    return undefined;
+  const expireMs =
+    (Number(store.account.participation.voteLastValid) -
+      Number(lastRound.value)) *
+    avgBlockTime.value;
+  return `${new Date(Date.now() + expireMs).toLocaleString()} (${Math.round(
+    expireMs / (24 * 60 * 60 * 1000)
+  )} days)`;
+});
+
+watch(
+  () => store.refresh,
+  () => calcAvgBlockTime(),
+  { immediate: true }
+);
+
+async function pasteFromClipboard() {
+  const clip = await navigator.clipboard.readText();
+  part.value.voteFirst = Number(clip.match(/(?<=^First\sround:\s*)\d*$/gm)![0]);
+  part.value.voteLast = Number(clip.match(/(?<=^Last\sround:\s*)\d*$/gm)![0]);
+  part.value.voteKeyDilution = Number(
+    clip.match(/(?<=^Key\sdilution:\s*)\d*$/gm)![0]
+  );
+  part.value.selectionKey = clip.match(/(?<=^Selection\skey:\s*)[^\s]*$/gm)![0];
+  part.value.voteKey = clip.match(/(?<=^Voting\skey:\s*)[^\s]*$/gm)![0];
+  part.value.stateProofKey = clip.match(
+    /(?<=^State\sproof\skey:\s*)[^\s]*$/gm
+  )![0];
+}
+
+function b64ToUint8(b64: string | undefined) {
+  return b64 ? Buffer.from(b64, "base64") : undefined;
+}
+
+async function compose() {
+  const { valid } = await form.value.validate();
+  if (!valid) return;
+  try {
+    store.overlay = true;
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer();
+    part.value.sender = activeAddress.value!;
+    if (incentiveEligible.value) {
+      suggestedParams.flatFee = true;
+      suggestedParams.fee = 2n * 10n ** 6n;
+    }
+    const obj = {
+      ...(part.value as any),
+      voteKey: b64ToUint8(part.value.voteKey),
+      selectionKey: b64ToUint8(part.value.selectionKey),
+      stateProofKey: b64ToUint8(part.value.stateProofKey),
+      suggestedParams,
+    };
+    const txn =
+      algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject(obj);
+    if (!txn) throw Error("Invalid Transaction");
+    atc.addTransaction({ txn, signer: transactionSigner });
+    await execAtc(atc, algodClient.value, "Success");
+    form.value.reset();
+  } catch (err: any) {
+    console.error(err);
+    toast.error(err.message, { duration: 7000 });
+  }
+  store.overlay = false;
+}
+
+async function calcAvgBlockTime() {
+  const status = await algodClient.value.status().do();
+  lastRound.value = status.lastRound;
+  const currentRound = await algodClient.value.block(lastRound.value).do();
+  const oldRound = await algodClient.value.block(lastRound.value - 100n).do();
+  avgBlockTime.value =
+    Math.floor(
+      Number(
+        currentRound.block.header.timestamp - oldRound.block.header.timestamp
+      )
+    ) * 10;
+}
+
+async function offline() {
+  try {
+    store.overlay = true;
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const atc = new algosdk.AtomicTransactionComposer();
+    const txn = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject({
+      sender: activeAddress.value!,
+      suggestedParams,
+      nonParticipation: false,
+    });
+    atc.addTransaction({ txn, signer: transactionSigner });
+    await execAtc(atc, algodClient.value, "Successfully Offline");
+  } catch (err: any) {
+    console.error(err);
+    toast.error(err.message, { duration: 7000 });
+  }
+  store.overlay = false;
+}
+</script>
+
 <template>
+  <!-- TODO -->
   <v-container>
     <v-card v-if="store.account">
       <v-form ref="form" @submit.prevent="compose()">
@@ -102,130 +230,3 @@
     </v-card>
   </v-container>
 </template>
-
-<script lang="ts" setup>
-import Algo, { getParams } from "@/services/Algo";
-import type { KeyRegTxn } from "@/types";
-import { execAtc } from "@/utils";
-import { mdiContentPaste } from "@mdi/js";
-import { useWallet } from "@txnlab/use-wallet-vue";
-import algosdk from "algosdk";
-
-const store = useAppStore();
-const { activeAddress, transactionSigner } = useWallet();
-
-const required = (v: any) => !!v || v === 0 || "Required";
-const form = ref();
-const part = ref<KeyRegTxn>({} as KeyRegTxn);
-const incentiveEligible = ref(false);
-const incentiveHint = computed(() =>
-  store.account?.incentiveEligible
-    ? "Already Eligible"
-    : incentiveEligible.value
-    ? "This will increase the fee of this transaction to 2 Algo"
-    : ""
-);
-
-const lastRound = ref<bigint>();
-const avgBlockTime = ref();
-
-const expireDt = computed(() => {
-  if (!store.account?.participation || store.account.status !== "Online")
-    return undefined;
-  const expireMs =
-    (Number(store.account.participation.voteLastValid) -
-      Number(lastRound.value)) *
-    avgBlockTime.value;
-  return `${new Date(Date.now() + expireMs).toLocaleString()} (${Math.round(
-    expireMs / (24 * 60 * 60 * 1000)
-  )} days)`;
-});
-
-watch(
-  () => store.refresh,
-  () => calcAvgBlockTime(),
-  { immediate: true }
-);
-
-async function pasteFromClipboard() {
-  const clip = await navigator.clipboard.readText();
-  part.value.voteFirst = Number(clip.match(/(?<=^First\sround:\s*)\d*$/gm)![0]);
-  part.value.voteLast = Number(clip.match(/(?<=^Last\sround:\s*)\d*$/gm)![0]);
-  part.value.voteKeyDilution = Number(
-    clip.match(/(?<=^Key\sdilution:\s*)\d*$/gm)![0]
-  );
-  part.value.selectionKey = clip.match(/(?<=^Selection\skey:\s*)[^\s]*$/gm)![0];
-  part.value.voteKey = clip.match(/(?<=^Voting\skey:\s*)[^\s]*$/gm)![0];
-  part.value.stateProofKey = clip.match(
-    /(?<=^State\sproof\skey:\s*)[^\s]*$/gm
-  )![0];
-}
-
-function b64ToUint8(b64: string | undefined) {
-  return b64 ? Buffer.from(b64, "base64") : undefined;
-}
-
-async function compose() {
-  const { valid } = await form.value.validate();
-  if (!valid) return;
-  try {
-    store.overlay = true;
-    const suggestedParams = await getParams();
-    const atc = new algosdk.AtomicTransactionComposer();
-    part.value.sender = activeAddress.value!;
-    if (incentiveEligible.value) {
-      suggestedParams.flatFee = true;
-      suggestedParams.fee = 2n * 10n ** 6n;
-    }
-    const obj = {
-      ...(part.value as any),
-      voteKey: b64ToUint8(part.value.voteKey),
-      selectionKey: b64ToUint8(part.value.selectionKey),
-      stateProofKey: b64ToUint8(part.value.stateProofKey),
-      suggestedParams,
-    };
-    const txn =
-      algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject(obj);
-    if (!txn) throw Error("Invalid Transaction");
-    atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, "Success");
-    form.value.reset();
-  } catch (err: any) {
-    console.error(err);
-    store.setSnackbar(err.message, "error");
-  }
-  store.overlay = false;
-}
-
-async function calcAvgBlockTime() {
-  const status = await Algo.algod.status().do();
-  lastRound.value = status.lastRound;
-  const currentRound = await Algo.algod.block(lastRound.value).do();
-  const oldRound = await Algo.algod.block(lastRound.value - 100n).do();
-  avgBlockTime.value =
-    Math.floor(
-      Number(
-        currentRound.block.header.timestamp - oldRound.block.header.timestamp
-      )
-    ) * 10;
-}
-
-async function offline() {
-  try {
-    store.overlay = true;
-    const suggestedParams = await getParams();
-    const atc = new algosdk.AtomicTransactionComposer();
-    const txn = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject({
-      sender: activeAddress.value!,
-      suggestedParams,
-      nonParticipation: false,
-    });
-    atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, "Successfully Offline");
-  } catch (err: any) {
-    console.error(err);
-    store.setSnackbar(err.message, "error");
-  }
-  store.overlay = false;
-}
-</script>

@@ -63,7 +63,7 @@
                     v-model="closeout"
                     label="Close Out"
                     @update:model-value="
-                      (val) => {
+                      (val: boolean) => {
                         if (val) {
                           amount = undefined;
                           form.validate();
@@ -125,7 +125,6 @@
 
 <script lang="ts" setup>
 import router from "@/router";
-import Algo, { getParams } from "@/services/Algo";
 import burnTeal from "@/teal/burn.teal?raw";
 import { bigintAmount, execAtc } from "@/utils";
 import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
@@ -136,9 +135,10 @@ import algosdk, {
   parseJSON,
   stringifyJSON,
 } from "algosdk";
+import { toast } from "vue-sonner";
 
 const store = useAppStore();
-const { activeAddress, transactionSigner } = useWallet();
+const { algodClient, activeAddress, transactionSigner } = useWallet();
 
 interface BurnAsset extends modelsv2.AssetHolding {
   params?: any;
@@ -190,7 +190,9 @@ async function getAssets() {
         params = ca.params;
       } else {
         try {
-          const assetInfo = await Algo.algod.getAssetByID(x.assetId).do();
+          const assetInfo = await algodClient.value
+            .getAssetByID(x.assetId)
+            .do();
           params = assetInfo.params;
         } catch (err: any) {
           console.error(err);
@@ -209,8 +211,10 @@ const lsig = ref();
 const lsigInfo = ref<modelsv2.Account>();
 
 async function getLsig() {
-  lsig.value = await Algo.algod.compile(burnTeal).do();
-  lsigInfo.value = await Algo.algod.accountInformation(lsig.value.hash).do();
+  lsig.value = await algodClient.value.compile(burnTeal).do();
+  lsigInfo.value = await algodClient.value
+    .accountInformation(lsig.value.hash)
+    .do();
 }
 
 onMounted(async () => {
@@ -224,7 +228,7 @@ async function burn() {
   try {
     store.overlay = true;
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getParams();
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
 
     if (!opted.value && needFunding.value) {
       suggestedParams.flatFee = true;
@@ -273,12 +277,12 @@ async function burn() {
         algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(burnObj);
       atc.addTransaction({ txn, signer: transactionSigner });
     }
-    await execAtc(atc, "Successfully Burned Asset");
+    await execAtc(atc, algodClient.value, "Successfully Burned Asset");
     form.value.reset();
     assetId.value = undefined;
   } catch (err: any) {
     console.error(err);
-    store.setSnackbar(err.message, "error");
+    toast.error(err.message, { duration: 7000 });
   }
   store.overlay = false;
 }

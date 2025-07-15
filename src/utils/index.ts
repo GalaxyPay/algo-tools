@@ -1,5 +1,5 @@
-import Algo from "@/services/Algo";
-import { AtomicTransactionComposer } from "algosdk";
+import algosdk from "algosdk";
+import { toast } from "vue-sonner";
 
 export { getAssetInfo } from "./assetInfo";
 export { resolveProtocol } from "./resolveProtocol";
@@ -23,13 +23,17 @@ export async function fetchAsync(url: string) {
   }
 }
 
-export async function execAtc(atc: AtomicTransactionComposer, success: string) {
+export async function execAtc(
+  atc: algosdk.AtomicTransactionComposer,
+  algodClient: algosdk.Algodv2,
+  success: string
+) {
   const store = useAppStore();
-  store.setSnackbar("Awaiting Signatures...", "info", -1);
+  toast.info("Awaiting Signatures...");
   await atc.gatherSignatures();
-  store.setSnackbar("Processing...", "info", -1);
-  await atc.execute(Algo.algod, 4);
-  store.setSnackbar(success, "success");
+  toast.info("Processing...");
+  await atc.execute(algodClient, 4);
+  toast.success(success);
   store.refresh++;
 }
 

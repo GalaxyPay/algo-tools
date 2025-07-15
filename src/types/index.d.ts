@@ -1,6 +1,5 @@
 export interface Network {
   name: string;
-  algod: Node;
   indexer: Node;
   networkId: string;
   explorer: string;

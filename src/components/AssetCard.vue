@@ -1,4 +1,147 @@
+<script lang="ts" setup>
+import { execAtc, getAssetInfo, resolveProtocol } from "@/utils";
+import { mdiClose, mdiDelete, mdiInformationOutline } from "@mdi/js";
+import { useWallet } from "@txnlab/use-wallet-vue";
+import algosdk, { modelsv2 } from "algosdk";
+import { toast } from "vue-sonner";
+
+const store = useAppStore();
+const { algodClient, activeAddress, transactionSigner } = useWallet();
+const props = defineProps({
+  asset: {
+    type: Object as PropType<
+      modelsv2.AssetHolding | { assetId: number; amount: number }
+    >,
+    required: true,
+  },
+});
+
+const assetInfo = ref<modelsv2.Asset>();
+const image = ref();
+const form = ref();
+const required = (v: string) => !!v || "Required";
+const validAddress = (v: string) =>
+  algosdk.isValidAddress(v) || "Invalid Address";
+const showReceiver = ref(false);
+const receiver = ref();
+const creator = ref(false);
+
+watch(
+  creator,
+  (val) => (receiver.value = val ? assetInfo.value?.params.creator : undefined)
+);
+
+const created = computed(() =>
+  store.account?.createdAssets?.some((x) => x.index == props.asset.assetId)
+);
+
+onMounted(async () => {
+  assetInfo.value = await getAssetInfo(
+    props.asset.assetId,
+    algodClient.value,
+    true
+  );
+  if (assetInfo.value?.params.url) {
+    image.value = await resolveProtocol(
+      assetInfo.value.params.url,
+      assetInfo.value.params.reserve || ""
+    );
+  }
+});
+
+function exploreAsset() {
+  const url = store.network.explorer + "/asset/" + props.asset.assetId;
+  window.open(url, "_blank");
+}
+
+function formatAmount() {
+  return assetInfo.value
+    ? (
+        Number(props.asset.amount) /
+        10 ** Number(assetInfo.value.params?.decimals)
+      ).toLocaleString(undefined, {
+        maximumFractionDigits: Number(assetInfo.value.params?.decimals),
+      })
+    : "-";
+}
+
+async function setReceiver() {
+  if (!props.asset.amount && props.asset.assetId) {
+    receiver.value = activeAddress.value!;
+    closeOut();
+  } else {
+    showReceiver.value = true;
+  }
+}
+
+async function destroy() {
+  try {
+    store.overlay = true;
+    const atc = new algosdk.AtomicTransactionComposer();
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const txn = algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
+      sender: activeAddress.value!,
+      suggestedParams,
+      assetIndex: Number(props.asset.assetId),
+    });
+    atc.addTransaction({ txn, signer: transactionSigner });
+    await execAtc(atc, algodClient.value, "Successfully Destroyed Asset");
+  } catch (err: any) {
+    console.error(err);
+    let message = err.message;
+    const manager = "this transaction should be issued by the manager";
+    if (message.includes(manager)) message = manager;
+    if (message.includes("creator is holding only"))
+      message = "Must hold 100% of asset.";
+    toast.error(message, { duration: 7000 });
+  }
+  store.overlay = false;
+}
+
+async function closeOut() {
+  if (props.asset.amount || !props.asset.assetId) {
+    const { valid } = await form.value.validate();
+    if (!valid) return;
+  }
+  try {
+    store.overlay = true;
+    const atc = new algosdk.AtomicTransactionComposer();
+    showReceiver.value = false;
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    let txn;
+    if (props.asset.assetId) {
+      txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+        sender: activeAddress.value!,
+        receiver: activeAddress.value!,
+        closeRemainderTo: receiver.value,
+        amount: 0,
+        assetIndex: Number(props.asset.assetId),
+        suggestedParams,
+      });
+    } else {
+      txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+        sender: activeAddress.value!,
+        receiver: activeAddress.value!,
+        closeRemainderTo: receiver.value,
+        amount: 0,
+        suggestedParams,
+      });
+    }
+    atc.addTransaction({ txn, signer: transactionSigner });
+    await execAtc(atc, algodClient.value, "Successfully Closed Out of Asset");
+  } catch (err: any) {
+    console.error(err);
+    let message = err.message;
+    if (err.status == 400)
+      message = "Must close/destroy all Assets and Apps first.";
+    toast.error(message, { duration: 7000 });
+  }
+  store.overlay = false;
+}
+</script>
+
 <template>
+  <!-- TODO -->
   <v-card class="fill-height" color="#2B2B2B">
     <v-container>
       <v-row>
@@ -75,141 +218,3 @@
     </v-dialog>
   </v-card>
 </template>
-
-<script lang="ts" setup>
-import { getParams } from "@/services/Algo";
-import { execAtc, getAssetInfo, resolveProtocol } from "@/utils";
-import { mdiClose, mdiDelete, mdiInformationOutline } from "@mdi/js";
-import { useWallet } from "@txnlab/use-wallet-vue";
-import algosdk, { modelsv2 } from "algosdk";
-
-const store = useAppStore();
-const { activeAddress, transactionSigner } = useWallet();
-const props = defineProps({
-  asset: {
-    type: Object as PropType<
-      modelsv2.AssetHolding | { assetId: number; amount: number }
-    >,
-    required: true,
-  },
-});
-
-const assetInfo = ref<modelsv2.Asset>();
-const image = ref();
-const form = ref();
-const required = (v: string) => !!v || "Required";
-const validAddress = (v: string) =>
-  algosdk.isValidAddress(v) || "Invalid Address";
-const showReceiver = ref(false);
-const receiver = ref();
-const creator = ref(false);
-
-watch(
-  creator,
-  (val) => (receiver.value = val ? assetInfo.value?.params.creator : undefined)
-);
-
-const created = computed(() =>
-  store.account?.createdAssets?.some((x) => x.index == props.asset.assetId)
-);
-
-onMounted(async () => {
-  assetInfo.value = await getAssetInfo(props.asset.assetId, true);
-  if (assetInfo.value?.params.url) {
-    image.value = await resolveProtocol(
-      assetInfo.value.params.url,
-      assetInfo.value.params.reserve || ""
-    );
-  }
-});
-
-function exploreAsset() {
-  const url = store.network.explorer + "/asset/" + props.asset.assetId;
-  window.open(url, "_blank");
-}
-
-function formatAmount() {
-  return assetInfo.value
-    ? (
-        Number(props.asset.amount) /
-        10 ** Number(assetInfo.value.params?.decimals)
-      ).toLocaleString(undefined, {
-        maximumFractionDigits: Number(assetInfo.value.params?.decimals),
-      })
-    : "-";
-}
-
-async function setReceiver() {
-  if (!props.asset.amount && props.asset.assetId) {
-    receiver.value = activeAddress.value!;
-    closeOut();
-  } else {
-    showReceiver.value = true;
-  }
-}
-
-async function destroy() {
-  try {
-    store.overlay = true;
-    const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getParams();
-    const txn = algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
-      sender: activeAddress.value!,
-      suggestedParams,
-      assetIndex: Number(props.asset.assetId),
-    });
-    atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, "Successfully Destroyed Asset");
-  } catch (err: any) {
-    console.error(err);
-    let message = err.message;
-    const manager = "this transaction should be issued by the manager";
-    if (message.includes(manager)) message = manager;
-    if (message.includes("creator is holding only"))
-      message = "Must hold 100% of asset.";
-    store.setSnackbar(message, "error");
-  }
-  store.overlay = false;
-}
-
-async function closeOut() {
-  if (props.asset.amount || !props.asset.assetId) {
-    const { valid } = await form.value.validate();
-    if (!valid) return;
-  }
-  try {
-    store.overlay = true;
-    const atc = new algosdk.AtomicTransactionComposer();
-    showReceiver.value = false;
-    const suggestedParams = await getParams();
-    let txn;
-    if (props.asset.assetId) {
-      txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
-        sender: activeAddress.value!,
-        receiver: activeAddress.value!,
-        closeRemainderTo: receiver.value,
-        amount: 0,
-        assetIndex: Number(props.asset.assetId),
-        suggestedParams,
-      });
-    } else {
-      txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        sender: activeAddress.value!,
-        receiver: activeAddress.value!,
-        closeRemainderTo: receiver.value,
-        amount: 0,
-        suggestedParams,
-      });
-    }
-    atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, "Successfully Closed Out of Asset");
-  } catch (err: any) {
-    console.error(err);
-    let message = err.message;
-    if (err.status == 400)
-      message = "Must close/destroy all Assets and Apps first.";
-    store.setSnackbar(message, "error");
-  }
-  store.overlay = false;
-}
-</script>

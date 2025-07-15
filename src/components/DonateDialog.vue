@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { FormField } from "@/components/ui/form";
-import { getParams } from "@/services/Algo";
 import { bigintAmount, execAtc } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import algosdk from "algosdk";
 import { useForm } from "vee-validate";
+import { toast } from "vue-sonner";
 import * as z from "zod";
 
 const store = useAppStore();
-const { activeAddress, transactionSigner } = useWallet();
+const { algodClient, activeAddress, transactionSigner } = useWallet();
 
 const formSchema = toTypedSchema(
   z.object({
@@ -27,7 +27,7 @@ const donate = handleSubmit(async (values) => {
     store.overlay = true;
     const atc = new algosdk.AtomicTransactionComposer();
     const enc = new TextEncoder();
-    const suggestedParams = await getParams();
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
     const note64 = values.note ? enc.encode(values.note) : undefined;
     const microAlgo = bigintAmount(values.amount, 6);
     const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
@@ -38,10 +38,10 @@ const donate = handleSubmit(async (values) => {
       amount: microAlgo,
     });
     atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, "Thank you for your donation!");
+    await execAtc(atc, algodClient.value, "Thank you for your donation!");
   } catch (err: any) {
     console.error(err);
-    store.setSnackbar(err.message, "error");
+    toast.error(err.message, { duration: 7000 });
   }
   store.overlay = false;
 });

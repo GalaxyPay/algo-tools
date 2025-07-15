@@ -1,4 +1,153 @@
+<script lang="ts" setup>
+import { execAtc, fetchAsync } from "@/utils";
+import { mdiCancel, mdiClose, mdiDelete, mdiInformationOutline } from "@mdi/js";
+import { useWallet } from "@txnlab/use-wallet-vue";
+import algosdk, { modelsv2 } from "algosdk";
+import { toast } from "vue-sonner";
+
+const props = defineProps({
+  app: {
+    type: Object as PropType<
+      modelsv2.ApplicationLocalState | modelsv2.Application
+    >,
+    required: true,
+  },
+});
+const store = useAppStore();
+const { algodClient, activeAddress, transactionSigner } = useWallet();
+
+const appInfo = ref();
+
+onMounted(async () => {
+  appInfo.value = (
+    await fetchAsync(
+      `https://algoaccinfo.com:8443/applications/?id=${props.app.id}`
+    )
+  )[0];
+});
+
+function exploreApp() {
+  const url = store.network.explorer + "/application/" + props.app.id;
+  window.open(url, "_blank");
+}
+
+function isOwned(app: any) {
+  return app instanceof modelsv2.Application;
+}
+
+async function closeOut() {
+  if (
+    confirm(
+      "WARNING: Closing-out of this contract may result in financial loss. " +
+        "Before performing this action you should make sure this contract doesn't hold any current or future value. " +
+        "Are you sure you want to proceed?"
+    )
+  ) {
+    try {
+      store.overlay = true;
+      const atc = new algosdk.AtomicTransactionComposer();
+      const suggestedParams = await algodClient.value
+        .getTransactionParams()
+        .do();
+      const txn = algosdk.makeApplicationCloseOutTxnFromObject({
+        sender: activeAddress.value!,
+        suggestedParams,
+        appIndex: Number(props.app.id),
+      });
+      atc.addTransaction({ txn, signer: transactionSigner });
+      await execAtc(
+        atc,
+        algodClient.value,
+        "Successfully Closed Out of Application"
+      );
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message, { duration: 7000 });
+    }
+    store.overlay = false;
+  }
+}
+
+async function clearState() {
+  if (
+    confirm(
+      "WARNING: CLEAR-STATE SHOULD ONLY BE USED IF CLOSE-OUT FAILS. Clearing this contract's state may result in financial loss. " +
+        "Before performing this action you should make sure this contract doesn't hold any current or future value. " +
+        "Are you sure you want to proceed?"
+    )
+  ) {
+    try {
+      store.overlay = true;
+      const atc = new algosdk.AtomicTransactionComposer();
+      const suggestedParams = await algodClient.value
+        .getTransactionParams()
+        .do();
+      const txn = algosdk.makeApplicationClearStateTxnFromObject({
+        sender: activeAddress.value!,
+        suggestedParams,
+        appIndex: Number(props.app.id),
+      });
+      atc.addTransaction({ txn, signer: transactionSigner });
+      await execAtc(
+        atc,
+        algodClient.value,
+        "Successfully Cleared Application State"
+      );
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message, { duration: 7000 });
+    }
+    store.overlay = false;
+  }
+}
+
+async function deleteApp() {
+  if (
+    confirm(
+      "WARNING: This will permenantly DELETE the contract. Are you sure you want to proceed?"
+    )
+  ) {
+    try {
+      store.overlay = true;
+      const atc = new algosdk.AtomicTransactionComposer();
+      const suggestedParams = await algodClient.value
+        .getTransactionParams()
+        .do();
+      const txn = algosdk.makeApplicationDeleteTxnFromObject({
+        sender: activeAddress.value!,
+        suggestedParams,
+        appIndex: Number(props.app.id),
+      });
+      atc.addTransaction({ txn, signer: transactionSigner });
+      await execAtc(atc, algodClient.value, "Successfully Deleted Application");
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message, { duration: 7000 });
+    }
+    store.overlay = false;
+  }
+}
+
+function mbr() {
+  let cost;
+  if (props.app instanceof modelsv2.ApplicationLocalState)
+    cost =
+      (100000 +
+        28500 * Number(props.app.schema.numUint) +
+        50000 * Number(props.app.schema.numByteSlice)) /
+      10 ** 6;
+  else
+    cost =
+      (100000 +
+        28500 * Number(props.app.params.globalStateSchema?.numUint) +
+        50000 * Number(props.app.params.globalStateSchema?.numByteSlice)) /
+      10 ** 6;
+  return cost;
+}
+</script>
+
 <template>
+  <!-- TODO -->
   <v-card class="fill-height" variant="tonal">
     <v-container>
       <v-row>
@@ -76,137 +225,3 @@
     </v-container>
   </v-card>
 </template>
-
-<script lang="ts" setup>
-import { getParams } from "@/services/Algo";
-import { execAtc, fetchAsync } from "@/utils";
-import { mdiCancel, mdiClose, mdiDelete, mdiInformationOutline } from "@mdi/js";
-import { useWallet } from "@txnlab/use-wallet-vue";
-import algosdk, { modelsv2 } from "algosdk";
-
-const props = defineProps({
-  app: {
-    type: Object as PropType<
-      modelsv2.ApplicationLocalState | modelsv2.Application
-    >,
-    required: true,
-  },
-});
-const store = useAppStore();
-const { activeAddress, transactionSigner } = useWallet();
-
-const appInfo = ref();
-
-onMounted(async () => {
-  appInfo.value = (
-    await fetchAsync(
-      `https://algoaccinfo.com:8443/applications/?id=${props.app.id}`
-    )
-  )[0];
-});
-
-function exploreApp() {
-  const url = store.network.explorer + "/application/" + props.app.id;
-  window.open(url, "_blank");
-}
-
-function isOwned(app: any) {
-  return app instanceof modelsv2.Application;
-}
-
-async function closeOut() {
-  if (
-    confirm(
-      "WARNING: Closing-out of this contract may result in financial loss. " +
-        "Before performing this action you should make sure this contract doesn't hold any current or future value. " +
-        "Are you sure you want to proceed?"
-    )
-  ) {
-    try {
-      store.overlay = true;
-      const atc = new algosdk.AtomicTransactionComposer();
-      const suggestedParams = await getParams();
-      const txn = algosdk.makeApplicationCloseOutTxnFromObject({
-        sender: activeAddress.value!,
-        suggestedParams,
-        appIndex: Number(props.app.id),
-      });
-      atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, "Successfully Closed Out of Application");
-    } catch (err: any) {
-      console.error(err);
-      store.setSnackbar(err.message, "error");
-    }
-    store.overlay = false;
-  }
-}
-
-async function clearState() {
-  if (
-    confirm(
-      "WARNING: CLEAR-STATE SHOULD ONLY BE USED IF CLOSE-OUT FAILS. Clearing this contract's state may result in financial loss. " +
-        "Before performing this action you should make sure this contract doesn't hold any current or future value. " +
-        "Are you sure you want to proceed?"
-    )
-  ) {
-    try {
-      store.overlay = true;
-      const atc = new algosdk.AtomicTransactionComposer();
-      const suggestedParams = await getParams();
-      const txn = algosdk.makeApplicationClearStateTxnFromObject({
-        sender: activeAddress.value!,
-        suggestedParams,
-        appIndex: Number(props.app.id),
-      });
-      atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, "Successfully Cleared Application State");
-    } catch (err: any) {
-      console.error(err);
-      store.setSnackbar(err.message, "error");
-    }
-    store.overlay = false;
-  }
-}
-
-async function deleteApp() {
-  if (
-    confirm(
-      "WARNING: This will permenantly DELETE the contract. Are you sure you want to proceed?"
-    )
-  ) {
-    try {
-      store.overlay = true;
-      const atc = new algosdk.AtomicTransactionComposer();
-      const suggestedParams = await getParams();
-      const txn = algosdk.makeApplicationDeleteTxnFromObject({
-        sender: activeAddress.value!,
-        suggestedParams,
-        appIndex: Number(props.app.id),
-      });
-      atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, "Successfully Deleted Application");
-    } catch (err: any) {
-      console.error(err);
-      store.setSnackbar(err.message, "error");
-    }
-    store.overlay = false;
-  }
-}
-
-function mbr() {
-  let cost;
-  if (props.app instanceof modelsv2.ApplicationLocalState)
-    cost =
-      (100000 +
-        28500 * Number(props.app.schema.numUint) +
-        50000 * Number(props.app.schema.numByteSlice)) /
-      10 ** 6;
-  else
-    cost =
-      (100000 +
-        28500 * Number(props.app.params.globalStateSchema?.numUint) +
-        50000 * Number(props.app.params.globalStateSchema?.numByteSlice)) /
-      10 ** 6;
-  return cost;
-}
-</script>
