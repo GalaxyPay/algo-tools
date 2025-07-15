@@ -1,18 +1,11 @@
 <script lang="ts" setup>
 import { tools } from "@/data";
-// import { useWallet } from "@txnlab/use-wallet-vue";
-import { RouterLink } from "vue-router";
-// const store = useAppStore();
-// const { activeAddress } = useWallet();
-
-// function clickDonate() {
-//   if (activeAddress.value) store.showDonate = true;
-//   else store.connectMenu = true;
-// }
 </script>
 
 <template>
-  <div class="flex flex-col gap-3 p-4 pt-0 max-w-200 mx-auto lg:min-w-200">
+  <div
+    class="flex flex-col gap-3 p-4 pt-0 mx-auto lg:min-w-200 xl:min-w-250 2xl:min-w-300"
+  >
     <RouterLink v-for="item in tools()" :key="item.title" :to="item.path">
       <Card class="bg-muted/50 hover:bg-accent">
         <div class="flex items-center pl-6 gap-4">
@@ -30,7 +23,7 @@ import { RouterLink } from "vue-router";
     </RouterLink>
     <DonateDialog>
       <Card class="bg-muted/50 hover:bg-accent">
-        <div class="flex items-center pl-6 gap-4">
+        <div class="flex items-center px-6 gap-4">
           <AlgoSymbol
             color="currentColor"
             :width="20"

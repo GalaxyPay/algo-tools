@@ -10,7 +10,6 @@ const { algodClient, activeAddress, activeWallet } = useWallet();
 async function refresh() {
   try {
     store.loading++;
-    store.getCache();
     if (activeAddress.value) {
       store.account = await algodClient.value
         .accountInformation(activeAddress.value)

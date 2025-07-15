@@ -1,3 +1,4 @@
+import { useNetwork } from "@txnlab/use-wallet-vue";
 import {
   CaseUpper,
   Coins,
@@ -7,6 +8,7 @@ import {
   LogOut,
 } from "lucide-vue-next";
 import type { FunctionalComponent } from "vue";
+import { networks } from ".";
 
 interface Tool {
   title: string;
@@ -16,11 +18,12 @@ interface Tool {
 }
 
 export const tools = () => {
-  const store = useAppStore();
+  const { activeNetwork } = useNetwork();
+  const network = networks.find((n) => n.networkId === activeNetwork.value);
 
   const val: Tool[] = [];
 
-  if (store.network.nftIndexer)
+  if (network?.nftIndexer)
     val.push({
       title: "ARC200 Assets",
       subtitle: "View and send contract-based assets",
@@ -28,7 +31,7 @@ export const tools = () => {
       path: "/arc200",
     });
 
-  if (store.network.inboxRouter || store.network.name === "LocalNet")
+  if (network?.inboxRouter || network?.name === "LocalNet")
     val.push({
       title: "Asset Inbox",
       subtitle: "View and claim assets sent to your inbox.",
@@ -58,7 +61,7 @@ export const tools = () => {
     }
   );
 
-  if (store.network.vanityId)
+  if (network?.vanityId)
     val.push({
       title: "Vanity Marketplace",
       subtitle: "Buy and sell vanity addresses.",

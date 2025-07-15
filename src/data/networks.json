@@ -47,6 +47,7 @@
       "port": "8980",
       "token": ""
     },
+    "networkId": "localnet",
     "explorer": "https://lora.algokit.io/localnet"
   },
   {

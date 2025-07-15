@@ -1,12 +1,24 @@
 <script setup lang="ts">
 import type { SidebarProps } from "@/components/ui/sidebar";
-import { tools } from "@/data";
+import { networks, tools } from "@/data";
+import { NetworkId, useNetwork } from "@txnlab/use-wallet-vue";
 
 const router = useRouter();
+const store = useAppStore();
+const { activeNetwork, setActiveNetwork } = useNetwork();
 
 const props = withDefaults(defineProps<SidebarProps>(), {
   collapsible: "icon",
 });
+
+async function switchNetwork(val: NetworkId) {
+  await setActiveNetwork(val);
+  store.refresh++;
+}
+
+const network = computed(() =>
+  networks.find((n) => n.networkId === activeNetwork.value)
+);
 </script>
 
 <template>
@@ -21,7 +33,7 @@ const props = withDefaults(defineProps<SidebarProps>(), {
             />
             <div class="grid flex-1 text-left text-sm leading-tight">
               <span class="truncate font-medium">AlgoTools</span>
-              <!-- <span class="truncate text-xs">{{ env }}</span> -->
+              <span class="truncate text-xs">{{ network?.name }}</span>
             </div>
           </SidebarMenuButton>
         </SidebarMenuItem>
@@ -53,6 +65,27 @@ const props = withDefaults(defineProps<SidebarProps>(), {
       </SidebarGroup>
       <SidebarGroup>
         <SidebarGroupLabel>Network</SidebarGroupLabel>
+        <div class="px-4 pt-2">
+          <Select
+            :model-value="activeNetwork"
+            @update:model-value="(val) => switchNetwork(val as NetworkId)"
+          >
+            <SelectTrigger class="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem
+                  v-for="network in networks"
+                  :key="network.name"
+                  :value="network.networkId"
+                >
+                  {{ network.name }}
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </SidebarGroup>
     </SidebarContent>
     <SidebarFooter>
