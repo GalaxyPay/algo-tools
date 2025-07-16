@@ -173,7 +173,6 @@ async function buy(item: ForSale) {
   try {
     if (!item.vanity) throw Error("Invalid Item");
     if (!store.network.vanityId) throw Error("Network not supported");
-    store.overlay = true;
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await getParams();
     const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
@@ -203,14 +202,12 @@ async function buy(item: ForSale) {
     console.error(err);
     store.setSnackbar(err.message, "error");
   }
-  store.overlay = false;
   getForSale();
 }
 
 async function rescind(item: ForSale) {
   try {
     if (!store.network.vanityId) throw Error("Network not supported");
-    store.overlay = true;
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await getParams();
     suggestedParams.fee = suggestedParams.minFee * 3n;
@@ -233,7 +230,6 @@ async function rescind(item: ForSale) {
     console.error(err);
     store.setSnackbar(err.message, "error");
   }
-  store.overlay = false;
   getForSale();
 }
 

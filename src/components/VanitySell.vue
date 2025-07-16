@@ -54,7 +54,6 @@ async function sell() {
   try {
     if (!m2a.value) throw Error("Invalid Account");
     if (!store.network.vanityId) throw Error("Network not supported");
-    store.overlay = true;
     const vanityInfo = await algodClient.value
       .accountInformation(m2a.value.addr)
       .do();
@@ -104,7 +103,6 @@ async function sell() {
   }
   form.value.reset();
   showAddListing.value = false;
-  store.overlay = false;
 }
 </script>
 

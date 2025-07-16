@@ -75,7 +75,6 @@ async function compose() {
     console.log(Object.values(part.value));
     if (!Object.values(part.value).every((val) => val))
       throw Error("All fields are required");
-    store.overlay = true;
     const suggestedParams = await algodClient.value.getTransactionParams().do();
     const atc = new algosdk.AtomicTransactionComposer();
     part.value.sender = activeAddress.value!;
@@ -100,7 +99,6 @@ async function compose() {
     console.error(err);
     toast.error(err.message, { duration: 7000 });
   }
-  store.overlay = false;
 }
 
 async function calcAvgBlockTime() {
@@ -118,7 +116,6 @@ async function calcAvgBlockTime() {
 
 async function offline() {
   try {
-    store.overlay = true;
     const suggestedParams = await algodClient.value.getTransactionParams().do();
     const atc = new algosdk.AtomicTransactionComposer();
     const txn = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject({
@@ -132,7 +129,6 @@ async function offline() {
     console.error(err);
     toast.error(err.message, { duration: 7000 });
   }
-  store.overlay = false;
 }
 </script>
 
