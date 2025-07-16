@@ -76,7 +76,6 @@ async function setReceiver() {
 
 async function destroy() {
   try {
-    store.overlay = true;
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await algodClient.value.getTransactionParams().do();
     const txn = algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
@@ -95,7 +94,6 @@ async function destroy() {
       message = "Must hold 100% of asset.";
     toast.error(message, { duration: 7000 });
   }
-  store.overlay = false;
 }
 
 async function closeOut() {
@@ -104,7 +102,6 @@ async function closeOut() {
     if (!valid) return;
   }
   try {
-    store.overlay = true;
     const atc = new algosdk.AtomicTransactionComposer();
     showReceiver.value = false;
     const suggestedParams = await algodClient.value.getTransactionParams().do();
@@ -136,7 +133,6 @@ async function closeOut() {
       message = "Must close/destroy all Assets and Apps first.";
     toast.error(message, { duration: 7000 });
   }
-  store.overlay = false;
 }
 </script>
 

@@ -44,7 +44,6 @@ async function closeOut() {
     )
   ) {
     try {
-      store.overlay = true;
       const atc = new algosdk.AtomicTransactionComposer();
       const suggestedParams = await algodClient.value
         .getTransactionParams()
@@ -64,7 +63,6 @@ async function closeOut() {
       console.error(err);
       toast.error(err.message, { duration: 7000 });
     }
-    store.overlay = false;
   }
 }
 
@@ -77,7 +75,6 @@ async function clearState() {
     )
   ) {
     try {
-      store.overlay = true;
       const atc = new algosdk.AtomicTransactionComposer();
       const suggestedParams = await algodClient.value
         .getTransactionParams()
@@ -97,7 +94,6 @@ async function clearState() {
       console.error(err);
       toast.error(err.message, { duration: 7000 });
     }
-    store.overlay = false;
   }
 }
 
@@ -108,7 +104,6 @@ async function deleteApp() {
     )
   ) {
     try {
-      store.overlay = true;
       const atc = new algosdk.AtomicTransactionComposer();
       const suggestedParams = await algodClient.value
         .getTransactionParams()
@@ -124,7 +119,6 @@ async function deleteApp() {
       console.error(err);
       toast.error(err.message, { duration: 7000 });
     }
-    store.overlay = false;
   }
 }
 

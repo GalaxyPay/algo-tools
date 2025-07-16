@@ -39,11 +39,6 @@ watch(
   () => refresh(),
   { immediate: true }
 );
-
-watch(
-  () => activeAddress.value,
-  () => refresh()
-);
 </script>
 
 <template>

@@ -3,11 +3,13 @@ import { useWallet, type Wallet } from "@txnlab/use-wallet-vue";
 import { Wallet2 } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 
+const store = useAppStore();
 const { wallets } = useWallet();
 
 async function handleWalletClick(wallet: Wallet) {
   try {
     await wallet.connect();
+    store.refresh++;
   } catch (err: any) {
     console.error(`Error connecting to ${wallet.metadata.name}:`, err);
     toast.error(err.message, { duration: 7000 });

@@ -80,6 +80,7 @@ import { mdiCancel, mdiCircleOutline, mdiClose } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
 import { arc200 as Contract } from "ulujs";
+import { toast } from "vue-sonner";
 
 const props = defineProps({
   asset: { type: Object, required: true },
@@ -114,7 +115,6 @@ async function sendAsset() {
   if (!valid) return;
 
   try {
-    store.overlay = true;
     if (!activeAddress.value) throw Error("Invalid Account");
     const contract = new Contract(
       props.asset.contractId,
@@ -140,9 +140,8 @@ async function sendAsset() {
     }
   } catch (err: any) {
     console.error(err);
-    store.setSnackbar(err.message, "error");
+    toast.error(err.message, { duration: 7000 });
   }
-  store.overlay = false;
 }
 watch(
   () => showSend.value,

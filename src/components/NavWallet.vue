@@ -18,6 +18,7 @@ function handleCopyAddress() {
 async function handleAccountChange(addr: string) {
   if (activeWallet.value) {
     activeWallet.value.setActiveAccount(addr);
+    store.refresh++;
   }
 }
 async function handleDisconnect() {
@@ -25,6 +26,7 @@ async function handleDisconnect() {
     try {
       store.getCache();
       await activeWallet.value.disconnect();
+      store.refresh++;
     } catch (err: any) {
       console.error("Error disconnecting wallet:", err);
       toast.error(err.message, { duration: 7000 });

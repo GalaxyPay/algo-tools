@@ -29,12 +29,25 @@ export async function execAtc(
   success: string
 ) {
   const store = useAppStore();
-  toast.info("Awaiting Signatures...");
-  await atc.gatherSignatures();
-  toast.info("Processing...");
-  await atc.execute(algodClient, 4);
-  toast.success(success);
-  store.refresh++;
+  let toastId: number | string | undefined = undefined;
+  try {
+    store.overlay = true;
+    toastId = toast.info("Awaiting Signatures...", {
+      duration: Infinity,
+    });
+    await atc.gatherSignatures();
+    toast.dismiss(toastId);
+    toastId = toast.info("Processing...");
+    await atc.execute(algodClient, 4);
+    toast.dismiss(toastId);
+    toast.success(success);
+    store.refresh++;
+    store.overlay = false;
+  } catch (err) {
+    store.overlay = false;
+    toast.dismiss(toastId);
+    throw err;
+  }
 }
 
 export function ipfs2http(url: string) {

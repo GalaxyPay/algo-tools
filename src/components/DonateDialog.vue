@@ -8,7 +8,6 @@ import { useForm } from "vee-validate";
 import { toast } from "vue-sonner";
 import * as z from "zod";
 
-const store = useAppStore();
 const { algodClient, activeAddress, transactionSigner } = useWallet();
 
 const formSchema = toTypedSchema(
@@ -18,13 +17,14 @@ const formSchema = toTypedSchema(
   })
 );
 
-const { handleSubmit } = useForm({
+const { handleSubmit, isFieldValid } = useForm({
   validationSchema: formSchema,
 });
 
+const disableSend = computed(() => !isFieldValid("amount"));
+
 const donate = handleSubmit(async (values) => {
   try {
-    store.overlay = true;
     const atc = new algosdk.AtomicTransactionComposer();
     const enc = new TextEncoder();
     const suggestedParams = await algodClient.value.getTransactionParams().do();
@@ -43,13 +43,12 @@ const donate = handleSubmit(async (values) => {
     console.error(err);
     toast.error(err.message, { duration: 7000 });
   }
-  store.overlay = false;
 });
 </script>
 
 <template>
   <Dialog>
-    <DialogTrigger :as-child="true">
+    <DialogTrigger as-child>
       <slot />
     </DialogTrigger>
     <DialogContent class="w-100">
@@ -87,8 +86,11 @@ const donate = handleSubmit(async (values) => {
           </FormItem>
         </FormField>
         <DialogFooter>
-          <DialogClose></DialogClose>
-          <Button variant="outline" type="submit">Send</Button>
+          <DialogClose as-child>
+            <Button :disabled="disableSend" variant="outline" type="submit">
+              Send
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </form>
     </DialogContent>
