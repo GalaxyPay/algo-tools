@@ -89,7 +89,7 @@ async function switchNetwork(val: NetworkId) {
             </SelectContent>
           </Select>
         </div>
-        <div class="pt-2 text-center text-gray-400 text text-tiny">
+        <div class="pt-2 text-center text-muted-foreground text-tiny">
           &copy; {{ new Date().getFullYear() }} AlgoTools - Version
           {{ appVersion }}
         </div>

@@ -21,9 +21,9 @@ interface BurnAsset extends modelsv2.AssetHolding {
 
 const assets = ref<BurnAsset[]>();
 const assetId = ref();
-// const form = ref();
 const amount = ref();
 const closeout = ref(false);
+const amountRequired = ref(false);
 const asset = computed(() =>
   assets.value?.find((a) => a.assetId == assetId.value)
 );
@@ -40,8 +40,6 @@ const needFunding = computed(
   () =>
     (lsigInfo.value?.amount || 0n) - (lsigInfo.value?.minBalance || 0n) < 101000
 );
-
-// const required = (v: number) => closeout.value || !!v || v === 0 || "Required";
 
 async function getAssets() {
   if (!store.account) {
@@ -96,9 +94,12 @@ onMounted(async () => {
 });
 
 async function burn() {
-  // const { valid } = await form.value.validate();
-  // if (!valid) return;
   try {
+    if (amount.value == null && !closeout.value) {
+      amountRequired.value = true;
+      return;
+    }
+    amountRequired.value = false;
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await algodClient.value.getTransactionParams().do();
 
@@ -150,7 +151,8 @@ async function burn() {
       atc.addTransaction({ txn, signer: transactionSigner });
     }
     await execAtc(atc, algodClient.value, "Successfully Burned Asset");
-    // form.value.reset();
+    amount.value = undefined;
+    closeout.value = false;
     assetId.value = undefined;
   } catch (err: any) {
     console.error(err);
@@ -196,7 +198,7 @@ watch(
             </SelectContent>
           </Select>
           <div v-show="clawback" class="p-1 text-sm text-yellow-600">
-            Assets with clawback enabled cannot be burned.
+            Assets with clawback enabled cannot be burned
           </div>
         </div>
         <div v-if="assetId" class="p-4">
@@ -228,6 +230,34 @@ watch(
               </div>
             </div>
             <div class="flex flex-col gap-2 text-center">
+              <div class="flex gap-2">
+                <div class="flex flex-col gap-2">
+                  <Input
+                    v-model="amount"
+                    placeholder="Amount to Burn"
+                    :disabled="closeout"
+                  />
+                  <div
+                    v-show="amountRequired"
+                    class="pl-2 text-left text-red-500 text-xs"
+                  >
+                    Required
+                  </div>
+                </div>
+                <div class="items-center flex gap-x-2">
+                  <Checkbox
+                    id="closeout"
+                    class="border-gray-500"
+                    v-model="closeout"
+                  />
+                  <label
+                    for="closeout"
+                    class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Close Out
+                  </label>
+                </div>
+              </div>
               <Button
                 variant="destructive"
                 :disabled="clawback"
@@ -277,79 +307,4 @@ watch(
       </Accordion>
     </Card>
   </div>
-  <!-- <v-container>
-
-          <v-col v-show="!clawback" align-self="center" class="text-center">
-            <v-form ref="form" validate-on="submit" @submit.prevent="burn()">
-              <v-row justify="center">
-                <v-col cols="10" md="8" lg="7" class="d-flex">
-                  <v-text-field
-                    v-model.number="amount"
-                    type="number"
-                    label="Amount to Burn"
-                    :disabled="closeout"
-                    :rules="[required]"
-                  />
-                  <v-checkbox
-                    v-model="closeout"
-                    label="Close Out"
-                    @update:model-value="
-                      (val: boolean) => {
-                        if (val) {
-                          amount = undefined;
-                          form.validate();
-                        }
-                      }
-                    "
-                  />
-                </v-col>
-              </v-row>
-              <v-btn text="Burn It" type="submit" />
-              <v-card-text v-show="!opted && needFunding" class="text-caption">
-                <div>The burn account is not yet opted-in to this asset.</div>
-                <div>A payment will be added to cover the .1 MBR increase.</div>
-                <div>This only happens once per asset.</div>
-              </v-card-text>
-            </v-form>
-          </v-col>
-          <v-col v-show="clawback">
-            <v-card-text>
-              Assets with clawback enabled cannot be burned.
-            </v-card-text>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
-    <v-card class="mt-3">
-      <v-card-title class="d-flex" @click="showDetails = !showDetails">
-        Technical Details
-        <v-spacer />
-        <v-icon>
-          {{ showDetails ? mdiChevronUp : mdiChevronDown }}
-        </v-icon>
-      </v-card-title>
-      <v-container v-show="showDetails">
-        <v-container>
-          The burn account is a Logic Signature. This means that the account
-          will only approve transactions that satisfy its logic. There is no key
-          or mnemonic for this account.
-        </v-container>
-        <v-container>
-          <pre>{{ lsig?.hash }}</pre>
-        </v-container>
-        <v-container>
-          The logic is quite short, presented here in TEAL.
-        </v-container>
-        <v-container>
-          <pre>{{ burnTeal }}</pre>
-        </v-container>
-        <v-container>
-          Translated, this says that the only transactions it will approve are
-          asset transfers to itself (opt-ins) where there is no rekeying or
-          closing-out. This account can opt-in to assets and that is all. Once
-          assets are sent to this account they are not retrievable (burnt).
-        </v-container>
-      </v-container>
-    </v-card>
-  </v-container> -->
 </template>
