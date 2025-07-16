@@ -47,6 +47,7 @@ watch(
 </script>
 
 <template>
+  <div v-if="store.overlay" class="fixed inset-0 z-50 bg-black/80" />
   <SidebarProvider>
     <AppSidebar />
     <SidebarInset>

@@ -9,9 +9,15 @@ import { toast } from "vue-sonner";
 const store = useAppStore();
 const { algodClient, activeAddress, transactionSigner } = useWallet();
 
-// const required = (v: any) => !!v || v === 0 || "Required";
-// const form = ref();
-const part = ref<KeyRegTxn>({} as KeyRegTxn);
+const emptyKeyReg = {
+  voteKey: "",
+  selectionKey: "",
+  stateProofKey: "",
+  voteFirst: undefined,
+  voteLast: undefined,
+  voteKeyDilution: undefined,
+} as KeyRegTxn;
+const part = ref(emptyKeyReg);
 const incentiveEligible = ref(false);
 const incentiveHint = computed(() =>
   store.account?.incentiveEligible
@@ -25,7 +31,11 @@ const lastRound = ref<bigint>();
 const avgBlockTime = ref();
 
 const expireDt = computed(() => {
-  if (!store.account?.participation || store.account.status !== "Online")
+  if (
+    !store.account?.participation ||
+    store.account.status !== "Online" ||
+    !avgBlockTime.value
+  )
     return undefined;
   const expireMs =
     (Number(store.account.participation.voteLastValid) -
@@ -61,9 +71,10 @@ function b64ToUint8(b64: string | undefined) {
 }
 
 async function compose() {
-  // const { valid } = await form.value.validate();
-  // if (!valid) return;
   try {
+    console.log(Object.values(part.value));
+    if (!Object.values(part.value).every((val) => val))
+      throw Error("All fields are required");
     store.overlay = true;
     const suggestedParams = await algodClient.value.getTransactionParams().do();
     const atc = new algosdk.AtomicTransactionComposer();
@@ -84,7 +95,7 @@ async function compose() {
     if (!txn) throw Error("Invalid Transaction");
     atc.addTransaction({ txn, signer: transactionSigner });
     await execAtc(atc, algodClient.value, "Success");
-    // form.value.reset();
+    part.value = emptyKeyReg;
   } catch (err: any) {
     console.error(err);
     toast.error(err.message, { duration: 7000 });
@@ -140,41 +151,68 @@ async function offline() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div class="items-top flex gap-x-2">
+        <div class="items-center flex gap-x-2">
           <Checkbox
             id="eligible"
             class="border-gray-500"
             v-model="incentiveEligible"
             :disabled="store.account?.incentiveEligible"
           />
-          <div class="grid gap-1.5 leading-none">
-            <label
-              for="eligible"
-              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Make Incentive Eligible
-            </label>
-            <p class="text-sm text-muted-foreground">
-              {{ incentiveHint }}
-            </p>
-          </div>
+          <label
+            for="eligible"
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Make Incentive Eligible
+          </label>
+        </div>
+        <div class="text-sm text-muted-foreground pt-1 pl-6">
+          {{ incentiveHint }}
         </div>
         <div class="flex flex-col gap-4 pt-4">
           <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <Input placeholder="First Round" />
-            <Input placeholder="Last Round" />
-            <Input placeholder="Key Dilution" />
+            <div class="grid w-full max-w-sm items-center gap-1.5">
+              <Label for="voteFirst">First Round</Label>
+              <Input id="voteFirst" v-model.number="part.voteFirst" />
+            </div>
+            <div class="grid w-full max-w-sm items-center gap-1.5">
+              <Label for="voteLast">Last Round</Label>
+              <Input id="voteLast" v-model.number="part.voteLast" />
+            </div>
+            <div class="grid w-full max-w-sm items-center gap-1.5">
+              <Label for="voteKeyDilution">Key Dilution</Label>
+              <Input
+                id="voteKeyDilution"
+                v-model.number="part.voteKeyDilution"
+              />
+            </div>
           </div>
           <div class="grid auto-rows-min gap-4 md:grid-cols-2">
-            <Input placeholder="Selection Key" />
-            <Input placeholder="Voting Key" />
+            <div class="grid w-full items-center gap-1.5">
+              <Label for="selectionKey">Selection Key</Label>
+              <Input id="selectionKey" v-model.number="part.selectionKey" />
+            </div>
+            <div class="grid w-full items-center gap-1.5">
+              <Label for="voteKey">Voting Key</Label>
+              <Input id="voteKey" v-model.number="part.voteKey" />
+            </div>
           </div>
-          <Input placeholder="State Proof Key" />
+          <div class="grid w-full items-center gap-1.5">
+            <Label for="stateProofKey">State Proof Key</Label>
+            <Input id="stateProofKey" v-model.number="part.stateProofKey" />
+          </div>
         </div>
       </CardContent>
       <CardFooter class="justify-between">
         <div class="flex items-center gap-4">
-          <ClipboardPaste @click="pasteFromClipboard()" />
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <ClipboardPaste @click="pasteFromClipboard()" />
+            </TooltipTrigger>
+            <TooltipContent>
+              Paste all properties at once from the terminal and we'll try to
+              parse them for you
+            </TooltipContent>
+          </Tooltip>
           <Button
             v-if="store.account.status == 'Online'"
             variant="destructive"
@@ -183,111 +221,8 @@ async function offline() {
             Go Offline
           </Button>
         </div>
-        <Button variant="secondary" type="submit">Send</Button>
+        <Button variant="secondary" @click="compose()">Send</Button>
       </CardFooter>
     </Card>
   </div>
-  <!-- TODO -->
-  <!-- <v-container>
-    <v-card v-if="store.account">
-      <v-form ref="form" @submit.prevent="compose()">
-        <v-container>
-          <v-row>
-            <v-col>
-              {{ `Your account is currently ${store.account.status}.` }}
-              <v-container v-if="store.account.status == 'Online'">
-                <v-row class="text-caption">
-                  Expire Round:
-                  {{ store.account.participation?.voteLastValid }}
-                </v-row>
-                <v-row class="text-caption">
-                  Expire Date: {{ expireDt }}
-                </v-row>
-              </v-container>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" class="pt-0">
-              <v-checkbox
-                v-model.number="incentiveEligible"
-                label="Make Incentive Eligible"
-                density="comfortable"
-                :hint="incentiveHint"
-                persistent-hint
-                :disabled="store.account?.incentiveEligible"
-              />
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-text-field
-                v-model.number="part.voteFirst"
-                label="First Round"
-                :rules="[required]"
-              />
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-text-field
-                v-model.number="part.voteLast"
-                label="Last Round"
-                :rules="[required]"
-              />
-            </v-col>
-            <v-col cols="12" sm="4">
-              <v-text-field
-                v-model.number="part.voteKeyDilution"
-                label="Key Dilution"
-                :rules="[required]"
-              />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field
-                v-model="part.selectionKey"
-                label="Selection Key"
-                :rules="[required]"
-              />
-            </v-col>
-            <v-col cols="12" sm="6">
-              <v-text-field
-                v-model="part.voteKey"
-                label="Voting Key"
-                :rules="[required]"
-              />
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                v-model="part.stateProofKey"
-                label="State Proof Key"
-                :rules="[required]"
-              />
-            </v-col>
-          </v-row>
-        </v-container>
-        <v-card-actions>
-          <div v-if="store.account">
-            <span>
-              <v-btn
-                variant="plain"
-                color="currentColor"
-                :icon="mdiContentPaste"
-                @click="pasteFromClipboard()"
-              />
-              <v-tooltip
-                activator="parent"
-                location="bottom"
-                text="Paste all properties at once from the terminal and we'll try to
-                  parse them for you"
-              />
-            </span>
-            <v-btn
-              v-if="store.account.status == 'Online'"
-              text="Go Offline"
-              color="red"
-              @click="offline()"
-            />
-          </div>
-          <v-spacer />
-          <v-btn text="Send" type="submit" />
-        </v-card-actions>
-      </v-form>
-    </v-card>
-  </v-container> -->
 </template>
