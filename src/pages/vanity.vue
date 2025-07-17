@@ -1,155 +1,14 @@
-<template>
-  <v-container>
-    <v-card class="mb-3">
-      <v-card-title class="d-flex" @click="showInstuctions = !showInstuctions">
-        Instructions
-        <v-spacer />
-        <v-icon>
-          {{ showInstuctions ? mdiChevronUp : mdiChevronDown }}
-        </v-icon>
-      </v-card-title>
-      <v-container v-show="showInstuctions">
-        Buyers
-        <ul class="pa-6">
-          <li>
-            Vanity accounts purchased from here will be rekeyed to your account.
-            If you are not comfortable with using rekeyed accounts,
-            <a
-              href="https://developer.algorand.org/docs/get-details/accounts/rekey/"
-              target="_blank"
-              >read up</a
-            >
-            before using.
-          </li>
-          <li>
-            Some wallets require you to import the rekeyed account using the
-            mnemonic. So when you purchase an account, the mnemonic will be
-            shown to you. No, this is not secure... but it doesn't matter
-            because the account is rekeyed.
-          </li>
-          <li>
-            Never rekey the vanity account back to itself - its key is not
-            secure!
-          </li>
-        </ul>
-        Sellers
-        <ul class="pa-6">
-          <li>
-            In order to sell an account, you must provide the mnemonic so that
-            it can be provided to the buyer.
-          </li>
-          <li>
-            You pick the price. A 5% fee is collected in escrow when listing. If
-            you remove the listing the fee is refunded.
-          </li>
-          <li>
-            When listing an account, it is rekeyed to the contract and must have
-            a minimum balance of .3285 Algo to opt-in to the contract. If you
-            remove the listing, the account is rekeyed to you.
-          </li>
-          <li>
-            The account to be listed must be in your wallet and among the
-            accounts selected when connecting.
-          </li>
-        </ul>
-        Technical Details
-        <ul class="pa-6">
-          <li>
-            All the logic is contained in JavaScript and a smart contract -
-            there is no backend server.
-          </li>
-        </ul>
-      </v-container>
-    </v-card>
-    <v-card>
-      <v-card-title class="d-flex">
-        Vanity Marketplace
-        <v-spacer />
-        <v-btn
-          text="Add Listing"
-          :disabled="!activeAddress"
-          @click="showVanitySell = true"
-        />
-      </v-card-title>
-      <v-container>
-        <v-row justify="center">
-          <v-col cols="10" sm="6">
-            <v-text-field
-              v-model="filter"
-              label="Filter"
-              single-line
-              hide-details
-              density="compact"
-              clearable
-            />
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-container>
-        <v-data-table
-          v-model:items-per-page="itemsPerPage"
-          :headers="headers"
-          :items="forSale"
-          :search="filter"
-          density="comfortable"
-          :loading="loading"
-        >
-          <template #[`item.address`]="{ value }">
-            <div style="font-family: monospace">
-              {{ smAndUp ? value : value.substring(0, 10) + "..." }}
-            </div>
-          </template>
-          <template #[`item.vanity.price`]="{ value }">
-            {{ value / 10 ** 6 }}
-          </template>
-          <template #[`item.action`]="{ item }">
-            <v-btn
-              :text="item.vanity?.owner === activeAddress ? 'Remove' : 'Buy'"
-              :disabled="!activeAddress"
-              size="small"
-              @click="
-                item.vanity?.owner === activeAddress ? rescind(item) : buy(item)
-              "
-            />
-          </template>
-          <template #no-data>
-            <i>No accounts currently listed</i>
-          </template>
-        </v-data-table>
-      </v-container>
-      <VanitySell
-        :visible="showVanitySell"
-        @close="
-          showVanitySell = false;
-          getForSale();
-        "
-      />
-      <VanityMnemonic
-        :visible="showVanityMnemonic"
-        :mnemonic="mnemonic"
-        @close="
-          showVanityMnemonic = false;
-          mnemonic = '';
-        "
-      />
-    </v-card>
-  </v-container>
-</template>
-
 <script lang="ts" setup>
 import { vanityAbi } from "@/data";
-import Algo, { getParams } from "@/services/Algo";
+import Algo from "@/services/Algo";
 import { delay, execAtc } from "@/utils";
-import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { indexerModels } from "algosdk";
-import { useDisplay } from "vuetify";
+import { toast } from "vue-sonner";
 
 const store = useAppStore();
-const { smAndUp } = useDisplay();
-const { activeAddress, transactionSigner } = useWallet();
+const { algodClient, activeAddress, transactionSigner } = useWallet();
 
-const showInstuctions = ref(true);
 const showVanitySell = ref(false);
 const showVanityMnemonic = ref(false);
 const mnemonic = ref("");
@@ -174,7 +33,7 @@ async function buy(item: ForSale) {
     if (!item.vanity) throw Error("Invalid Item");
     if (!store.network.vanityId) throw Error("Network not supported");
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getParams();
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
     const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       sender: activeAddress.value!,
       suggestedParams,
@@ -195,12 +54,12 @@ async function buy(item: ForSale) {
       appAccounts: [item.address],
       signer: transactionSigner,
     });
-    await execAtc(atc, "Successfully Purchased Account");
+    await execAtc(atc, algodClient.value, "Successfully Purchased Account");
     mnemonic.value = algosdk.secretKeyToMnemonic(item.vanity.key.sk);
     showVanityMnemonic.value = true;
   } catch (err: any) {
     console.error(err);
-    store.setSnackbar(err.message, "error");
+    toast.error(err.message, { duration: 7000 });
   }
   getForSale();
 }
@@ -209,7 +68,7 @@ async function rescind(item: ForSale) {
   try {
     if (!store.network.vanityId) throw Error("Network not supported");
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getParams();
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
     suggestedParams.fee = suggestedParams.minFee * 3n;
     suggestedParams.flatFee = true;
     const method = vanityAbi.methods.find((m) => m.name == "rescind");
@@ -223,12 +82,12 @@ async function rescind(item: ForSale) {
       appAccounts: [item.address],
       signer: transactionSigner,
     });
-    await execAtc(atc, "Successfully Unlisted Account");
+    await execAtc(atc, algodClient.value, "Successfully Unlisted Account");
     await delay(4000);
     store.refresh++;
   } catch (err: any) {
     console.error(err);
-    store.setSnackbar(err.message, "error");
+    toast.error(err.message, { duration: 7000 });
   }
   getForSale();
 }
@@ -273,7 +132,7 @@ async function getForSale() {
     );
   } catch (err: any) {
     console.error(err);
-    store.setSnackbar(err.message, "error");
+    toast.error(err.message, { duration: 7000 });
   }
   loading.value = false;
 }
@@ -284,3 +143,158 @@ watch(
   { immediate: true }
 );
 </script>
+
+<template>
+  <div class="flex flex-col gap-4 p-4 pt-0">
+    <Card class="px-4 py-2 bg-muted/50" v-if="store.account">
+      <Accordion type="single" collapsible>
+        <!-- default-value="item-1" -->
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Instructions</AccordionTrigger>
+          <AccordionContent class="p-4">
+            <div class="font-bold">Buyers</div>
+            <ul class="list-disc pl-4 py-4">
+              <li>
+                Vanity accounts purchased from here will be rekeyed to your
+                account. If you are not comfortable with using rekeyed accounts,
+                <a
+                  href="https://dev.algorand.co/concepts/accounts/rekeying"
+                  target="_blank"
+                  class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+                  >read up</a
+                >
+                before using.
+              </li>
+              <li>
+                Some wallets require you to import the rekeyed account using the
+                mnemonic. So when you purchase an account, the mnemonic will be
+                shown to you. No, this is not secure... but it doesn't matter
+                because the account is rekeyed.
+              </li>
+              <li>
+                Never rekey the vanity account back to itself - its key is not
+                secure!
+              </li>
+            </ul>
+            <div class="font-bold">Sellers</div>
+            <ul class="list-disc pl-4 py-4">
+              <li>
+                In order to sell an account, you must provide the mnemonic so
+                that it can be provided to the buyer.
+              </li>
+              <li>
+                You pick the price. A 5% fee is collected in escrow when
+                listing. If you remove the listing the fee is refunded.
+              </li>
+              <li>
+                When listing an account, it is rekeyed to the contract and must
+                have a minimum balance of .3285 Algo to opt-in to the contract.
+                If you remove the listing, the account is rekeyed to you.
+              </li>
+              <li>
+                The account to be listed must be in your wallet and among the
+                accounts selected when connecting.
+              </li>
+            </ul>
+            <div class="font-bold">Technical Details</div>
+            <ul class="list-disc pl-4 py-4">
+              <li>
+                All the logic is contained in JavaScript and a smart contract -
+                there is no backend server.
+              </li>
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </Card>
+    <Card class="bg-muted/50" v-if="store.account">
+      <CardHeader>
+        <CardTitle>Vanity Marketplace</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div
+          v-for="addr in forSale?.map((fs) => fs.address)"
+          :key="addr"
+          class="font-mono"
+        >
+          {{ addr }}
+        </div>
+      </CardContent>
+    </Card>
+  </div>
+
+  <!-- <v-container>
+    <v-card>
+      <v-card-title class="d-flex">
+        Vanity Marketplace
+        <v-spacer />
+        <v-btn
+          text="Add Listing"
+          :disabled="!activeAddress"
+          @click="showVanitySell = true"
+        />
+      </v-card-title>
+      <v-container>
+        <v-row justify="center">
+          <v-col cols="10" sm="6">
+            <v-text-field
+              v-model="filter"
+              label="Filter"
+              single-line
+              hide-details
+              density="compact"
+              clearable
+            />
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-container>
+        <v-data-table
+          v-model:items-per-page="itemsPerPage"
+          :headers="headers"
+          :items="forSale"
+          :search="filter"
+          density="comfortable"
+          :loading="loading"
+        >
+          <template #[`item.address`]="{ value }">
+            <div style="font-family: monospace">
+              {{ value }}
+            </div>
+          </template>
+          <template #[`item.vanity.price`]="{ value }">
+            {{ value / 10 ** 6 }}
+          </template>
+          <template #[`item.action`]="{ item }">
+            <v-btn
+              :text="item.vanity?.owner === activeAddress ? 'Remove' : 'Buy'"
+              :disabled="!activeAddress"
+              size="small"
+              @click="
+                item.vanity?.owner === activeAddress ? rescind(item) : buy(item)
+              "
+            />
+          </template>
+          <template #no-data>
+            <i>No accounts currently listed</i>
+          </template>
+        </v-data-table>
+      </v-container>
+      <VanitySell
+        :visible="showVanitySell"
+        @close="
+          showVanitySell = false;
+          getForSale();
+        "
+      />
+      <VanityMnemonic
+        :visible="showVanityMnemonic"
+        :mnemonic="mnemonic"
+        @close="
+          showVanityMnemonic = false;
+          mnemonic = '';
+        "
+      />
+    </v-card>
+  </v-container> -->
+</template>

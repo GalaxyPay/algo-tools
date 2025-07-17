@@ -183,7 +183,7 @@ watch(
         <div class="max-w-sm mx-auto">
           <Select v-model="assetId">
             <SelectTrigger class="w-full">
-              <SelectValue />
+              <SelectValue placeholder="Choose an Asset" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -276,7 +276,7 @@ watch(
         </div>
       </CardContent>
     </Card>
-    <Card class="p-4 bg-muted/50" v-if="store.account">
+    <Card class="px-4 py-2 bg-muted/50" v-if="store.account">
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>Technical Details</AccordionTrigger>
