@@ -2,7 +2,7 @@
 import { execAtc, getAssetInfo, resolveProtocol } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
-import { Delete, Info } from "lucide-vue-next";
+import { Delete, Info, X } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();
@@ -18,10 +18,6 @@ const props = defineProps({
 
 const assetInfo = ref<modelsv2.Asset>();
 const image = ref();
-const form = ref();
-// const required = (v: string) => !!v || "Required";
-// const validAddress = (v: string) =>
-//   algosdk.isValidAddress(v) || "Invalid Address";
 const showReceiver = ref(false);
 const receiver = ref();
 const creator = ref(false);
@@ -97,10 +93,6 @@ async function destroy() {
 }
 
 async function closeOut() {
-  if (props.asset.amount || !props.asset.assetId) {
-    const { valid } = await form.value.validate();
-    if (!valid) return;
-  }
   try {
     const atc = new algosdk.AtomicTransactionComposer();
     showReceiver.value = false;
@@ -134,6 +126,12 @@ async function closeOut() {
     toast.error(message, { duration: 7000 });
   }
 }
+
+function handleClose() {
+  showReceiver.value = false;
+  creator.value = false;
+  receiver.value = undefined;
+}
 </script>
 
 <template>
@@ -160,6 +158,45 @@ async function closeOut() {
       </div>
     </div>
   </Card>
+  <Dialog :open="showReceiver">
+    <DialogContent class="w-600 [&>button]:hidden">
+      <div
+        class="absolute top-4 right-4 opacity-70 transition-opacity hover:opacity-100"
+        @click="handleClose()"
+      >
+        <X :size="18" />
+        <span class="sr-only">Close</span>
+      </div>
+      <DialogHeader>
+        <DialogTitle>Choose Receiver</DialogTitle>
+        <CardDescription>
+          Where should the remainder of the asset go?
+        </CardDescription>
+      </DialogHeader>
+      <div class="flex flex-col gap-4">
+        <Input
+          v-model="receiver"
+          :disabled="creator"
+          placeholder="Address"
+          class="font-mono"
+        />
+        <div class="flex items-center space-x-2">
+          <Checkbox
+            id="creator"
+            class="border-gray-500"
+            v-show="asset.assetId"
+            v-model="creator"
+            label="Send back to creator"
+          />
+          <Label for="creator">Send back to creator</Label>
+        </div>
+      </div>
+      <DialogFooter>
+        <Button variant="secondary" @click="closeOut()">Submit</Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+
   <!-- TODO -->
   <!-- <v-dialog v-model="showReceiver" max-width="600">
       <v-card>

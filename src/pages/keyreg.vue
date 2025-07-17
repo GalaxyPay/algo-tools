@@ -154,12 +154,7 @@ async function offline() {
             v-model="incentiveEligible"
             :disabled="store.account?.incentiveEligible"
           />
-          <label
-            for="eligible"
-            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Make Incentive Eligible
-          </label>
+          <Label for="eligible">Make Incentive Eligible</Label>
         </div>
         <div class="text-sm text-muted-foreground pt-1 pl-6">
           {{ incentiveHint }}
