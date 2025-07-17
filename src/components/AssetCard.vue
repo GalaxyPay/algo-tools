@@ -137,8 +137,8 @@ async function closeOut() {
 </script>
 
 <template>
-  <Card class="px-4 py-2 bg-muted/50">
-    <div class="flex gap-2 items-center">
+  <Card class="flex flex-1 px-4 py-2 bg-muted/50">
+    <div class="flex flex-1 gap-2 items-center">
       <img class="max-w-[60px]" :src="image" />
       {{ assetInfo?.params?.name || asset.assetId }}
     </div>
