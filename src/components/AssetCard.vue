@@ -150,11 +150,11 @@ async function closeOut() {
             @click="created ? destroy() : setReceiver()"
           />
         </div>
-        <div class="text-xs">
+        <div class="text-xs text-muted-foreground">
           {{ formatAmount() }}
           {{ assetInfo?.params.unitName }}
         </div>
-        <div class="flex gap-1 items-center text-xs">
+        <div class="flex gap-1 items-center text-xs text-muted-foreground">
           MBR: <AlgoSymbol color="currentColor" :width="10" /> 0.1
         </div>
       </div>

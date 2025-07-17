@@ -2,6 +2,7 @@
 import { nfdReverseLookup } from "@/lib/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import axios from "axios";
+import { Loader2 } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import "vue-sonner/style.css";
 
@@ -65,7 +66,10 @@ watch(
           <ModeSwitcher />
         </div>
       </header>
-      <RouterView />
+      <div v-if="store.loading" class="flex justify-center">
+        <Loader2 class="animate-spin" :size="50" />
+      </div>
+      <RouterView v-else />
     </SidebarInset>
   </SidebarProvider>
   <Sonner />

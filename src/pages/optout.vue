@@ -69,7 +69,9 @@ const apps = computed(() =>
             </TabsTrigger>
           </TabsList>
           <TabsContent value="assets" as-child>
-            <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 p-4">
+            <div
+              class="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 p-4"
+            >
               <AssetCard
                 v-for="asset in store.account.assets"
                 :key="Number(asset.assetId)"
