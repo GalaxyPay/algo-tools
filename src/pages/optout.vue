@@ -37,18 +37,20 @@
           <v-card>
             <v-container>
               <v-row>
-                <v-col
-                  v-for="asset in store.account.assets"
-                  :key="Number(asset.assetId)"
-                  cols="12"
-                  md="6"
-                  lg="4"
-                >
-                  <AssetCard :asset="asset" />
-                </v-col>
-                <v-col cols="12" md="6" lg="4">
-                  <AssetCard :asset="algo" />
-                </v-col>
+                <div class="grid grid-cols-3 gap-4">
+                  <v-col
+                    v-for="asset in store.account.assets"
+                    :key="Number(asset.assetId)"
+                    cols="12"
+                    md="6"
+                    lg="4"
+                  >
+                    <AssetCard :asset="asset" />
+                  </v-col>
+                  <v-col cols="12" md="6" lg="4">
+                    <AssetCard :asset="algo" />
+                  </v-col>
+                </div>
               </v-row>
             </v-container>
           </v-card>

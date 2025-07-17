@@ -137,8 +137,14 @@ async function closeOut() {
 </script>
 
 <template>
+  <Card class="px-4 py-2 bg-muted/50">
+    <div class="flex gap-2 items-center">
+      <img class="max-w-[60px]" :src="image" />
+      {{ assetInfo?.params?.name || asset.assetId }}
+    </div>
+  </Card>
   <!-- TODO -->
-  <v-card class="fill-height" color="#2B2B2B">
+  <!-- <v-card class="fill-height" color="#2B2B2B">
     <v-container>
       <v-row>
         <v-col cols="2" align-self="center" class="pr-0 pl-2">
@@ -176,7 +182,6 @@ async function closeOut() {
         </v-col>
       </v-row>
     </v-container>
-    <!-- receiver dialog -->
     <v-dialog v-model="showReceiver" max-width="600">
       <v-card>
         <v-card-title class="d-flex">
@@ -212,5 +217,5 @@ async function closeOut() {
         </v-form>
       </v-card>
     </v-dialog>
-  </v-card>
+  </v-card> -->
 </template>
