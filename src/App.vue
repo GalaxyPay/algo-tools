@@ -36,9 +36,11 @@ async function refresh() {
 }
 
 onBeforeMount(async () => {
+  store.loading++;
   store.tinyman = (
     await axios("https://asa-list.tinyman.org/assets.json")
   ).data;
+  store.loading--;
 });
 
 watch(

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { execAtc, getAssetInfo, resolveProtocol } from "@/utils";
-import { mdiClose, mdiDelete, mdiInformationOutline } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
+import { Delete, Info } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();
@@ -19,9 +19,9 @@ const props = defineProps({
 const assetInfo = ref<modelsv2.Asset>();
 const image = ref();
 const form = ref();
-const required = (v: string) => !!v || "Required";
-const validAddress = (v: string) =>
-  algosdk.isValidAddress(v) || "Invalid Address";
+// const required = (v: string) => !!v || "Required";
+// const validAddress = (v: string) =>
+//   algosdk.isValidAddress(v) || "Invalid Address";
 const showReceiver = ref(false);
 const receiver = ref();
 const creator = ref(false);
@@ -139,50 +139,29 @@ async function closeOut() {
 <template>
   <Card class="flex flex-1 px-4 py-2 bg-muted/50">
     <div class="flex flex-1 gap-2 items-center">
-      <img class="max-w-[60px]" :src="image" />
-      {{ assetInfo?.params?.name || asset.assetId }}
+      <img class="max-w-[60px] max-h-[60px]" :src="image" />
+      <div class="flex flex-1 flex-col">
+        <div class="flex flex-1 gap-1 items-center font-bold">
+          {{ assetInfo?.params?.name || asset.assetId }}
+          <Info :size="18" @click="exploreAsset()" />
+          <Delete
+            :size="20"
+            class="text-red-400 ml-auto"
+            @click="created ? destroy() : setReceiver()"
+          />
+        </div>
+        <div class="text-xs">
+          {{ formatAmount() }}
+          {{ assetInfo?.params.unitName }}
+        </div>
+        <div class="flex gap-1 items-center text-xs">
+          MBR: <AlgoSymbol color="currentColor" :width="10" /> 0.1
+        </div>
+      </div>
     </div>
   </Card>
   <!-- TODO -->
-  <!-- <v-card class="fill-height" color="#2B2B2B">
-    <v-container>
-      <v-row>
-        <v-col cols="2" align-self="center" class="pr-0 pl-2">
-          <v-img contain max-width="60" :src="image" />
-        </v-col>
-        <v-col cols="10" class="py-1">
-          <v-container>
-            <v-row>
-              {{ assetInfo?.params?.name || asset.assetId }}
-              <v-icon
-                v-if="asset.assetId"
-                :icon="mdiInformationOutline"
-                color="grey"
-                class="pl-2"
-                @click="exploreAsset()"
-              />
-              <v-spacer />
-              <v-icon
-                :icon="mdiDelete"
-                color="error"
-                size="x-small"
-                @click="created ? destroy() : setReceiver()"
-              />
-            </v-row>
-            <v-row class="text-caption">
-              {{ formatAmount() }}
-              {{ assetInfo?.params.unitName }}
-            </v-row>
-            <v-row class="text-caption">
-              MBR:
-              <AlgoIcon color="currentColor" :width="10" class="mx-1" />
-              0.1
-            </v-row>
-          </v-container>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-dialog v-model="showReceiver" max-width="600">
+  <!-- <v-dialog v-model="showReceiver" max-width="600">
       <v-card>
         <v-card-title class="d-flex">
           Choose Receiver
@@ -216,6 +195,5 @@ async function closeOut() {
           </v-card-actions>
         </v-form>
       </v-card>
-    </v-dialog>
-  </v-card> -->
+    </v-dialog> -->
 </template>
