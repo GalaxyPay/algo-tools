@@ -196,41 +196,4 @@ function handleClose() {
       </DialogFooter>
     </DialogContent>
   </Dialog>
-
-  <!-- TODO -->
-  <!-- <v-dialog v-model="showReceiver" max-width="600">
-      <v-card>
-        <v-card-title class="d-flex">
-          Choose Receiver
-          <v-spacer />
-          <v-icon
-            color="currentColor"
-            :icon="mdiClose"
-            @click="showReceiver = false"
-          />
-        </v-card-title>
-        <v-card-text> Where should the remainder of the asset go? </v-card-text>
-        <v-form ref="form" @submit.prevent="closeOut()">
-          <v-container>
-            <v-text-field
-              v-model="receiver"
-              :disabled="creator"
-              label="Address"
-              :rules="[required, validAddress]"
-              style="font-family: monospace"
-            />
-            <v-checkbox
-              v-show="asset.assetId"
-              v-model="creator"
-              label="Send back to creator"
-              hide-details
-            />
-          </v-container>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn text="Submit" type="submit" />
-          </v-card-actions>
-        </v-form>
-      </v-card>
-    </v-dialog> -->
 </template>

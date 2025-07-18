@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { execAtc, fetchAsync } from "@/utils";
-import { mdiCancel, mdiClose, mdiDelete, mdiInformationOutline } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
+import { CircleOff, Delete, Info, X } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 
 const props = defineProps({
@@ -31,8 +31,8 @@ function exploreApp() {
   window.open(url, "_blank");
 }
 
-function isOwned(app: any) {
-  return app instanceof modelsv2.Application;
+function isOwned() {
+  return props.app instanceof modelsv2.Application;
 }
 
 async function closeOut() {
@@ -141,81 +141,47 @@ function mbr() {
 </script>
 
 <template>
-  <!-- TODO -->
-  <v-card class="fill-height" variant="tonal">
-    <v-container>
-      <v-row>
-        <v-col cols="2" align-self="center" class="pr-0 pl-2">
-          <v-img
-            v-if="appInfo?.name"
-            contain
-            max-width="60"
-            :src="`https://algoaccinfo.com:8443/images/${appInfo.name.toLowerCase()}.png`"
-          />
-        </v-col>
-        <v-col cols="10" class="py-1">
-          <v-container>
-            <v-row>
-              {{ appInfo ? appInfo.name : app.id }}
-              <v-icon
-                :icon="mdiInformationOutline"
-                color="grey"
-                class="pl-2"
-                @click="exploreApp()"
+  <Card class="flex flex-1 px-4 py-2 bg-muted/50">
+    <div class="flex flex-1 gap-2 items-center">
+      <img
+        v-if="appInfo?.name"
+        class="max-w-[60px] max-h-[60px]"
+        :src="`https://algoaccinfo.com:8443/images/${appInfo.name.toLowerCase()}.png`"
+      />
+      <div class="flex flex-1 flex-col">
+        <div class="flex flex-1 gap-1 items-center font-bold">
+          {{ appInfo ? appInfo.name : app.id }}
+          <Info :size="18" @click="exploreApp()" />
+          <Tooltip v-if="isOwned()">
+            <TooltipTrigger as-child>
+              <Delete
+                :size="20"
+                class="text-red-400 ml-auto"
+                @click="deleteApp()"
               />
-              <v-spacer />
-              <template v-if="isOwned(app)">
-                <span>
-                  <v-icon
-                    :icon="mdiDelete"
-                    color="error"
-                    size="small"
-                    @click="deleteApp()"
-                  />
-                  <v-tooltip activator="parent" location="top" text="Delete" />
-                </span>
-              </template>
-              <template v-else>
-                <span>
-                  <v-icon
-                    :icon="mdiClose"
-                    color="error"
-                    size="small"
-                    class="mr-2"
-                    @click="closeOut()"
-                  />
-                  <v-tooltip
-                    activator="parent"
-                    location="top"
-                    text="Close Out"
-                  />
-                </span>
-                <span>
-                  <v-icon
-                    :icon="mdiCancel"
-                    color="error"
-                    size="small"
-                    @click="clearState()"
-                  />
-                  <v-tooltip
-                    activator="parent"
-                    location="top"
-                    text="Clear State"
-                  />
-                </span>
-              </template>
-            </v-row>
-            <v-row v-if="appInfo">
-              {{ appInfo.description }}
-            </v-row>
-            <v-row class="text-caption">
-              MBR:
-              <algo-icon color="currentColor" :width="10" class="mx-1" />
-              {{ mbr() }}
-            </v-row>
-          </v-container>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-card>
+            </TooltipTrigger>
+            <TooltipContent>Delete</TooltipContent>
+          </Tooltip>
+          <div v-else class="flex gap-2 text-red-400 ml-auto">
+            <Tooltip>
+              <TooltipTrigger as-child>
+                <X :size="20" @click="closeOut()" />
+              </TooltipTrigger>
+              <TooltipContent>Close Out</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger as-child>
+                <CircleOff :size="20" @click="clearState()" />
+              </TooltipTrigger>
+              <TooltipContent>Clear State</TooltipContent>
+            </Tooltip>
+          </div>
+        </div>
+        {{ appInfo?.description }}
+        <div class="flex gap-1 items-center text-xs text-muted-foreground">
+          MBR: <AlgoSymbol color="currentColor" :width="10" /> {{ mbr() }}
+        </div>
+      </div>
+    </div>
+  </Card>
 </template>
