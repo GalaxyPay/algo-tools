@@ -30,6 +30,7 @@ async function getInbox() {
 }
 
 async function createRouter() {
+  let toastId: number | string | undefined = undefined;
   try {
     store.overlay = true;
     if (!store.account) throw Error("Invalid Account");
@@ -40,6 +41,9 @@ async function createRouter() {
       defaultSender: store.account.address,
       algorand,
     });
+    toastId = toast.info("Processing...", {
+      duration: Infinity,
+    });
     const { result } = await factory.send.create.createApplication();
     store.network.inboxRouter = Number(result.appId);
     setRouter();
@@ -47,6 +51,7 @@ async function createRouter() {
     console.error(err);
     toast.error(err.message, { duration: 7000 });
   }
+  toast.dismiss(toastId);
   store.overlay = false;
 }
 
@@ -75,11 +80,18 @@ watch(
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div v-if="!inboxInfo?.assets?.length" class="text-center italic py-12">
+        <div v-if="!inboxInfo?.assets?.length" class="text-center italic">
           Your Inbox is Empty
         </div>
-        <div v-for="n in inboxInfo?.assets?.length" :key="n">
-          <InboxAsset :inbox-info="inboxInfo!" :idx="n - 1" />
+        <div
+          class="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 p-4"
+        >
+          <InboxAsset
+            v-for="n in inboxInfo?.assets?.length"
+            :key="n"
+            :inbox-info="inboxInfo!"
+            :idx="n - 1"
+          />
         </div>
       </CardContent>
     </Card>
@@ -90,7 +102,7 @@ watch(
       <CardContent>
         <div class="flex items-center justify-evenly">
           <div>
-            <Button variant="outline" @click="createRouter()">
+            <Button variant="secondary" @click="createRouter()">
               Create New
             </Button>
           </div>

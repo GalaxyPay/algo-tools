@@ -87,7 +87,7 @@ const donate = handleSubmit(async (values) => {
         </FormField>
         <DialogFooter>
           <DialogClose as-child>
-            <Button :disabled="disableSend" variant="outline" type="submit">
+            <Button :disabled="disableSend" variant="secondary" type="submit">
               Send
             </Button>
           </DialogClose>

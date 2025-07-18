@@ -37,7 +37,9 @@ export async function execAtc(
     });
     await atc.gatherSignatures();
     toast.dismiss(toastId);
-    toastId = toast.info("Processing...");
+    toastId = toast.info("Processing...", {
+      duration: Infinity,
+    });
     await atc.execute(algodClient, 4);
     toast.dismiss(toastId);
     toast.success(success);
