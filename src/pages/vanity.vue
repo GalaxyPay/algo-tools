@@ -12,13 +12,6 @@ const { algodClient, activeAddress, transactionSigner } = useWallet();
 const showVanitySell = ref(false);
 const showVanityMnemonic = ref(false);
 const mnemonic = ref("");
-const headers = ref([
-  { title: "Address", key: "address" },
-  { title: "Price", key: "vanity.price" },
-  { title: "Action", key: "action" },
-]);
-const itemsPerPage = ref(10);
-const filter = ref();
 
 interface ForSale extends indexerModels.Account {
   vanity?: {
@@ -208,80 +201,60 @@ watch(
       </Accordion>
     </Card>
     <Card class="bg-muted/50" v-if="store.account">
-      <CardHeader>
+      <CardHeader class="flex items-center">
         <CardTitle>Vanity Marketplace</CardTitle>
+        <Button
+          variant="secondary"
+          :disabled="!activeAddress"
+          @click="showVanitySell = true"
+          class="ml-auto"
+        >
+          Add Listing
+        </Button>
       </CardHeader>
       <CardContent>
-        <div
-          v-for="addr in forSale?.map((fs) => fs.address)"
-          :key="addr"
-          class="font-mono"
-        >
-          {{ addr }}
-        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Address</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody v-if="loading || forSale?.length">
+            <TableRow v-for="item in forSale" :key="item.address">
+              <TableCell class="font-mono">
+                {{ item.address }}
+              </TableCell>
+              <TableCell>
+                {{ Number(item.vanity?.price) / 10 ** 6 }}
+              </TableCell>
+              <TableCell>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  @click="
+                    item.vanity?.owner === activeAddress
+                      ? rescind(item)
+                      : buy(item)
+                  "
+                >
+                  {{ item.vanity?.owner === activeAddress ? "Remove" : "Buy" }}
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+          <TableBody v-else>
+            <TableRow class="text-center italic">
+              <TableCell colSpan="3">No accounts currently listed</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </CardContent>
     </Card>
   </div>
 
-  <!-- TODO -->
-  <!-- <v-container>
-    <v-card>
-      <v-card-title class="d-flex">
-        Vanity Marketplace
-        <v-spacer />
-        <v-btn
-          text="Add Listing"
-          :disabled="!activeAddress"
-          @click="showVanitySell = true"
-        />
-      </v-card-title>
-      <v-container>
-        <v-row justify="center">
-          <v-col cols="10" sm="6">
-            <v-text-field
-              v-model="filter"
-              label="Filter"
-              single-line
-              hide-details
-              density="compact"
-              clearable
-            />
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-container>
-        <v-data-table
-          v-model:items-per-page="itemsPerPage"
-          :headers="headers"
-          :items="forSale"
-          :search="filter"
-          density="comfortable"
-          :loading="loading"
-        >
-          <template #[`item.address`]="{ value }">
-            <div style="font-family: monospace">
-              {{ value }}
-            </div>
-          </template>
-          <template #[`item.vanity.price`]="{ value }">
-            {{ value / 10 ** 6 }}
-          </template>
-          <template #[`item.action`]="{ item }">
-            <v-btn
-              :text="item.vanity?.owner === activeAddress ? 'Remove' : 'Buy'"
-              :disabled="!activeAddress"
-              size="small"
-              @click="
-                item.vanity?.owner === activeAddress ? rescind(item) : buy(item)
-              "
-            />
-          </template>
-          <template #no-data>
-            <i>No accounts currently listed</i>
-          </template>
-        </v-data-table>
-      </v-container>
-      <VanitySell
+  <!-- <VanitySell
         :visible="showVanitySell"
         @close="
           showVanitySell = false;
