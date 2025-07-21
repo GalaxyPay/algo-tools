@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { tools } from "@/data";
+
+const store = useAppStore();
 </script>
 
 <template>
@@ -21,23 +23,17 @@ import { tools } from "@/data";
         </div>
       </Card>
     </RouterLink>
-    <DonateDialog>
-      <Card class="bg-muted/50 hover:bg-accent">
-        <div class="flex items-center px-6 gap-4">
-          <AlgoSymbol
-            color="currentColor"
-            :width="20"
-            class="text-vuet mx-0.5"
-          />
-          <div>
-            <CardTitle>Donate</CardTitle>
-            <CardDescription>
-              If you found this site helpful, please consider a donation to help
-              out the developer. Thanks!
-            </CardDescription>
-          </div>
+    <Card class="bg-muted/50 hover:bg-accent" @click="store.showDonate = true">
+      <div class="flex items-center px-6 gap-4">
+        <AlgoSymbol color="currentColor" :width="20" class="text-vuet mx-0.5" />
+        <div>
+          <CardTitle>Donate</CardTitle>
+          <CardDescription>
+            If you found this site helpful, please consider a donation to help
+            out the developer. Thanks!
+          </CardDescription>
         </div>
-      </Card>
-    </DonateDialog>
+      </div>
+    </Card>
   </div>
 </template>

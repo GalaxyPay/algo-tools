@@ -55,14 +55,17 @@ async function switchNetwork(val: NetworkId) {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <DonateDialog>
-              <SidebarMenuButton size="lg" as-child tooltip="Donate">
-                <div class="flex items-center gap-2 cursor-pointer">
-                  <AlgoSymbol color="currentColor" :width="16" class="mx-2" />
-                  Donate
-                </div>
-              </SidebarMenuButton>
-            </DonateDialog>
+            <SidebarMenuButton
+              size="lg"
+              as-child
+              tooltip="Donate"
+              @click="store.showDonate = true"
+            >
+              <div class="flex items-center gap-2 cursor-pointer">
+                <AlgoSymbol color="currentColor" :width="16" class="mx-2" />
+                Donate
+              </div>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroup>
@@ -100,4 +103,5 @@ async function switchNetwork(val: NetworkId) {
     </SidebarFooter>
     <SidebarRail />
   </Sidebar>
+  <DonateDialog />
 </template>

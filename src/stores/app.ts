@@ -13,6 +13,7 @@ export const useAppStore = defineStore("app", {
     account: undefined as undefined | modelsv2.Account,
     refresh: 0,
     network: networks[0] as Network,
+    showDonate: false,
     tinyman: undefined as undefined | TinyAsset[],
     nfds: {} as { [key: string]: any },
   }),
