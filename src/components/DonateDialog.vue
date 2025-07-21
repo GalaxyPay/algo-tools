@@ -1,35 +1,27 @@
 <script lang="ts" setup>
-import { FormField } from "@/components/ui/form";
 import { bigintAmount, execAtc } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import { toTypedSchema } from "@vee-validate/zod";
 import algosdk from "algosdk";
-import { useForm } from "vee-validate";
 import { toast } from "vue-sonner";
-import * as z from "zod";
 
 const { algodClient, activeAddress, transactionSigner } = useWallet();
 
-const formSchema = toTypedSchema(
-  z.object({
-    amount: z.number().multipleOf(0.000001).min(0),
-    note: z.string().optional(),
-  })
-);
+const amount = ref<number>();
+const note = ref<string>();
+const amountRequired = ref(false);
 
-const { handleSubmit, isFieldValid } = useForm({
-  validationSchema: formSchema,
-});
-
-const disableSend = computed(() => !isFieldValid("amount"));
-
-const donate = handleSubmit(async (values) => {
+async function donate() {
   try {
+    if (amount.value == null) {
+      amountRequired.value = true;
+      return;
+    }
+    amountRequired.value = false;
     const atc = new algosdk.AtomicTransactionComposer();
     const enc = new TextEncoder();
     const suggestedParams = await algodClient.value.getTransactionParams().do();
-    const note64 = values.note ? enc.encode(values.note) : undefined;
-    const microAlgo = bigintAmount(values.amount, 6);
+    const note64 = note ? enc.encode(note.value) : undefined;
+    const microAlgo = bigintAmount(amount.value, 6);
     const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       receiver: "TOOLSGOIPA6BC2JHR4QZYWNYJQRKLTA7NQ44EDRUQCR2R26Y4Y5OAIE6MM",
       sender: activeAddress.value!,
@@ -43,7 +35,7 @@ const donate = handleSubmit(async (values) => {
     console.error(err);
     toast.error(err.message, { duration: 7000 });
   }
-});
+}
 </script>
 
 <template>
@@ -52,47 +44,28 @@ const donate = handleSubmit(async (values) => {
       <slot />
     </DialogTrigger>
     <DialogContent class="w-100">
-      <form class="space-y-6" @submit="donate">
-        <DialogHeader>
-          <DialogTitle>Donate to AlgoTools</DialogTitle>
-          <DialogDescription>
-            How much would you like to give?
-          </DialogDescription>
-        </DialogHeader>
-        <FormField
-          v-slot="{ componentField }"
-          name="amount"
-          :validate-on-blur="false"
-        >
-          <FormItem>
-            <FormControl>
-              <Input
-                type="number"
-                step="any"
-                placeholder="Amount"
-                v-bind="componentField"
-                autocomplete="off"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-        <FormField v-slot="{ componentField }" name="note">
-          <FormItem>
-            <FormControl>
-              <Textarea rows="2" placeholder="Note" v-bind="componentField" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        </FormField>
-        <DialogFooter>
-          <DialogClose as-child>
-            <Button :disabled="disableSend" variant="secondary" type="submit">
-              Send
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </form>
+      <DialogHeader>
+        <DialogTitle>Donate to AlgoTools</DialogTitle>
+        <DialogDescription>
+          How much would you like to give?
+        </DialogDescription>
+      </DialogHeader>
+      <div class="space-y-6">
+        <Input
+          type="number"
+          step="any"
+          placeholder="Amount"
+          autocomplete="off"
+          v-model="amount"
+        />
+        <div v-show="amountRequired" class="pl-2 -mt-5 text-red-500 text-xs">
+          Required
+        </div>
+        <Textarea rows="2" placeholder="Note" v-model="note" />
+      </div>
+      <DialogFooter>
+        <Button variant="secondary" @click="donate()">Send</Button>
+      </DialogFooter>
     </DialogContent>
   </Dialog>
 </template>
