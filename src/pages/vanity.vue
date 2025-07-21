@@ -139,7 +139,7 @@ watch(
 
 <template>
   <div class="flex flex-col gap-4 p-4 pt-0">
-    <Card class="px-4 py-2 bg-muted/50" v-if="store.account">
+    <Card class="px-4 py-2 bg-muted/50">
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>Instructions</AccordionTrigger>
@@ -199,7 +199,7 @@ watch(
         </AccordionItem>
       </Accordion>
     </Card>
-    <Card class="bg-muted/50" v-if="store.account">
+    <Card class="bg-muted/50">
       <CardHeader class="flex items-center">
         <CardTitle>Vanity Marketplace</CardTitle>
         <Button
@@ -232,6 +232,7 @@ watch(
                 <Button
                   size="sm"
                   variant="secondary"
+                  :disabled="!activeAddress"
                   @click="
                     item.vanity?.owner === activeAddress
                       ? rescind(item)
