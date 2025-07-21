@@ -1,7 +1,15 @@
 <script lang="ts" setup>
 import { tools } from "@/data";
+import { useWallet } from "@txnlab/use-wallet-vue";
+import { toast } from "vue-sonner";
 
 const store = useAppStore();
+const { activeAddress } = useWallet();
+
+function showDonate() {
+  if (!activeAddress.value) toast.warning("Connect your wallet first");
+  else store.showDonate = true;
+}
 </script>
 
 <template>
@@ -23,7 +31,7 @@ const store = useAppStore();
         </div>
       </Card>
     </RouterLink>
-    <Card class="bg-muted/50 hover:bg-accent" @click="store.showDonate = true">
+    <Card class="bg-muted/50 hover:bg-accent" @click="showDonate()">
       <div class="flex items-center px-6 gap-4">
         <AlgoSymbol color="currentColor" :width="20" class="text-vuet mx-0.5" />
         <div>
