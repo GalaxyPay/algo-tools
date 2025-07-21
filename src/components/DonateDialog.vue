@@ -56,7 +56,7 @@ async function donate() {
           step="any"
           placeholder="Amount"
           autocomplete="off"
-          v-model="amount"
+          v-model.number="amount"
         />
         <div v-show="amountRequired" class="pl-2 -mt-5 text-red-500 text-xs">
           Required

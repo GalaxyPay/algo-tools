@@ -124,7 +124,7 @@ async function offline() {
       nonParticipation: false,
     });
     atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, algodClient.value, "Successfully Offline");
+    await execAtc(atc, algodClient.value, "Account Offline");
   } catch (err: any) {
     console.error(err);
     toast.error(err.message, { duration: 7000 });

@@ -54,11 +54,7 @@ async function closeOut() {
         appIndex: Number(props.app.id),
       });
       atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(
-        atc,
-        algodClient.value,
-        "Successfully Closed Out of Application"
-      );
+      await execAtc(atc, algodClient.value, "Application Closed Out");
     } catch (err: any) {
       console.error(err);
       toast.error(err.message, { duration: 7000 });
@@ -85,11 +81,7 @@ async function clearState() {
         appIndex: Number(props.app.id),
       });
       atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(
-        atc,
-        algodClient.value,
-        "Successfully Cleared Application State"
-      );
+      await execAtc(atc, algodClient.value, "Application State Cleared");
     } catch (err: any) {
       console.error(err);
       toast.error(err.message, { duration: 7000 });
@@ -114,7 +106,7 @@ async function deleteApp() {
         appIndex: Number(props.app.id),
       });
       atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, algodClient.value, "Successfully Deleted Application");
+      await execAtc(atc, algodClient.value, "Application Deleted");
     } catch (err: any) {
       console.error(err);
       toast.error(err.message, { duration: 7000 });

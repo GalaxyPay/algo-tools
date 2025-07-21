@@ -47,7 +47,7 @@ async function buy(item: ForSale) {
       appAccounts: [item.address],
       signer: transactionSigner,
     });
-    await execAtc(atc, algodClient.value, "Successfully Purchased Account");
+    await execAtc(atc, algodClient.value, "Account Purchased");
     mnemonic.value = algosdk.secretKeyToMnemonic(item.vanity.key.sk);
     showVanityMnemonic.value = true;
   } catch (err: any) {
@@ -75,7 +75,7 @@ async function rescind(item: ForSale) {
       appAccounts: [item.address],
       signer: transactionSigner,
     });
-    await execAtc(atc, algodClient.value, "Successfully Unlisted Account");
+    await execAtc(atc, algodClient.value, "Account Unlisted");
     await delay(4000);
     store.refresh++;
   } catch (err: any) {

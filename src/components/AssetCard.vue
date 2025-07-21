@@ -80,7 +80,7 @@ async function destroy() {
       assetIndex: Number(props.asset.assetId),
     });
     atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, algodClient.value, "Successfully Destroyed Asset");
+    await execAtc(atc, algodClient.value, "Asset Destroyed");
   } catch (err: any) {
     console.error(err);
     let message = err.message;
@@ -117,7 +117,7 @@ async function closeOut() {
       });
     }
     atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, algodClient.value, "Successfully Closed Out of Asset");
+    await execAtc(atc, algodClient.value, "Asset Closed Out");
   } catch (err: any) {
     console.error(err);
     let message = err.message;
@@ -159,19 +159,18 @@ function handleClose() {
     </div>
   </Card>
   <Dialog :open="showReceiver">
-    <DialogContent class="w-600 [&>button]:hidden">
+    <DialogContent class="!max-w-[530px] [&>button]:hidden">
       <div
         class="absolute top-4 right-4 opacity-70 transition-opacity hover:opacity-100"
         @click="handleClose()"
       >
         <X :size="18" />
-        <span class="sr-only">Close</span>
       </div>
       <DialogHeader>
         <DialogTitle>Choose Receiver</DialogTitle>
-        <CardDescription>
+        <DialogDescription>
           Where should the remainder of the asset go?
-        </CardDescription>
+        </DialogDescription>
       </DialogHeader>
       <div class="flex flex-col gap-4">
         <Input
@@ -180,11 +179,10 @@ function handleClose() {
           placeholder="Address"
           class="font-mono"
         />
-        <div class="flex items-center space-x-2">
+        <div v-show="asset.assetId" class="flex items-center space-x-2">
           <Checkbox
             id="creator"
             class="border-gray-500"
-            v-show="asset.assetId"
             v-model="creator"
             label="Send back to creator"
           />
