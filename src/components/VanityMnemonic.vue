@@ -1,27 +1,6 @@
-<template>
-  <v-dialog v-model="showMnemonic" max-width="800" persistent>
-    <v-card>
-      <v-card-title>Your Vanity Mnemonic</v-card-title>
-      <v-card-text>{{ props.mnemonic }}</v-card-text>
-      <v-card-actions>
-        <span>
-          <v-btn
-            variant="plain"
-            color="currentColor"
-            :icon="mdiContentCopy"
-            @click="copyToClipboard()"
-          />
-          <v-tooltip activator="parent" text="Copy to clipboard" />
-        </span>
-        <v-spacer />
-        <v-btn text="Close" color="grey" @click="close()" />
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-</template>
-
 <script lang="ts" setup>
-import { mdiContentCopy } from "@mdi/js";
+import { Clipboard, X } from "lucide-vue-next";
+import { toast } from "vue-sonner";
 
 const props = defineProps({
   visible: { type: Boolean, default: false },
@@ -45,6 +24,7 @@ const showMnemonic = computed({
 
 function copyToClipboard() {
   navigator.clipboard.writeText(props.mnemonic);
+  toast.success("Copied");
 }
 
 function close() {
@@ -52,3 +32,29 @@ function close() {
     showMnemonic.value = false;
 }
 </script>
+
+<template>
+  <Dialog :open="showMnemonic">
+    <DialogContent class="[&>button]:hidden">
+      <div
+        class="absolute top-4 right-4 opacity-70 transition-opacity hover:opacity-100"
+        @click="close()"
+      >
+        <X :size="18" />
+      </div>
+      <DialogHeader>
+        <DialogTitle>Your Vanity Mnemonic</DialogTitle>
+        <DialogDescription> Save this somewhere secure </DialogDescription>
+      </DialogHeader>
+      {{ props.mnemonic }}
+      <DialogFooter>
+        <Tooltip>
+          <TooltipTrigger>
+            <Clipboard @click="copyToClipboard()" />
+          </TooltipTrigger>
+          <TooltipContent>Copy to Clipboard</TooltipContent>
+        </Tooltip>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+</template>

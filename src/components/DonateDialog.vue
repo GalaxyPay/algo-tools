@@ -10,20 +10,27 @@ const { algodClient, activeAddress, transactionSigner } = useWallet();
 
 const amount = ref<number>();
 const note = ref<string>();
-const amountError = ref<string>();
+const amountValid = ref<true | string>(true);
+
+const required = (v: any) => !!v || "Required";
+
+function validate() {
+  // amount
+  amountValid.value = required(amount.value);
+  // all
+  if (amountValid.value === true) return true;
+  return false;
+}
 
 async function donate() {
   try {
-    if (amount.value == null) {
-      amountError.value = "Required";
-      return;
-    }
-    amountError.value = undefined;
+    const valid = validate();
+    if (!valid) return;
     const atc = new algosdk.AtomicTransactionComposer();
     const enc = new TextEncoder();
     const suggestedParams = await algodClient.value.getTransactionParams().do();
     const note64 = note ? enc.encode(note.value) : undefined;
-    const microAlgo = bigintAmount(amount.value, 6);
+    const microAlgo = bigintAmount(amount.value!, 6);
     const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       receiver: "TOOLSGOIPA6BC2JHR4QZYWNYJQRKLTA7NQ44EDRUQCR2R26Y4Y5OAIE6MM",
       sender: activeAddress.value!,
@@ -43,7 +50,7 @@ async function donate() {
 function close() {
   store.showDonate = false;
   amount.value = undefined;
-  amountError.value = undefined;
+  amountValid.value = true;
   note.value = undefined;
 }
 </script>
@@ -64,15 +71,20 @@ function close() {
         </DialogDescription>
       </DialogHeader>
       <div class="space-y-6">
-        <Input
-          type="number"
-          step="any"
-          placeholder="Amount"
-          autocomplete="off"
-          v-model.number="amount"
-        />
-        <div v-show="amountError" class="pl-2 -mt-5 text-red-500 text-xs">
-          {{ amountError }}
+        <div>
+          <Input
+            type="number"
+            step="any"
+            placeholder="Amount"
+            autocomplete="off"
+            v-model.number="amount"
+          />
+          <div
+            v-show="amountValid !== true"
+            class="pl-2 pt-1 text-red-500 text-xs"
+          >
+            {{ amountValid }}
+          </div>
         </div>
         <Textarea rows="2" placeholder="Note" v-model="note" />
       </div>

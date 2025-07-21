@@ -141,7 +141,6 @@ watch(
   <div class="flex flex-col gap-4 p-4 pt-0">
     <Card class="px-4 py-2 bg-muted/50" v-if="store.account">
       <Accordion type="single" collapsible>
-        <!-- default-value="item-1" -->
         <AccordionItem value="item-1">
           <AccordionTrigger>Instructions</AccordionTrigger>
           <AccordionContent class="p-4">
@@ -253,22 +252,19 @@ watch(
       </CardContent>
     </Card>
   </div>
-
-  <!-- <VanitySell
-        :visible="showVanitySell"
-        @close="
-          showVanitySell = false;
-          getForSale();
-        "
-      />
-      <VanityMnemonic
-        :visible="showVanityMnemonic"
-        :mnemonic="mnemonic"
-        @close="
-          showVanityMnemonic = false;
-          mnemonic = '';
-        "
-      />
-    </v-card>
-  </v-container> -->
+  <VanitySell
+    :visible="showVanitySell"
+    @close="
+      showVanitySell = false;
+      getForSale();
+    "
+  />
+  <VanityMnemonic
+    :visible="showVanityMnemonic"
+    :mnemonic="mnemonic"
+    @close="
+      showVanityMnemonic = false;
+      mnemonic = '';
+    "
+  />
 </template>

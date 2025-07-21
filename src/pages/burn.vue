@@ -23,7 +23,18 @@ const assets = ref<BurnAsset[]>();
 const assetId = ref();
 const amount = ref();
 const closeout = ref(false);
-const amountRequired = ref(false);
+const amountValid = ref<true | string>(true);
+
+const required = (v: number) => closeout.value || !!v || v === 0 || "Required";
+
+function validate() {
+  // amount
+  amountValid.value = required(amount.value);
+  // all
+  if (amountValid.value === true) return true;
+  return false;
+}
+
 const asset = computed(() =>
   assets.value?.find((a) => a.assetId == assetId.value)
 );
@@ -95,11 +106,8 @@ onMounted(async () => {
 
 async function burn() {
   try {
-    if (amount.value == null && !closeout.value) {
-      amountRequired.value = true;
-      return;
-    }
-    amountRequired.value = false;
+    const valid = validate();
+    if (!valid) return;
     const atc = new algosdk.AtomicTransactionComposer();
     const suggestedParams = await algodClient.value.getTransactionParams().do();
 
@@ -231,17 +239,17 @@ watch(
             </div>
             <div class="flex flex-col gap-2 text-center">
               <div class="flex gap-2">
-                <div class="flex flex-col gap-2">
+                <div>
                   <Input
                     v-model="amount"
                     placeholder="Amount to Burn"
                     :disabled="closeout"
                   />
                   <div
-                    v-show="amountRequired"
-                    class="pl-2 text-left text-red-500 text-xs"
+                    v-show="amountValid !== true"
+                    class="pl-2 pt-1 text-left text-red-500 text-xs"
                   >
-                    Required
+                    {{ amountValid }}
                   </div>
                 </div>
                 <div class="items-center flex gap-x-2">
