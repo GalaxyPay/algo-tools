@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import type { SidebarProps } from "@/components/ui/sidebar";
 import { networks, tools } from "@/data";
-import { NetworkId, useNetwork } from "@txnlab/use-wallet-vue";
+import { NetworkId, useNetwork, useWallet } from "@txnlab/use-wallet-vue";
 import { set } from "idb-keyval";
+import { toast } from "vue-sonner";
 
 const router = useRouter();
 const store = useAppStore();
 const { activeNetwork, setActiveNetwork } = useNetwork();
+const { activeAddress } = useWallet();
 const appVersion = __APP_VERSION__;
 
 const props = withDefaults(defineProps<SidebarProps>(), {
@@ -21,6 +23,11 @@ async function switchNetwork(val: NetworkId) {
   await set("network", network);
   await store.getCache();
   store.refresh++;
+}
+
+function showDonate() {
+  if (!activeAddress.value) toast.warning("Connect your wallet first");
+  else store.showDonate = true;
 }
 </script>
 
@@ -59,7 +66,7 @@ async function switchNetwork(val: NetworkId) {
               size="lg"
               as-child
               tooltip="Donate"
-              @click="store.showDonate = true"
+              @click="showDonate()"
             >
               <div class="flex items-center gap-2 cursor-pointer">
                 <AlgoSymbol color="currentColor" :width="16" class="mx-2" />

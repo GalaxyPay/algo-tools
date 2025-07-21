@@ -22,7 +22,7 @@ async function handleWalletClick(wallet: Wallet) {
     <DialogTrigger as-child>
       <SidebarMenuButton
         size="lg"
-        class="justify-center"
+        class="justify-center text-orange-400 hover:text-orange-300"
         tooltip="Connect Wallet"
       >
         <Wallet2 class="ml-2.5" />
