@@ -4,10 +4,10 @@ import Components from "unplugin-vue-components/vite";
 import Fonts from "unplugin-fonts/vite";
 import Vue from "@vitejs/plugin-vue";
 import VueRouter from "unplugin-vue-router/vite";
-import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import mkcert from "vite-plugin-mkcert";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import vueDevTools from "vite-plugin-vue-devtools";
+import tailwindcss from "@tailwindcss/vite";
 
 // Utilities
 import { defineConfig } from "vite";
@@ -38,13 +38,8 @@ export default defineConfig({
     Components({
       dts: "src/components.d.ts",
     }),
-    Vue({
-      template: { transformAssetUrls },
-    }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
-    Vuetify({
-      autoImport: true,
-    }),
+    Vue(),
+    tailwindcss(),
     Fonts({
       google: {
         families: [
@@ -79,7 +74,6 @@ export default defineConfig({
         manualChunks: {
           algokit: ["@algorandfoundation/algokit-utils"],
           useWallet: ["@txnlab/use-wallet-vue"],
-          vuetify: ["vuetify"],
         },
       },
     },
@@ -87,6 +81,6 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ["@algorandfoundation/algokit-utils", "merkletreejs"],
-    exclude: ["lute-connect", "vuetify"],
+    exclude: ["lute-connect"],
   },
 });

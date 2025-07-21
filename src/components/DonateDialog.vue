@@ -1,57 +1,36 @@
-<template>
-  <v-dialog v-model="store.showDonate" max-width="400">
-    <v-card>
-      <v-card-title class="d-flex">
-        Donate to AlgoTools <v-spacer />
-        <v-icon
-          color="currentColor"
-          :icon="mdiClose"
-          @click="store.showDonate = false"
-        />
-      </v-card-title>
-      <v-card-text>How much would you like to give?</v-card-text>
-      <v-form ref="form" @submit.prevent="donate()">
-        <v-container>
-          <v-text-field
-            v-model.number="amount"
-            type="number"
-            label="Amount"
-            :rules="[required]"
-          />
-          <v-textarea v-model="note" rows="2" label="Note" />
-        </v-container>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn text="Send" type="submit" />
-        </v-card-actions>
-      </v-form>
-    </v-card>
-  </v-dialog>
-</template>
-
 <script lang="ts" setup>
-import { getParams } from "@/services/Algo";
 import { bigintAmount, execAtc } from "@/utils";
-import { mdiClose } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
+import { X } from "lucide-vue-next";
+import { toast } from "vue-sonner";
 
 const store = useAppStore();
-const { activeAddress, transactionSigner } = useWallet();
+const { algodClient, activeAddress, transactionSigner } = useWallet();
+
+const amount = ref<number>();
+const note = ref<string>();
+const amountValid = ref<true | string>(true);
+
 const required = (v: any) => !!v || "Required";
-const amount = ref();
-const note = ref();
-const form = ref();
+
+function validate() {
+  // amount
+  amountValid.value = required(amount.value);
+  // all
+  if (amountValid.value === true) return true;
+  return false;
+}
+
 async function donate() {
-  const { valid } = await form.value.validate();
-  if (!valid) return;
   try {
-    store.overlay = true;
+    const valid = validate();
+    if (!valid) return;
     const atc = new algosdk.AtomicTransactionComposer();
     const enc = new TextEncoder();
-    const suggestedParams = await getParams();
-    const note64 = note.value ? enc.encode(note.value) : undefined;
-    const microAlgo = bigintAmount(amount.value, 6);
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const note64 = note ? enc.encode(note.value) : undefined;
+    const microAlgo = bigintAmount(amount.value!, 6);
     const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       receiver: "TOOLSGOIPA6BC2JHR4QZYWNYJQRKLTA7NQ44EDRUQCR2R26Y4Y5OAIE6MM",
       sender: activeAddress.value!,
@@ -60,19 +39,58 @@ async function donate() {
       amount: microAlgo,
     });
     atc.addTransaction({ txn, signer: transactionSigner });
-    await execAtc(atc, "Thank you for your donation!");
+    close();
+    await execAtc(atc, algodClient.value, "Thank you for your donation!");
   } catch (err: any) {
     console.error(err);
-    store.setSnackbar(err.message, "error");
+    toast.error(err.message, { duration: 7000 });
   }
-  store.overlay = false;
-  store.showDonate = false;
 }
 
-watch(
-  () => store.showDonate,
-  (val) => {
-    if (!val) form.value.reset();
-  }
-);
+function close() {
+  store.showDonate = false;
+  amount.value = undefined;
+  amountValid.value = true;
+  note.value = undefined;
+}
 </script>
+
+<template>
+  <Dialog :open="store.showDonate">
+    <DialogContent class="w-100 [&>button]:hidden">
+      <div
+        class="absolute top-4 right-4 opacity-70 transition-opacity hover:opacity-100"
+        @click="close()"
+      >
+        <X :size="18" />
+      </div>
+      <DialogHeader>
+        <DialogTitle>Donate to AlgoTools</DialogTitle>
+        <DialogDescription>
+          How much would you like to give?
+        </DialogDescription>
+      </DialogHeader>
+      <div class="space-y-6">
+        <div>
+          <Input
+            type="number"
+            step="any"
+            placeholder="Amount"
+            autocomplete="off"
+            v-model.number="amount"
+          />
+          <div
+            v-show="amountValid !== true"
+            class="pl-2 pt-1 text-red-500 text-xs"
+          >
+            {{ amountValid }}
+          </div>
+        </div>
+        <Textarea rows="2" placeholder="Note" v-model="note" />
+      </div>
+      <DialogFooter>
+        <Button variant="secondary" @click="donate()">Send</Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+</template>

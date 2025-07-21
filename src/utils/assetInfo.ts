@@ -1,20 +1,20 @@
-import Algo from "@/services/Algo";
 import type { TinyAsset } from "@/types";
-import { modelsv2 } from "algosdk";
+import algosdk from "algosdk";
 import { createStore, get, set } from "idb-keyval";
 
 export async function getAssetInfo(
   id: number | bigint,
+  algodClient: algosdk.Algodv2,
   getImage: boolean = false
 ) {
   try {
-    let assetInfo: modelsv2.Asset | undefined;
+    let assetInfo: algosdk.modelsv2.Asset | undefined;
     const appStore = useAppStore();
     let tiny: TinyAsset | undefined;
     if (appStore.network.networkId === "mainnet" || id === 0) {
       tiny = appStore.tinyman?.[Number(id)];
       if (tiny && id === 0) {
-        assetInfo = new modelsv2.Asset({
+        assetInfo = new algosdk.modelsv2.Asset({
           index: BigInt(tiny.id),
           // @ts-expect-error
           params: {
@@ -37,7 +37,7 @@ export async function getAssetInfo(
       !assetInfo ||
       (assetInfo.params.url?.startsWith("template-ipfs") && getImage)
     ) {
-      assetInfo = await Algo.algod.getAssetByID(numId).do();
+      assetInfo = await algodClient.getAssetByID(numId).do();
       await set(numId, assetInfo, customStore);
     }
     if (tiny) assetInfo.params.url = tiny.logo.png;

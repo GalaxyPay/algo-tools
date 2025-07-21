@@ -8,10 +8,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "vue-router/auto-routes";
 import { useWallet } from "@txnlab/use-wallet-vue";
+import { toast } from "vue-sonner";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  linkActiveClass: "bg-accent",
 });
 
 router.beforeEach(async (to: any, _from: any, next: any) => {
@@ -21,7 +23,7 @@ router.beforeEach(async (to: any, _from: any, next: any) => {
   if (!activeAddress.value && to.path != "/") {
     await store.getCache();
     if (!activeAddress.value && !["/gov", "/vanity"].includes(to.name)) {
-      store.connectMenu = true;
+      toast.warning("Connect your wallet first");
       return next({ path: "/" });
     }
   }

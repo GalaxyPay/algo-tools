@@ -1,11 +1,6 @@
 [
   {
     "name": "MainNet",
-    "algod": {
-      "url": "https://mainnet-api.algonode.cloud",
-      "port": "",
-      "token": ""
-    },
     "indexer": {
       "url": "https://mainnet-idx.algonode.cloud",
       "port": "",
@@ -13,16 +8,12 @@
     },
     "networkId": "mainnet",
     "explorer": "https://allo.info",
+    "nfdUrl": "https://api.nf.domains",
     "vanityId": 1093312673,
     "inboxRouter": 2449590623
   },
   {
     "name": "TestNet",
-    "algod": {
-      "url": "https://testnet-api.algonode.cloud",
-      "port": "",
-      "token": ""
-    },
     "indexer": {
       "url": "https://testnet-idx.algonode.cloud",
       "port": "",
@@ -30,30 +21,22 @@
     },
     "networkId": "testnet",
     "explorer": "https://lora.algokit.io/testnet",
+    "nfdUrl": "https://api.testnet.nf.domains",
     "vanityId": 206059417,
     "inboxRouter": 643020148
   },
   {
     "name": "LocalNet",
-    "algod": {
-      "url": "http://localhost",
-      "port": "4001",
-      "token": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    },
     "indexer": {
       "url": "http://localhost",
       "port": "8980",
       "token": ""
     },
+    "networkId": "localnet",
     "explorer": "https://lora.algokit.io/localnet"
   },
   {
     "name": "Voi MainNet",
-    "algod": {
-      "url": "https://mainnet-api.voi.nodely.dev",
-      "port": "",
-      "token": ""
-    },
     "indexer": {
       "url": "https://mainnet-idx.voi.nodely.dev",
       "port": "",

@@ -1,37 +1,41 @@
+import { useNetwork } from "@txnlab/use-wallet-vue";
 import {
-  mdiCircleMultipleOutline,
-  mdiFire,
-  mdiHandshake,
-  mdiLogout,
-  mdiMirror,
-  mdiTrayArrowDown,
-} from "@mdi/js";
+  CaseUpper,
+  Coins,
+  Download,
+  Flame,
+  Handshake,
+  LogOut,
+} from "lucide-vue-next";
+import type { FunctionalComponent } from "vue";
+import { networks } from ".";
 
 interface Tool {
   title: string;
   subtitle: string;
-  icon: any;
+  icon: FunctionalComponent;
   path: string;
 }
 
 export const tools = () => {
-  const store = useAppStore();
+  const { activeNetwork } = useNetwork();
+  const network = networks.find((n) => n.networkId === activeNetwork.value);
 
   const val: Tool[] = [];
 
-  if (store.network.nftIndexer)
+  if (network?.nftIndexer)
     val.push({
       title: "ARC200 Assets",
       subtitle: "View and send contract-based assets",
-      icon: mdiCircleMultipleOutline,
+      icon: Coins,
       path: "/arc200",
     });
 
-  if (store.network.inboxRouter || store.network.name === "LocalNet")
+  if (network?.inboxRouter || network?.name === "LocalNet")
     val.push({
-      title: "Inbox",
+      title: "Asset Inbox",
       subtitle: "View and claim assets sent to your inbox.",
-      icon: mdiTrayArrowDown,
+      icon: Download,
       path: "/inbox",
     });
 
@@ -39,29 +43,29 @@ export const tools = () => {
     {
       title: "Participation Keys",
       subtitle: "For node runners. Manage participation keys.",
-      icon: mdiHandshake,
+      icon: Handshake,
       path: "/keyreg",
     },
     {
       title: "Opt-Out",
       subtitle:
         "Manage your minimum balance by opting out of assets and applications (smart contracts).",
-      icon: mdiLogout,
+      icon: LogOut,
       path: "/optout",
     },
     {
       title: "Burn Assets",
       subtitle: "Burn ASAs or NFTs. Trustlessly. Permenantly.",
-      icon: mdiFire,
+      icon: Flame,
       path: "/burn",
     }
   );
 
-  if (store.network.vanityId)
+  if (network?.vanityId)
     val.push({
       title: "Vanity Marketplace",
       subtitle: "Buy and sell vanity addresses.",
-      icon: mdiMirror,
+      icon: CaseUpper,
       path: "/vanity",
     });
 

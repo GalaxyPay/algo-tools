@@ -1,40 +1,8 @@
-<template>
-  <v-container>
-    <v-card :loading="loading">
-      <v-card-title class="d-flex">
-        Assets <v-spacer />
-        <v-checkbox-btn
-          v-model="showHidden"
-          label="Show Hidden"
-          class="justify-end"
-          :disabled="loading"
-        />
-      </v-card-title>
-      <v-container>
-        <v-row>
-          <v-col
-            v-for="asset in showAssets"
-            :key="Number(asset.contractId)"
-            cols="12"
-            md="6"
-            lg="4"
-          >
-            <Arc200AssetCard
-              :asset="asset"
-              :is-hidden="isHidden(asset.contractId)"
-              @toggle-hidden="toggleHidden"
-            />
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
-  </v-container>
-</template>
-
 <script setup lang="ts">
 import { fetchAsync } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import { get, set } from "idb-keyval";
+import { toast } from "vue-sonner";
 
 const store = useAppStore();
 const { activeAddress } = useWallet();
@@ -69,7 +37,7 @@ async function getAssets() {
     }));
   } catch (err: any) {
     console.error(err);
-    store.setSnackbar(err.message, "error");
+    toast.error(err.message, { duration: 7000 });
   }
   loading.value = false;
 }
@@ -107,3 +75,39 @@ watch(
   async () => await getAssets()
 );
 </script>
+
+<template>
+  <div class="flex flex-col gap-4 p-4 pt-0">
+    <Card class="bg-muted/50">
+      <CardHeader>
+        <CardTitle class="flex items-center">
+          ARC200 Assets
+          <div class="flex items-center ml-auto space-x-2">
+            <Checkbox
+              id="showHidden"
+              v-model="showHidden"
+              class="border-gray-500"
+              :disabled="loading"
+            />
+            <Label for="showHidden">Show Hidden</Label>
+          </div>
+        </CardTitle>
+
+        <CardDescription>Click asset to send</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div
+          class="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 p-4"
+        >
+          <Arc200AssetCard
+            v-for="asset in showAssets"
+            :key="Number(asset.contractId)"
+            :asset="asset"
+            :is-hidden="isHidden(asset.contractId)"
+            @toggle-hidden="toggleHidden"
+          />
+        </div>
+      </CardContent>
+    </Card>
+  </div>
+</template>

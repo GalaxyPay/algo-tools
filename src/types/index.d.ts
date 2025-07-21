@@ -1,16 +1,9 @@
-export interface SnackBar {
-  text: string;
-  color: string;
-  timeout: number;
-  display: boolean;
-}
-
 export interface Network {
   name: string;
-  algod: Node;
   indexer: Node;
   networkId: string;
   explorer: string;
+  nfdUrl?: string;
   vanityId?: number;
   inboxRouter?: number;
   nftIndexer?: string;
