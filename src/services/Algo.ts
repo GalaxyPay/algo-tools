@@ -1,14 +1,6 @@
 import { Algodv2, Indexer, IntDecoding, parseJSON } from "algosdk";
 
 const Algo = {
-  get algod() {
-    const store = useAppStore();
-    return new Algodv2(
-      store.network.algod.token,
-      store.network.algod.url,
-      store.network.algod.port
-    );
-  },
   get indexer() {
     const store = useAppStore();
     return new Indexer(
@@ -18,10 +10,6 @@ const Algo = {
     );
   },
 };
-
-export async function getParams() {
-  return await Algo.algod.getTransactionParams().do();
-}
 
 export async function getNetwork(token: string, url: string, port: string) {
   const tempClient = new Algodv2(token, url, port);
