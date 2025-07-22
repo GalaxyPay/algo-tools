@@ -17,9 +17,6 @@ importers:
       '@blockshake/defly-connect':
         specifier: ^1.2.1
         version: 1.2.1(algosdk@3.3.1)
-      '@mdi/js':
-        specifier: ^7.4.47
-        version: 7.4.47
       '@perawallet/connect':
         specifier: ^1.4.2
         version: 1.4.2(algosdk@3.3.1)
@@ -562,9 +559,6 @@ packages:
 
   '@likecoin/qr-code-styling@1.6.6':
     resolution: {integrity: sha512-RbGK/+20bJhFZR70r8MeDvfyz3W7U5zXpykSTYOYxZGyo6wC+Y4QnbUpL+YdAtzT2ZIFeCNOcRs2W2FNrKPoaA==}
-
-  '@mdi/js@7.4.47':
-    resolution: {integrity: sha512-KPnNOtm5i2pMabqZxpUz7iQf+mfrYZyKCZ8QNz85czgEt7cuHcGorWfdzUMWYA0SD+a6Hn4FmJ+YhzzzjkTZrQ==}
 
   '@noble/ciphers@1.2.0':
     resolution: {integrity: sha512-YGdEUzYEd+82jeaVbSKKVp1jFZb8LwaNMIIzHFkihGvYdd/KKAr7KaJHdEdSYGredE3ssSravXIa0Jxg28Sv5w==}
@@ -3296,8 +3290,6 @@ snapshots:
   '@likecoin/qr-code-styling@1.6.6':
     dependencies:
       qrcode-generator: 1.5.1
-
-  '@mdi/js@7.4.47': {}
 
   '@noble/ciphers@1.2.0': {}
 

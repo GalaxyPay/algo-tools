@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { Arc59Factory } from "@/clients/Arc59Client";
 import { AlgorandClient } from "@algorandfoundation/algokit-utils";
-import { mdiContentSave } from "@mdi/js";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 import { set } from "idb-keyval";
@@ -111,7 +110,6 @@ watch(
             <Input
               v-model.number="store.network.inboxRouter"
               placeholder="Existing App ID"
-              :append-inner-icon="mdiContentSave"
               @click:append-inner="setRouter()"
               @keyup.enter="setRouter()"
             />

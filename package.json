@@ -12,7 +12,6 @@
     "@agoralabs-sh/avm-web-provider": "^1.7.0",
     "@algorandfoundation/algokit-utils": "^9.1.1",
     "@blockshake/defly-connect": "^1.2.1",
-    "@mdi/js": "^7.4.47",
     "@perawallet/connect": "^1.4.2",
     "@tailwindcss/vite": "^4.1.11",
     "@txnlab/use-wallet-vue": "^4.1.0",

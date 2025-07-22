@@ -103,8 +103,10 @@ function showDonate() {
     </SidebarContent>
     <SidebarFooter>
       <div class="text-center text-muted-foreground text-tiny">
-        &copy; {{ new Date().getFullYear() }} AlgoTools - Version
-        {{ appVersion }}
+        <span class="group-data-[collapsible=icon]:hidden">
+          &copy; {{ new Date().getFullYear() }} AlgoTools -
+        </span>
+        Version {{ appVersion }}
       </div>
     </SidebarFooter>
     <SidebarRail />
