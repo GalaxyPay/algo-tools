@@ -22,7 +22,7 @@ router.beforeEach(async (to: any, _from: any, next: any) => {
   // redirect to root if not connected
   if (!activeAddress.value && to.path != "/") {
     await store.getCache();
-    if (!activeAddress.value && !["/gov", "/vanity"].includes(to.name)) {
+    if (!activeAddress.value && !["/vanity"].includes(to.name)) {
       toast.warning("Connect your wallet first");
       return next({ path: "/" });
     }
