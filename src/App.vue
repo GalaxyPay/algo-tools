@@ -62,8 +62,9 @@ watch(
         <div class="flex items-center gap-2 px-4">
           <SidebarTrigger class="-ml-1" />
         </div>
-        <div class="ml-auto px-4">
+        <div class="ml-auto flex items-center px-4 gap-4">
           <ModeSwitcher />
+          <NavWallet />
         </div>
       </header>
       <div v-if="store.loading" class="flex justify-center">

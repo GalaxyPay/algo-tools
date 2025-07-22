@@ -99,14 +99,13 @@ function showDonate() {
             </SelectContent>
           </Select>
         </div>
-        <div class="pt-2 text-center text-muted-foreground text-tiny">
-          &copy; {{ new Date().getFullYear() }} AlgoTools - Version
-          {{ appVersion }}
-        </div>
       </SidebarGroup>
     </SidebarContent>
     <SidebarFooter>
-      <NavWallet />
+      <div class="text-center text-muted-foreground text-tiny">
+        &copy; {{ new Date().getFullYear() }} AlgoTools - Version
+        {{ appVersion }}
+      </div>
     </SidebarFooter>
     <SidebarRail />
   </Sidebar>
