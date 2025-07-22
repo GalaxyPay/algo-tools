@@ -139,11 +139,13 @@ async function offline() {
         <CardTitle>Participation Keys</CardTitle>
         <CardDescription>
           {{ `Your account is currently ${store.account.status}.` }}
-          <div class="text-caption">
-            Expire Round:
-            {{ store.account.participation?.voteLastValid }}
+          <div v-if="store.account.status == 'Online'">
+            <div class="text-caption">
+              Expire Round:
+              {{ store.account.participation?.voteLastValid }}
+            </div>
+            <div class="text-caption">Expire Date: {{ expireDt }}</div>
           </div>
-          <div class="text-caption">Expire Date: {{ expireDt }}</div>
         </CardDescription>
       </CardHeader>
       <CardContent>
