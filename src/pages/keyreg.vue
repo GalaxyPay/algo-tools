@@ -182,16 +182,16 @@ async function offline() {
           <div class="grid auto-rows-min gap-4 md:grid-cols-2">
             <div class="grid w-full items-center gap-1.5">
               <Label for="selectionKey">Selection Key</Label>
-              <Input id="selectionKey" v-model.number="part.selectionKey" />
+              <Input id="selectionKey" v-model="part.selectionKey" />
             </div>
             <div class="grid w-full items-center gap-1.5">
               <Label for="voteKey">Voting Key</Label>
-              <Input id="voteKey" v-model.number="part.voteKey" />
+              <Input id="voteKey" v-model="part.voteKey" />
             </div>
           </div>
           <div class="grid w-full items-center gap-1.5">
             <Label for="stateProofKey">State Proof Key</Label>
-            <Input id="stateProofKey" v-model.number="part.stateProofKey" />
+            <Input id="stateProofKey" v-model="part.stateProofKey" />
           </div>
         </div>
       </CardContent>

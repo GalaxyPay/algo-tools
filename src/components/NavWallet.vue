@@ -64,11 +64,8 @@ function getAvatarUrl(addr: string | null) {
         class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         :tooltip="store.nfds[activeAddress]?.name || formatAddr(activeAddress)"
       >
-        <Avatar class="size-8 rounded-lg">
+        <Avatar v-if="activeAvatar" class="size-8 rounded-lg">
           <AvatarImage :src="activeAvatar" />
-          <AvatarFallback class="rounded-lg">
-            {{ activeAddress.substring(0, 2) }}
-          </AvatarFallback>
         </Avatar>
         <div class="grid flex-1 text-left text-sm leading-tight">
           <span class="font-medium">{{ formatAddr(activeAddress) }}</span>
