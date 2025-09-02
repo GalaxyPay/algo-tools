@@ -20,7 +20,7 @@ function showDonate() {
       <Card class="bg-muted/50 hover:bg-accent">
         <div class="flex items-center px-6 gap-4">
           <component :is="item.icon" v-if="item.icon" class="text-vuet" />
-          <div>
+          <div class="w-fit">
             <CardTitle>
               {{ item.title }}
             </CardTitle>
@@ -34,7 +34,7 @@ function showDonate() {
     <Card class="bg-muted/50 hover:bg-accent" @click="showDonate()">
       <div class="flex items-center px-6 gap-4">
         <AlgoSymbol color="currentColor" :width="20" class="text-vuet mx-0.5" />
-        <div>
+        <div class="w-fit">
           <CardTitle>Donate</CardTitle>
           <CardDescription>
             If you found this site helpful, please consider a donation to help
