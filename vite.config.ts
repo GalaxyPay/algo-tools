@@ -80,7 +80,7 @@ export default defineConfig({
     target: "esnext",
   },
   optimizeDeps: {
-    include: ["@algorandfoundation/algokit-utils", "merkletreejs"],
+    include: ["@algorandfoundation/algokit-utils"],
     exclude: ["lute-connect"],
   },
 });
