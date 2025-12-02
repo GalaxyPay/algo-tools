@@ -17,6 +17,11 @@ const store = useAppStore();
 const { algodClient, activeAddress, transactionSigner } = useWallet();
 
 const appInfo = ref();
+const warningDialog = ref({
+  show: false,
+  message: "",
+  callback: () => {},
+});
 
 onMounted(async () => {
   appInfo.value = (
@@ -35,82 +40,82 @@ function isOwned() {
   return props.app instanceof modelsv2.Application;
 }
 
+async function warnCloseOut() {
+  warningDialog.value = {
+    show: true,
+    message:
+      "Before performing this action you should make sure this contract doesn't hold any current or future value.",
+    callback: closeOut,
+  };
+}
+async function warnClearState() {
+  warningDialog.value = {
+    show: true,
+    message:
+      "CLEAR-STATE SHOULD ONLY BE USED IF CLOSE-OUT FAILS. Clearing this contract's state may result in financial loss. " +
+      "Before performing this action you should make sure this contract doesn't hold any current or future value.",
+    callback: clearState,
+  };
+}
+async function warnDeleteApp() {
+  warningDialog.value = {
+    show: true,
+    message: "This will permenantly DELETE the contract.",
+    callback: deleteApp,
+  };
+}
+
 async function closeOut() {
-  if (
-    confirm(
-      "WARNING: Closing-out of this contract may result in financial loss. " +
-        "Before performing this action you should make sure this contract doesn't hold any current or future value. " +
-        "Are you sure you want to proceed?"
-    )
-  ) {
-    try {
-      const atc = new algosdk.AtomicTransactionComposer();
-      const suggestedParams = await algodClient.value
-        .getTransactionParams()
-        .do();
-      const txn = algosdk.makeApplicationCloseOutTxnFromObject({
-        sender: activeAddress.value!,
-        suggestedParams,
-        appIndex: Number(props.app.id),
-      });
-      atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, algodClient.value, "Application Closed Out");
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err.message, { duration: 7000 });
-    }
+  warningDialog.value.show = false;
+  try {
+    const atc = new algosdk.AtomicTransactionComposer();
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const txn = algosdk.makeApplicationCloseOutTxnFromObject({
+      sender: activeAddress.value!,
+      suggestedParams,
+      appIndex: Number(props.app.id),
+    });
+    atc.addTransaction({ txn, signer: transactionSigner });
+    await execAtc(atc, algodClient.value, "Application Closed Out");
+  } catch (err: any) {
+    console.error(err);
+    toast.error(err.message, { duration: 7000 });
   }
 }
 
 async function clearState() {
-  if (
-    confirm(
-      "WARNING: CLEAR-STATE SHOULD ONLY BE USED IF CLOSE-OUT FAILS. Clearing this contract's state may result in financial loss. " +
-        "Before performing this action you should make sure this contract doesn't hold any current or future value. " +
-        "Are you sure you want to proceed?"
-    )
-  ) {
-    try {
-      const atc = new algosdk.AtomicTransactionComposer();
-      const suggestedParams = await algodClient.value
-        .getTransactionParams()
-        .do();
-      const txn = algosdk.makeApplicationClearStateTxnFromObject({
-        sender: activeAddress.value!,
-        suggestedParams,
-        appIndex: Number(props.app.id),
-      });
-      atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, algodClient.value, "Application State Cleared");
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err.message, { duration: 7000 });
-    }
+  warningDialog.value.show = false;
+  try {
+    const atc = new algosdk.AtomicTransactionComposer();
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const txn = algosdk.makeApplicationClearStateTxnFromObject({
+      sender: activeAddress.value!,
+      suggestedParams,
+      appIndex: Number(props.app.id),
+    });
+    atc.addTransaction({ txn, signer: transactionSigner });
+    await execAtc(atc, algodClient.value, "Application State Cleared");
+  } catch (err: any) {
+    console.error(err);
+    toast.error(err.message, { duration: 7000 });
   }
 }
 
 async function deleteApp() {
-  if (
-    confirm(
-      "WARNING: This will permenantly DELETE the contract. Are you sure you want to proceed?"
-    )
-  ) {
-    try {
-      const atc = new algosdk.AtomicTransactionComposer();
-      const suggestedParams = await algodClient.value
-        .getTransactionParams()
-        .do();
-      const txn = algosdk.makeApplicationDeleteTxnFromObject({
-        sender: activeAddress.value!,
-        suggestedParams,
-        appIndex: Number(props.app.id),
-      });
-      atc.addTransaction({ txn, signer: transactionSigner });
-      await execAtc(atc, algodClient.value, "Application Deleted");
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err.message, { duration: 7000 });
-    }
+  warningDialog.value.show = false;
+  try {
+    const atc = new algosdk.AtomicTransactionComposer();
+    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const txn = algosdk.makeApplicationDeleteTxnFromObject({
+      sender: activeAddress.value!,
+      suggestedParams,
+      appIndex: Number(props.app.id),
+    });
+    atc.addTransaction({ txn, signer: transactionSigner });
+    await execAtc(atc, algodClient.value, "Application Deleted");
+  } catch (err: any) {
+    console.error(err);
+    toast.error(err.message, { duration: 7000 });
   }
 }
 
@@ -149,7 +154,7 @@ function mbr() {
               <Delete
                 :size="20"
                 class="text-red-400 ml-auto"
-                @click="deleteApp()"
+                @click="warnDeleteApp()"
               />
             </TooltipTrigger>
             <TooltipContent>Delete</TooltipContent>
@@ -157,13 +162,13 @@ function mbr() {
           <div v-else class="flex gap-2 text-red-400 ml-auto">
             <Tooltip>
               <TooltipTrigger as-child>
-                <X :size="20" @click="closeOut()" />
+                <X :size="20" @click="warnCloseOut()" />
               </TooltipTrigger>
               <TooltipContent>Close Out</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger as-child>
-                <CircleOff :size="20" @click="clearState()" />
+                <CircleOff :size="20" @click="warnClearState()" />
               </TooltipTrigger>
               <TooltipContent>Clear State</TooltipContent>
             </Tooltip>
@@ -176,4 +181,22 @@ function mbr() {
       </div>
     </div>
   </Card>
+  <Dialog :open="warningDialog.show">
+    <DialogContent class="w-200 [&>button]:hidden">
+      <DialogHeader>
+        <DialogTitle>WARNING!</DialogTitle>
+        <DialogDescription />
+      </DialogHeader>
+      <div>
+        {{ warningDialog.message }}
+      </div>
+      <div>Are you sure you want to proceed?</div>
+      <DialogFooter>
+        <Button @click="warningDialog.callback"> OK </Button>
+        <Button variant="secondary" @click="warningDialog.show = false">
+          Cancel
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>
