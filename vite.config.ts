@@ -72,7 +72,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          crypto: ["crypto"],
           algosdk: ["algosdk"],
           useWallet: ["@txnlab/use-wallet-vue"],
         },
