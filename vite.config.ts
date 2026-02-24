@@ -80,7 +80,20 @@ export default defineConfig({
     target: "esnext",
   },
   optimizeDeps: {
-    include: ["@algorandfoundation/algokit-utils"],
+    include: [
+      "@algorandfoundation/algokit-utils",
+      "@vueuse/core",
+      "algosdk",
+      "class-variance-authority",
+      "idb-keyval",
+      "multiformats/cid",
+      "multiformats/hashes/sha2",
+      "multiformats/hashes/digest",
+      "reka-ui",
+      "vite-plugin-node-polyfills/shims/buffer",
+      "vite-plugin-node-polyfills/shims/global",
+      "vite-plugin-node-polyfills/shims/process",
+    ],
     exclude: ["lute-connect"],
   },
 });
