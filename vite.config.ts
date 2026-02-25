@@ -3,7 +3,7 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import Fonts from "unplugin-fonts/vite";
 import Vue from "@vitejs/plugin-vue";
-import VueRouter from "unplugin-vue-router/vite";
+import VueRouter from "vue-router/vite";
 import mkcert from "vite-plugin-mkcert";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import vueDevTools from "vite-plugin-vue-devtools";
@@ -18,7 +18,7 @@ export default defineConfig({
   base: "",
   plugins: [
     VueRouter({
-      dts: "src/typed-router.d.ts",
+      dts: "src/route-map.d.ts",
     }),
     AutoImport({
       imports: [
