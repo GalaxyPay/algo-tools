@@ -1,7 +1,7 @@
-import { decodeAddress } from "algosdk";
+import { Address } from "algosdk";
 import { CID, type Version } from "multiformats/cid";
-import * as mfsha2 from "multiformats/hashes/sha2";
 import * as digest from "multiformats/hashes/digest";
+import { sha256 } from "multiformats/hashes/sha2";
 
 export async function resolveProtocol(url: string, reserveAddr: string) {
   const ARC3_URL_SUFFIX = "#arc3";
@@ -14,7 +14,7 @@ export async function resolveProtocol(url: string, reserveAddr: string) {
 
   const chunks = url.split("://");
   // Check if prefix is template-ipfs and if {ipfscid:..} is where CID would normally be
-  if (chunks[0] === "template-ipfs" && chunks[1].startsWith("{ipfscid:")) {
+  if (chunks[0] === "template-ipfs" && chunks[1]?.startsWith("{ipfscid:")) {
     isARC69 = false;
     // Look for something like: template:ipfs://{ipfscid:1:raw:reserve:sha2-256} and parse into components
     chunks[0] = "ipfs";
@@ -26,8 +26,8 @@ export async function resolveProtocol(url: string, reserveAddr: string) {
     }
     const [, cidVersion, cidCodec, asaField, cidHash] = cidComponents;
 
-    const cidVersionInt = parseInt(cidVersion) as Version;
-    if (cidHash.split("}")[0] !== "sha2-256") {
+    const cidVersionInt = parseInt(cidVersion!) as Version;
+    if (cidHash?.split("}")[0] !== "sha2-256") {
       console.log("unsupported hash:", cidHash);
       return url;
     }
@@ -47,8 +47,8 @@ export async function resolveProtocol(url: string, reserveAddr: string) {
     }
 
     // get 32 bytes Uint8Array reserve address - treating it as 32-byte sha2-256 hash
-    const addr = decodeAddress(reserveAddr);
-    const mhdigest = digest.create(mfsha2.sha256.code, addr.publicKey);
+    const addr = Address.fromString(reserveAddr);
+    const mhdigest = digest.create(sha256.code, addr.publicKey);
 
     const cid = CID.create(cidVersionInt, cidCodecCode!, mhdigest);
     chunks[1] = cid.toString() + "/" + chunks[1].split("/").slice(1).join("/");
