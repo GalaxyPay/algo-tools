@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { bigintToString, formatAddr } from "@/lib/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import { Clipboard, LogOut } from "lucide-vue-next";
+import { Clipboard, LogOut, Wallet2 } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();
@@ -56,7 +56,16 @@ function getAvatarUrl(addr: string | null) {
 </script>
 
 <template>
-  <WalletDialog v-if="!activeAddress" />
+  <SidebarMenuButton
+    v-if="!activeAddress"
+    size="lg"
+    class="justify-center text-orange-400 hover:text-orange-300"
+    tooltip="Connect Wallet"
+    @click="store.showConnect = true"
+  >
+    <Wallet2 class="ml-2.5" />
+    <span class="font-medium">Connect Wallet</span>
+  </SidebarMenuButton>
   <DropdownMenu v-else>
     <DropdownMenuTrigger as-child>
       <SidebarMenuButton
