@@ -71,6 +71,7 @@ watch(
         <Loader2 class="animate-spin" :size="50" />
       </div>
       <RouterView v-else />
+      <WalletDialog />
     </SidebarInset>
   </SidebarProvider>
   <Sonner />

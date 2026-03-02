@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useWallet, type Wallet } from "@txnlab/use-wallet-vue";
-import { Wallet2 } from "lucide-vue-next";
+import { X } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();
@@ -8,6 +8,7 @@ const { wallets } = useWallet();
 
 async function handleWalletClick(wallet: Wallet) {
   try {
+    store.showConnect = false;
     await wallet.connect();
     store.refresh++;
   } catch (err: any) {
@@ -18,18 +19,14 @@ async function handleWalletClick(wallet: Wallet) {
 </script>
 
 <template>
-  <Dialog>
-    <DialogTrigger as-child>
-      <SidebarMenuButton
-        size="lg"
-        class="justify-center text-orange-400 hover:text-orange-300"
-        tooltip="Connect Wallet"
+  <Dialog :open="store.showConnect">
+    <DialogContent class="w-80 [&>button]:hidden">
+      <div
+        class="absolute top-4 right-4 opacity-70 transition-opacity hover:opacity-100"
+        @click="store.showConnect = false"
       >
-        <Wallet2 class="ml-2.5" />
-        <span class="font-medium">Connect Wallet</span>
-      </SidebarMenuButton>
-    </DialogTrigger>
-    <DialogContent class="w-80">
+        <X :size="18" />
+      </div>
       <DialogHeader>
         <DialogTitle>Connect a Wallet</DialogTitle>
         <DialogDescription>
