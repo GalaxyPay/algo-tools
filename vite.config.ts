@@ -4,7 +4,6 @@ import Components from "unplugin-vue-components/vite";
 import Fonts from "unplugin-fonts/vite";
 import Vue from "@vitejs/plugin-vue";
 import VueRouter from "vue-router/vite";
-import mkcert from "vite-plugin-mkcert";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import vueDevTools from "vite-plugin-vue-devtools";
 import tailwindcss from "@tailwindcss/vite";
@@ -50,7 +49,6 @@ export default defineConfig({
         ],
       },
     }),
-    mkcert(),
     nodePolyfills(),
     vueDevTools(),
   ],

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nfdReverseLookup } from "@/lib/utils";
+import { fetchAsync } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import axios from "axios";
 import { Loader2 } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import "vue-sonner/style.css";
@@ -38,9 +38,7 @@ async function refresh() {
 
 onBeforeMount(async () => {
   store.loading++;
-  store.tinyman = (
-    await axios("https://asa-list.tinyman.org/assets.json")
-  ).data;
+  store.tinyman = await fetchAsync("https://asa-list.tinyman.org/assets.json");
   store.loading--;
 });
 

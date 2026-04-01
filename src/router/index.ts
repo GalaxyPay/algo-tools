@@ -16,7 +16,7 @@ const router = createRouter({
   linkActiveClass: "bg-accent",
 });
 
-router.beforeEach(async (to: any, _from: any, next: any) => {
+router.beforeEach(async (to) => {
   const store = useAppStore();
   const { activeAddress } = useWallet();
   // redirect to root if not connected
@@ -24,10 +24,9 @@ router.beforeEach(async (to: any, _from: any, next: any) => {
     await store.getCache();
     if (!activeAddress.value && !["/vanity"].includes(to.name)) {
       toast.warning("Connect your wallet first");
-      return next({ path: "/" });
+      return { path: "/" };
     }
   }
-  next();
 });
 
 export default router;
