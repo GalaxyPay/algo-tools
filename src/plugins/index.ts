@@ -7,10 +7,11 @@
 // Plugins
 import pinia from "../stores";
 import router from "../router";
+import { defly } from "@txnlab/use-wallet-defly";
+import { lute } from "@txnlab/use-wallet-lute";
+import { pera } from "@txnlab/use-wallet-pera";
 import {
   NetworkConfigBuilder,
-  NetworkId,
-  WalletId,
   WalletManagerPlugin,
 } from "@txnlab/use-wallet-vue";
 
@@ -31,8 +32,9 @@ export function registerPlugins(app: App) {
     .use(router)
     .use(pinia)
     .use(WalletManagerPlugin, {
-      wallets: [WalletId.LUTE, WalletId.DEFLY, WalletId.PERA, WalletId.KIBISIS],
-      defaultNetwork: NetworkId.MAINNET,
+      wallets: [lute(), defly(), pera()],
       networks,
+      defaultNetwork: "mainnet",
+      options: { persistNetwork: true },
     });
 }

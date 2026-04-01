@@ -1,4 +1,4 @@
-import axios from "axios";
+import { fetchAsync } from "@/utils";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -52,17 +52,15 @@ export async function nfdReverseLookup(
     all[ch] = [].concat(all[ch] || [], one);
     return all;
   }, []);
-  let nfds: any;
+  let nfds: any = {};
   await Promise.all(
     groups.map(async (g: string[]) => {
-      await axios(
-        `${nfdUrl}/nfd/lookup?view=thumbnail&` +
-          new URLSearchParams(g.map((addr) => ["address", addr])).toString()
-      )
-        .then((resp: any) => {
-          nfds = nfds ? { ...nfds, ...resp.data } : resp.data;
-        })
-        .catch(() => {});
+      const addrs = g.map((addr) => ["address", addr]);
+      const url =
+        `${nfdUrl}/nfd/lookup?` +
+        new URLSearchParams([...addrs, ["view", "brief"]]).toString();
+      const resp = await fetchAsync(url);
+      nfds = { ...nfds, ...resp };
     })
   );
   return nfds || {};
