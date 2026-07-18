@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Clipboard, X } from "lucide-vue-next";
+import { Clipboard, X } from "@lucide/vue";
 import { toast } from "vue-sonner";
 
 const props = defineProps({

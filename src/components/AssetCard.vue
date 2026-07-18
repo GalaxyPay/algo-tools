@@ -2,7 +2,7 @@
 import { execAtc, getAssetInfo, resolveProtocol } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
-import { Delete, Info, X } from "lucide-vue-next";
+import { Delete, Info, X } from "@lucide/vue";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();
@@ -24,7 +24,7 @@ const creator = ref(false);
 
 watch(
   creator,
-  (val) => (receiver.value = val ? assetInfo.value?.params.creator : undefined)
+  (val) => (receiver.value = val ? assetInfo.value?.params?.creator : undefined)
 );
 
 const created = computed(() =>
@@ -37,7 +37,7 @@ onMounted(async () => {
     algodClient.value,
     true
   );
-  if (assetInfo.value?.params.url) {
+  if (assetInfo.value?.params?.url) {
     image.value = await resolveProtocol(
       assetInfo.value.params.url,
       assetInfo.value.params.reserve || ""
@@ -150,7 +150,7 @@ function handleClose() {
         </div>
         <div class="text-xs text-muted-foreground">
           {{ formatAmount() }}
-          {{ assetInfo?.params.unitName }}
+          {{ assetInfo?.params?.unitName }}
         </div>
         <div class="flex gap-1 items-center text-xs text-muted-foreground">
           MBR: <AlgoSymbol color="currentColor" :width="10" /> 0.1

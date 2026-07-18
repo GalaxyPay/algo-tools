@@ -2,7 +2,7 @@
 import { execAtc, fetchAsync } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
-import { CircleOff, Delete, Info, X } from "lucide-vue-next";
+import { CircleOff, Delete, Info, X } from "@lucide/vue";
 import { toast } from "vue-sonner";
 
 const props = defineProps({
@@ -130,8 +130,8 @@ function mbr() {
   else
     cost =
       (100000 +
-        28500 * Number(props.app.params.globalStateSchema?.numUint) +
-        50000 * Number(props.app.params.globalStateSchema?.numByteSlice)) /
+        28500 * Number(props.app.params?.globalStateSchema?.numUint) +
+        50000 * Number(props.app.params?.globalStateSchema?.numByteSlice)) /
       10 ** 6;
   return cost;
 }

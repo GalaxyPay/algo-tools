@@ -4,7 +4,7 @@ import { getAssetInfo, resolveProtocol } from "@/utils";
 import { AlgorandClient } from "@algorandfoundation/algokit-utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
-import { Check, Info, X } from "lucide-vue-next";
+import { Check, Info, X } from "@lucide/vue";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();
@@ -24,7 +24,7 @@ const image = ref();
 
 onMounted(async () => {
   assetInfo.value = await getAssetInfo(asset.assetId, algodClient.value, true);
-  if (assetInfo.value?.params.url) {
+  if (assetInfo.value?.params?.url) {
     image.value = await resolveProtocol(
       assetInfo.value.params.url,
       assetInfo.value.params.reserve || ""
@@ -156,7 +156,7 @@ async function reject() {
         </div>
         <div class="text-xs text-muted-foreground">
           {{ formatAmount() }}
-          {{ assetInfo?.params.unitName }}
+          {{ assetInfo?.params?.unitName }}
         </div>
       </div>
     </div>

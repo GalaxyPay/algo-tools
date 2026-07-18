@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useColorMode } from "@vueuse/core";
-import { Moon, Sun } from "lucide-vue-next";
+import { Moon, Sun } from "@lucide/vue";
 
 // Pass { disableTransition: false } to enable transitions
 const { store } = useColorMode();

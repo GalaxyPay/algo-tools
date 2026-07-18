@@ -3,7 +3,7 @@ import Algo from "@/services/Algo";
 import { bigintAmount, execAtc } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
-import { Circle, CircleOff, X } from "lucide-vue-next";
+import { Circle, CircleOff, X } from "@lucide/vue";
 import { arc200 as Contract } from "ulujs";
 import { toast } from "vue-sonner";
 
