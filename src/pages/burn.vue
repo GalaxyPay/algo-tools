@@ -81,8 +81,8 @@ async function getAssets() {
           params = { creator: account.address };
         }
       }
-      burnAssets[index].params = params;
-      burnAssets[index].title = params.name || params.unitName || x.assetId;
+      burnAssets[index]!.params = params;
+      burnAssets[index]!.title = params?.name || params?.unitName || x.assetId;
     })
   );
   assets.value = account.assets;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useWallet, type Wallet } from "@txnlab/use-wallet-vue";
-import { X } from "lucide-vue-next";
+import { X } from "@lucide/vue";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();

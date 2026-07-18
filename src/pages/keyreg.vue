@@ -3,7 +3,7 @@ import type { KeyRegTxn } from "@/types";
 import { execAtc } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
-import { ClipboardPaste } from "lucide-vue-next";
+import { ClipboardPaste } from "@lucide/vue";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();
@@ -23,8 +23,8 @@ const incentiveHint = computed(() =>
   store.account?.incentiveEligible
     ? "Already Eligible"
     : incentiveEligible.value
-    ? "This will increase the fee of this transaction to 2 Algo"
-    : ""
+      ? "This will increase the fee of this transaction to 2 Algo"
+      : ""
 );
 
 const lastRound = ref<bigint>();

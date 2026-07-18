@@ -6,7 +6,7 @@ import {
   Flame,
   Handshake,
   LogOut,
-} from "lucide-vue-next";
+} from "@lucide/vue";
 import type { FunctionalComponent } from "vue";
 import { networks } from ".";
 

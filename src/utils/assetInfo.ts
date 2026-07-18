@@ -35,12 +35,12 @@ export async function getAssetInfo(
 
     if (
       !assetInfo ||
-      (assetInfo.params.url?.startsWith("template-ipfs") && getImage)
+      (assetInfo.params?.url?.startsWith("template-ipfs") && getImage)
     ) {
       assetInfo = await algodClient.getAssetByID(numId).do();
       await set(numId, assetInfo, customStore);
     }
-    if (tiny) assetInfo.params.url = tiny.logo.png;
+    if (tiny) assetInfo.params!.url = tiny.logo.png;
     return assetInfo;
   } catch (err: any) {
     console.error(err);

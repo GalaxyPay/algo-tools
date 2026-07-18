@@ -2,7 +2,7 @@
 import { nfdReverseLookup } from "@/lib/utils";
 import { fetchAsync } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import { Loader2 } from "lucide-vue-next";
+import { Loader2 } from "@lucide/vue";
 import { toast } from "vue-sonner";
 import "vue-sonner/style.css";
 

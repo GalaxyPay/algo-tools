@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { bigintToString, formatAddr } from "@/lib/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
-import { Clipboard, LogOut, Wallet2 } from "lucide-vue-next";
+import { Clipboard, LogOut, Wallet2 } from "@lucide/vue";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();

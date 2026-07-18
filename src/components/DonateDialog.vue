@@ -2,7 +2,7 @@
 import { bigintAmount, execAtc } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
-import { X } from "lucide-vue-next";
+import { X } from "@lucide/vue";
 import { toast } from "vue-sonner";
 
 const store = useAppStore();
