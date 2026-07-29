@@ -67,11 +67,16 @@ export default defineConfig({
     port: 3030,
   },
   build: {
+    chunkSizeWarningLimit: 1024,
     rollupOptions: {
       output: {
-        manualChunks: {
-          algosdk: ["algosdk"],
-          useWallet: ["@txnlab/use-wallet-vue"],
+        codeSplitting: {
+          groups: [
+            {
+              test: /node_modules\/algosdk/,
+              name: "algosdk",
+            },
+          ],
         },
       },
     },

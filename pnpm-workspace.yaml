@@ -3,6 +3,13 @@ allowBuilds:
   esbuild: true
   vue-demi: true
 minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - '@txnlab/use-wallet-defly@5.0.0-rc.2'
+  - '@txnlab/use-wallet-lute@5.0.0-rc.2'
+  - '@txnlab/use-wallet-pera@5.0.0-rc.2'
+  - '@txnlab/use-wallet-vue@5.0.0-rc.2'
+  - '@txnlab/use-wallet@5.0.0-rc.2'
+  - lute-connect@2.0.1
 overrides:
   "ws": ">=7.5.10"
   "bn.js": ">=4.12.3"
