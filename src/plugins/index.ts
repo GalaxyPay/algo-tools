@@ -24,6 +24,7 @@ const networks = new NetworkConfigBuilder()
       baseServer: "https://mainnet-api.voi.nodely.dev",
       token: "",
     },
+    caipChainId: "voi:r20fSQI8gWe/kFZziNonSPCXLwcQmH/n",
   })
   .build();
 
