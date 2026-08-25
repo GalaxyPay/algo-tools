@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { execAtc, getAssetInfo, resolveProtocol } from "@/utils";
+import {
+  execAtc,
+  getAssetInfo,
+  getSuggestedParams,
+  resolveProtocol,
+} from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 import { Delete, Info, X } from "@lucide/vue";
@@ -73,7 +78,10 @@ async function setReceiver() {
 async function destroy() {
   try {
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
     const txn = algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
       sender: activeAddress.value!,
       suggestedParams,
@@ -96,7 +104,10 @@ async function closeOut() {
   try {
     const atc = new algosdk.AtomicTransactionComposer();
     showReceiver.value = false;
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
     let txn;
     if (props.asset.assetId) {
       txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({

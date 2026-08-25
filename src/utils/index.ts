@@ -52,6 +52,16 @@ export async function execAtc(
   }
 }
 
+export async function getSuggestedParams(
+  algodClient: algosdk.Algodv2,
+  pqMode: boolean
+): Promise<algosdk.SuggestedParams> {
+  const store = useAppStore();
+  const sp = await algodClient.getTransactionParams().do();
+  if (pqMode) sp.minFee = 3000n;
+  return sp;
+}
+
 export function ipfs2http(url: string) {
   const ipfsGateway = "https://ipfs.algonode.dev/ipfs/";
   return url.replace("ipfs://", ipfsGateway);

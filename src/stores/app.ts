@@ -17,11 +17,13 @@ export const useAppStore = defineStore("app", {
     showDonate: false,
     tinyman: undefined as undefined | TinyAsset[],
     nfds: {} as { [key: string]: any },
+    pqMode: false,
   }),
   getters: {},
   actions: {
     async getCache() {
       this.network = (await get("network")) || this.network;
+      this.pqMode = (await get("pqMode")) || this.pqMode;
     },
   },
 });
