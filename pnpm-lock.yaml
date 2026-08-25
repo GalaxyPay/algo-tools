@@ -54,9 +54,6 @@ importers:
       idb-keyval:
         specifier: ^6.3.0
         version: 6.3.0
-      lute-connect:
-        specifier: ^2.0.1
-        version: 2.0.1
       multiformats:
         specifier: ^13.4.2
         version: 13.4.2
