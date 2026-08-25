@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { execAtc, fetchAsync } from "@/utils";
+import { execAtc, fetchAsync, getSuggestedParams } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
 import { CircleOff, Delete, Info, X } from "@lucide/vue";
@@ -69,7 +69,10 @@ async function closeOut() {
   warningDialog.value.show = false;
   try {
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
     const txn = algosdk.makeApplicationCloseOutTxnFromObject({
       sender: activeAddress.value!,
       suggestedParams,
@@ -87,7 +90,10 @@ async function clearState() {
   warningDialog.value.show = false;
   try {
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
     const txn = algosdk.makeApplicationClearStateTxnFromObject({
       sender: activeAddress.value!,
       suggestedParams,
@@ -105,7 +111,10 @@ async function deleteApp() {
   warningDialog.value.show = false;
   try {
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
     const txn = algosdk.makeApplicationDeleteTxnFromObject({
       sender: activeAddress.value!,
       suggestedParams,

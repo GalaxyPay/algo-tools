@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { vanityAbi } from "@/data";
-import { bigintAmount, delay, execAtc } from "@/utils";
+import { bigintAmount, delay, execAtc, getSuggestedParams } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
 import { X } from "@lucide/vue";
@@ -70,10 +70,11 @@ async function sell() {
       .accountInformation(m2a.value.addr)
       .do();
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
 
-    suggestedParams.fee = suggestedParams.minFee * 2n;
-    suggestedParams.flatFee = true;
     const appAddr = algosdk.getApplicationAddress(store.network.vanityId);
     const price = bigintAmount(vanity.value.price!, 6);
     const tax = Math.floor(Number(price) / 20);
@@ -84,6 +85,7 @@ async function sell() {
       receiver: appAddr,
       amount: tax,
     });
+    payTxn.fee += 1000n;
 
     const txnWithSigner = { txn: payTxn, signer: transactionSigner };
     const key = m2a.value.sk.slice(0, 32);
@@ -93,6 +95,7 @@ async function sell() {
     const optinOrNoop = optedIn
       ? algosdk.OnApplicationComplete.NoOpOC
       : algosdk.OnApplicationComplete.OptInOC;
+    suggestedParams.flatFee = true;
     suggestedParams.fee = 0n;
     const method = vanityAbi.methods.find((m) => m.name == "post");
     if (!method) throw Error("Invalid Method");

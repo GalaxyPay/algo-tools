@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { vanityAbi } from "@/data";
 import Algo from "@/services/Algo";
-import { delay, execAtc } from "@/utils";
+import { delay, execAtc, getSuggestedParams } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { indexerModels } from "algosdk";
 import { toast } from "vue-sonner";
@@ -26,7 +26,10 @@ async function buy(item: ForSale) {
     if (!item.vanity) throw Error("Invalid Item");
     if (!store.network.vanityId) throw Error("Network not supported");
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
     const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       sender: activeAddress.value!,
       suggestedParams,
@@ -34,7 +37,7 @@ async function buy(item: ForSale) {
       amount: item.vanity.price,
     });
     const txnWithSigner = { txn: payTxn, signer: transactionSigner };
-    suggestedParams.fee = suggestedParams.minFee * 2n;
+    suggestedParams.fee = BigInt(suggestedParams.minFee) * 2n;
     suggestedParams.flatFee = true;
     const method = vanityAbi.methods.find((m) => m.name == "purchase");
     if (!method) throw Error("Invalid Method");
@@ -61,8 +64,11 @@ async function rescind(item: ForSale) {
   try {
     if (!store.network.vanityId) throw Error("Network not supported");
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
-    suggestedParams.fee = suggestedParams.minFee * 3n;
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
+    suggestedParams.fee = BigInt(suggestedParams.minFee) * 3n;
     suggestedParams.flatFee = true;
     const method = vanityAbi.methods.find((m) => m.name == "rescind");
     if (!method) throw Error("Invalid Method");

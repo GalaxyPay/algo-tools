@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Arc59Factory } from "@/clients/Arc59Client";
-import { getAssetInfo, resolveProtocol } from "@/utils";
+import { getAssetInfo, getSuggestedParams, resolveProtocol } from "@/utils";
 import { AlgorandClient } from "@algorandfoundation/algokit-utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, { modelsv2 } from "algosdk";
@@ -71,13 +71,18 @@ async function claim() {
     const claimerOptedIn = store.account?.assets?.some(
       (a) => a.assetId === asset.assetId
     );
-    let totalTxns = 3;
+    let outerTxnCount = 1;
+    let innerTxnCount = 2;
     if (props.inboxInfo.minBalance < props.inboxInfo.amount) {
-      totalTxns += 2;
+      outerTxnCount++;
+      innerTxnCount++;
       composer.arc59ClaimAlgo({ args: {}, staticFee: (0).algo() });
     }
     // If the claimer hasn't already opted in, add a transaction to do so
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
     if (!claimerOptedIn) {
       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         sender: store.account.address,
@@ -88,7 +93,10 @@ async function claim() {
       });
       composer.addTransaction(txn, transactionSigner);
     }
-    const fee = (Number(suggestedParams.minFee) * totalTxns).microAlgos();
+    const fee = (
+      Number(suggestedParams.minFee) * outerTxnCount +
+      innerTxnCount * 1000
+    ).microAlgos();
     composer.arc59Claim({ args: { asa: asset.assetId }, staticFee: fee });
     toastId = toast.info("Processing...", {
       duration: Infinity,
@@ -110,8 +118,11 @@ async function reject() {
   try {
     store.overlay = true;
     const appClient = getAppClient();
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
-    const fee = (Number(suggestedParams.minFee) * 3).microAlgos();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
+    const fee = (Number(suggestedParams.minFee) + 2000).microAlgos();
     toastId = toast.info("Processing...", {
       duration: Infinity,
     });

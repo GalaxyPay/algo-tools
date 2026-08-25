@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { bigintAmount, execAtc } from "@/utils";
+import { bigintAmount, execAtc, getSuggestedParams } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
 import { X } from "@lucide/vue";
@@ -28,7 +28,10 @@ async function donate() {
     if (!valid) return;
     const atc = new algosdk.AtomicTransactionComposer();
     const enc = new TextEncoder();
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
     const note64 = note ? enc.encode(note.value) : undefined;
     const microAlgo = bigintAmount(amount.value!, 6);
     const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({

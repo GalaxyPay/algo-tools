@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import router from "@/router";
 import burnTeal from "@/teal/burn.teal?raw";
-import { bigintAmount, execAtc } from "@/utils";
+import { bigintAmount, execAtc, getSuggestedParams } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk, {
   IntDecoding,
@@ -109,12 +109,12 @@ async function burn() {
     const valid = validate();
     if (!valid) return;
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
 
     if (!opted.value && needFunding.value) {
-      suggestedParams.flatFee = true;
-      suggestedParams.fee = suggestedParams.minFee;
-
       const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
         receiver: lsig.value.hash,
         sender: activeAddress.value!,
@@ -125,8 +125,6 @@ async function burn() {
     }
 
     if (!opted.value) {
-      suggestedParams.flatFee = true;
-      suggestedParams.fee = 0n;
       const lsigAcct = new algosdk.LogicSigAccount(
         new Uint8Array(Buffer.from(lsig.value.result, "base64"))
       );
@@ -138,11 +136,10 @@ async function burn() {
         assetIndex: assetId.value,
         amount: 0,
       });
+      txn.fee = 0n;
       atc.addTransaction({ txn, signer: lsigSigner });
     }
 
-    suggestedParams.flatFee = true;
-    suggestedParams.fee = suggestedParams.minFee * 2n;
     if (amount.value || closeout.value) {
       const burnObj: any = {
         sender: activeAddress.value!,
@@ -156,6 +153,7 @@ async function burn() {
       if (closeout.value) burnObj.closeRemainderTo = lsig.value.hash;
       const txn =
         algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject(burnObj);
+      if (!opted.value) txn.fee += 1000n;
       atc.addTransaction({ txn, signer: transactionSigner });
     }
     await execAtc(atc, algodClient.value, "Asset Burned");

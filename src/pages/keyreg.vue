@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { KeyRegTxn } from "@/types";
-import { execAtc } from "@/utils";
+import { execAtc, getSuggestedParams } from "@/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import algosdk from "algosdk";
 import { ClipboardPaste } from "@lucide/vue";
@@ -75,7 +75,10 @@ async function compose() {
     console.log(Object.values(part.value));
     if (!Object.values(part.value).every((val) => val))
       throw Error("All fields are required");
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
     const atc = new algosdk.AtomicTransactionComposer();
     part.value.sender = activeAddress.value!;
     if (incentiveEligible.value) {
@@ -116,7 +119,10 @@ async function calcAvgBlockTime() {
 
 async function offline() {
   try {
-    const suggestedParams = await algodClient.value.getTransactionParams().do();
+    const suggestedParams = await getSuggestedParams(
+      algodClient.value,
+      store.pqMode
+    );
     const atc = new algosdk.AtomicTransactionComposer();
     const txn = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject({
       sender: activeAddress.value!,
