@@ -1,6 +1,6 @@
 {
   "name": "algo-tools",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -23,7 +23,6 @@
     "clsx": "^2.1.1",
     "core-js": "^3.50.0",
     "idb-keyval": "^6.3.0",
-    "lute-connect": "^2.0.1",
     "multiformats": "^13.4.2",
     "pinia": "^3.0.4",
     "reka-ui": "^2.10.3",
