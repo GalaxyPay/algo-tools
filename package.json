@@ -1,6 +1,6 @@
 {
   "name": "algo-tools",
-  "version": "5.0.18",
+  "version": "5.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@algorandfoundation/algokit-utils": "^9.2.0",
-    "@lucide/vue": "^1.31.0",
+    "@lucide/vue": "^1.34.0",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/vue-table": "^8.21.3",
     "@txnlab/use-wallet-defly": "^5.0.0",
@@ -18,7 +18,7 @@
     "@txnlab/use-wallet-pera": "^5.0.0",
     "@txnlab/use-wallet-vue": "^5.0.0",
     "@vueuse/core": "^14.4.0",
-    "algosdk": "^3.6.0",
+    "algosdk": "^3.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "core-js": "^3.50.0",
@@ -37,7 +37,7 @@
     "vue-sonner": "^2.0.9"
   },
   "devDependencies": {
-    "@tsconfig/node22": "^22.0.5",
+    "@tsconfig/node22": "^22.0.6",
     "@types/node": "^26.2.0",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vue/eslint-config-typescript": "^14.9.0",
@@ -48,10 +48,10 @@
     "unplugin-auto-import": "^21.1.0",
     "unplugin-fonts": "^1.4.0",
     "unplugin-vue-components": "^32.1.0",
-    "vite": "^8.2.1",
+    "vite": "^8.2.2",
     "vite-plugin-node-polyfills": "^0.28.0",
     "vite-plugin-vue-devtools": "^8.2.1",
-    "vue-tsc": "^3.3.9"
+    "vue-tsc": "^3.3.11"
   },
   "engines": {
     "node": ">=22"
