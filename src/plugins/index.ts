@@ -7,8 +7,8 @@
 // Plugins
 import pinia from "../stores";
 import router from "../router";
+import { lute } from "@galaxypay/use-wallet-lute";
 import { defly } from "@txnlab/use-wallet-defly";
-import { lute } from "@txnlab/use-wallet-lute";
 import { pera } from "@txnlab/use-wallet-pera";
 import {
   NetworkConfigBuilder,
