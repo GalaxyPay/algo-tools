@@ -79,10 +79,7 @@ async function claim() {
       composer.arc59ClaimAlgo({ args: {}, staticFee: (0).algo() });
     }
     // If the claimer hasn't already opted in, add a transaction to do so
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     if (!claimerOptedIn) {
       const txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         sender: store.account.address,
@@ -118,10 +115,7 @@ async function reject() {
   try {
     store.overlay = true;
     const appClient = getAppClient();
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     const fee = (Number(suggestedParams.minFee) + 2000).microAlgos();
     toastId = toast.info("Processing...", {
       duration: Infinity,

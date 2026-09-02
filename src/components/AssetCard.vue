@@ -78,10 +78,7 @@ async function setReceiver() {
 async function destroy() {
   try {
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     const txn = algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
       sender: activeAddress.value!,
       suggestedParams,
@@ -104,10 +101,7 @@ async function closeOut() {
   try {
     const atc = new algosdk.AtomicTransactionComposer();
     showReceiver.value = false;
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     let txn;
     if (props.asset.assetId) {
       txn = algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({

@@ -1,4 +1,5 @@
-import algosdk from "algosdk";
+import { couldBeCurvePoint } from "./ed25519-check";
+import algosdk, { Address } from "algosdk";
 import { toast } from "vue-sonner";
 
 export { getAssetInfo } from "./assetInfo";
@@ -53,12 +54,15 @@ export async function execAtc(
 }
 
 export async function getSuggestedParams(
-  algodClient: algosdk.Algodv2,
-  pqMode: boolean
+  algodClient: algosdk.Algodv2
 ): Promise<algosdk.SuggestedParams> {
   const store = useAppStore();
+  if (!store.account) throw Error("Invalid Account");
+  const authAddrPk =
+    store.account.authAddr?.publicKey ??
+    Address.fromString(store.account.address).publicKey;
   const sp = await algodClient.getTransactionParams().do();
-  if (pqMode) sp.minFee = 3000n;
+  if (!couldBeCurvePoint(authAddrPk)) sp.minFee = 3000n;
   return sp;
 }
 
