@@ -26,10 +26,7 @@ async function buy(item: ForSale) {
     if (!item.vanity) throw Error("Invalid Item");
     if (!store.network.vanityId) throw Error("Network not supported");
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     const payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
       sender: activeAddress.value!,
       suggestedParams,
@@ -64,10 +61,7 @@ async function rescind(item: ForSale) {
   try {
     if (!store.network.vanityId) throw Error("Network not supported");
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     suggestedParams.fee = BigInt(suggestedParams.minFee) * 3n;
     suggestedParams.flatFee = true;
     const method = vanityAbi.methods.find((m) => m.name == "rescind");

@@ -70,10 +70,7 @@ async function sell() {
       .accountInformation(m2a.value.addr)
       .do();
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
 
     const appAddr = algosdk.getApplicationAddress(store.network.vanityId);
     const price = bigintAmount(vanity.value.price!, 6);

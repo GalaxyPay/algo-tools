@@ -75,10 +75,7 @@ async function compose() {
     console.log(Object.values(part.value));
     if (!Object.values(part.value).every((val) => val))
       throw Error("All fields are required");
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     const atc = new algosdk.AtomicTransactionComposer();
     part.value.sender = activeAddress.value!;
     if (incentiveEligible.value) {
@@ -119,10 +116,7 @@ async function calcAvgBlockTime() {
 
 async function offline() {
   try {
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     const atc = new algosdk.AtomicTransactionComposer();
     const txn = algosdk.makeKeyRegistrationTxnWithSuggestedParamsFromObject({
       sender: activeAddress.value!,

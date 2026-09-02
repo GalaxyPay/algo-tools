@@ -3,7 +3,6 @@ import { bigintToString, formatAddr } from "@/lib/utils";
 import { useWallet } from "@txnlab/use-wallet-vue";
 import { Clipboard, LogOut, Wallet2 } from "@lucide/vue";
 import { toast } from "vue-sonner";
-import { set } from "idb-keyval";
 
 const store = useAppStore();
 const { activeAddress, activeWallet } = useWallet();
@@ -31,11 +30,6 @@ async function handleDisconnect() {
       toast.error(err.message, { duration: 7000 });
     }
   }
-}
-
-async function setPqMode() {
-  await set("pqMode", !store.pqMode);
-  await store.getCache();
 }
 
 const activeAvatar = computed<string>(
@@ -141,17 +135,6 @@ function getAvatarUrl(addr: string | null) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
       </template>
-      <DropdownMenuItem>
-        <div class="flex space-x-2" @click.stop>
-          <Checkbox
-            id="pqMode"
-            v-model="store.pqMode"
-            class="border-gray-500"
-            @click.prevent="setPqMode()"
-          />
-          <Label for="pqMode">PQ Mode (3x fee)</Label>
-        </div>
-      </DropdownMenuItem>
       <DropdownMenuItem @click="handleCopyAddress()">
         <Clipboard />
         Copy Address

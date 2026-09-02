@@ -28,10 +28,7 @@ async function donate() {
     if (!valid) return;
     const atc = new algosdk.AtomicTransactionComposer();
     const enc = new TextEncoder();
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     const note64 = note ? enc.encode(note.value) : undefined;
     const microAlgo = bigintAmount(amount.value!, 6);
     const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({

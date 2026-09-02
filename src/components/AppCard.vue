@@ -69,10 +69,7 @@ async function closeOut() {
   warningDialog.value.show = false;
   try {
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     const txn = algosdk.makeApplicationCloseOutTxnFromObject({
       sender: activeAddress.value!,
       suggestedParams,
@@ -90,10 +87,7 @@ async function clearState() {
   warningDialog.value.show = false;
   try {
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     const txn = algosdk.makeApplicationClearStateTxnFromObject({
       sender: activeAddress.value!,
       suggestedParams,
@@ -111,10 +105,7 @@ async function deleteApp() {
   warningDialog.value.show = false;
   try {
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
     const txn = algosdk.makeApplicationDeleteTxnFromObject({
       sender: activeAddress.value!,
       suggestedParams,

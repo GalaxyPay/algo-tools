@@ -109,10 +109,7 @@ async function burn() {
     const valid = validate();
     if (!valid) return;
     const atc = new algosdk.AtomicTransactionComposer();
-    const suggestedParams = await getSuggestedParams(
-      algodClient.value,
-      store.pqMode
-    );
+    const suggestedParams = await getSuggestedParams(algodClient.value);
 
     if (!opted.value && needFunding.value) {
       const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
