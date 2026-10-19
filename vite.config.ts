@@ -97,6 +97,6 @@ export default defineConfig({
       "vite-plugin-node-polyfills/shims/global",
       "vite-plugin-node-polyfills/shims/process",
     ],
-    exclude: ["lute-connect"],
+    exclude: ["@galaxypay/lute-connect"],
   },
 });

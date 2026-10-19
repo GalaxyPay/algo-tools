@@ -16,9 +16,12 @@ const router = createRouter({
   linkActiveClass: "bg-accent",
 });
 
+let wallet: ReturnType<typeof useWallet> | undefined;
+
 router.beforeEach(async (to) => {
   const store = useAppStore();
-  const { activeAddress } = useWallet();
+  wallet ??= effectScope(true).run(() => useWallet())!;
+  const { activeAddress } = wallet;
   // redirect to root if not connected
   if (!activeAddress.value && to.path != "/") {
     await store.getCache();
