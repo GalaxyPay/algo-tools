@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { SidebarProps } from "@/components/ui/sidebar";
-import { networks, tools } from "@/data";
+import { networks, useTools } from "@/data";
 import { NetworkId, useNetwork, useWallet } from "@txnlab/use-wallet-vue";
 import { set } from "idb-keyval";
 import { toast } from "vue-sonner";
@@ -10,6 +10,7 @@ const store = useAppStore();
 const { activeNetwork, setActiveNetwork } = useNetwork();
 const { activeAddress } = useWallet();
 const appVersion = __APP_VERSION__;
+const tools = useTools();
 
 const props = withDefaults(defineProps<SidebarProps>(), {
   collapsible: "icon",
@@ -53,7 +54,7 @@ function showDonate() {
       <SidebarGroup>
         <SidebarGroupLabel>Tools</SidebarGroupLabel>
         <SidebarMenu>
-          <SidebarMenuItem v-for="item in tools()" :key="item.title">
+          <SidebarMenuItem v-for="item in tools" :key="item.title">
             <SidebarMenuButton size="lg" as-child :tooltip="item.title">
               <RouterLink :to="item.path">
                 <component :is="item.icon" v-if="item.icon" class="mx-2" />

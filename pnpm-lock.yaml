@@ -16,8 +16,8 @@ importers:
         specifier: ^9.2.0
         version: 9.2.0(algosdk@3.7.0)
       '@galaxypay/use-wallet-lute':
-        specifier: ^1.0.0
-        version: 1.0.0(@txnlab/use-wallet@5.0.0(algosdk@3.7.0))(algosdk@3.7.0)
+        specifier: ^1.1.0
+        version: 1.1.0(@txnlab/use-wallet@5.1.0(algosdk@3.7.0))(algosdk@3.7.0)
       '@lucide/vue':
         specifier: ^1.34.0
         version: 1.34.0(vue@3.5.41(typescript@5.9.3))
@@ -29,13 +29,13 @@ importers:
         version: 8.21.3(vue@3.5.41(typescript@5.9.3))
       '@txnlab/use-wallet-defly':
         specifier: ^5.0.0
-        version: 5.0.0(@txnlab/use-wallet@5.0.0(algosdk@3.7.0))(algosdk@3.7.0)
+        version: 5.0.0(@txnlab/use-wallet@5.1.0(algosdk@3.7.0))(algosdk@3.7.0)
       '@txnlab/use-wallet-pera':
         specifier: ^5.0.0
-        version: 5.0.0(@txnlab/use-wallet@5.0.0(algosdk@3.7.0))(algosdk@3.7.0)
+        version: 5.0.0(@txnlab/use-wallet@5.1.0(algosdk@3.7.0))(algosdk@3.7.0)
       '@txnlab/use-wallet-vue':
-        specifier: ^5.0.0
-        version: 5.0.0(algosdk@3.7.0)(vue@3.5.41(typescript@5.9.3))
+        specifier: ^5.1.0
+        version: 5.1.0(algosdk@3.7.0)(vue@3.5.41(typescript@5.9.3))
       '@vueuse/core':
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.41(typescript@5.9.3))
@@ -673,14 +673,14 @@ packages:
   '@floating-ui/vue@1.1.11':
     resolution: {integrity: sha512-HzHKCNVxnGS35r9fCHBc3+uCnjw9IWIlCPL683cGgM9Kgj2BiAl8x1mS7vtvP6F9S/e/q4O6MApwSHj8hNLGfw==}
 
-  '@galaxypay/lute-connect@3.0.1':
-    resolution: {integrity: sha512-a65433V13EQIV0eHpCcgFbOgs4Tp+zsRDhMFn5it0oTi1XfG2ld/SsRr0n0aLWTnaXNyOWQ7931bbd41a4Vo9w==}
+  '@galaxypay/lute-connect@3.3.2':
+    resolution: {integrity: sha512-KYrfkpiRT7cyLg3BzAPsvePMSgyRYFaz14AXx2tuo0K5/saUeTGo2JQIjcR4ZR3Ro0JsGGmc7PZqRBzyI85p+Q==}
 
-  '@galaxypay/use-wallet-lute@1.0.0':
-    resolution: {integrity: sha512-NCDGkyV9kglpVrksZg5QbLM8ZLeX5O+38WE6CDkl6K1wjXD9IUg5dC2w0e247RujdojiHTeU0yHjh/3Nd+01Nw==}
+  '@galaxypay/use-wallet-lute@1.1.0':
+    resolution: {integrity: sha512-3LvTaUAa+uQOZir76AcB4lRfMsIuWUQqr427BcbQ8cfslv39ZHp9d1ufnJ1DkVkdbm7dnlU5w914Kex9TrAxFw==}
     engines: {node: '>=22'}
     peerDependencies:
-      '@txnlab/use-wallet': ^5.0.0
+      '@txnlab/use-wallet': ^5.1.0
       algosdk: ^3.0.0
 
   '@humanfs/core@0.19.2':
@@ -1128,8 +1128,8 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7 || ^8
 
-  '@tanstack/store@0.9.1':
-    resolution: {integrity: sha512-+qcNkOy0N1qSGsP7omVCW0SDrXtaDcycPqBDE726yryiA5eTDFpjBReaYjghVJwNf1pcPMyzIwTGlYjCSQR0Fg==}
+  '@tanstack/store@0.11.2':
+    resolution: {integrity: sha512-sJ4mjol8uQsHV0gOJzzjwXfh2Fwm+Sz0+8deqiTm4jGbMdjzNSW+xZCFm0kUa870uhd8yi+DpKnZb5Kc4apa0Q==}
 
   '@tanstack/table-core@8.21.3':
     resolution: {integrity: sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg==}
@@ -1138,8 +1138,8 @@ packages:
   '@tanstack/virtual-core@3.17.8':
     resolution: {integrity: sha512-BfEvehNpOT75r5Ksc5xW6NZuXujTfb7nlSEyVu4XHG3gdxNg1KqXruWbDewXOUaUYIo4oRbSfkjIajz4MAT8tA==}
 
-  '@tanstack/vue-store@0.9.1':
-    resolution: {integrity: sha512-mXXZzPWom656MExX2gG1fqopJhToDbqGEl98WtJ5/hyouQHtQXiAgtsPNLzUcVcwU9okM/OCWv7QAgXf6C5ziQ==}
+  '@tanstack/vue-store@0.11.2':
+    resolution: {integrity: sha512-wZmkfsvc0dNvOg/Xb/a7uTPKejleI0dR3HHi0t3ZyVM/23MJ7AC0bH6C7rp2seSY4mIYo0pLLbGJGZ/UpO93Zw==}
     peerDependencies:
       '@vue/composition-api': ^1.2.1
       vue: ^2.5.0 || ^3.0.0
@@ -1175,18 +1175,18 @@ packages:
       '@txnlab/use-wallet': ^5.0.0
       algosdk: ^3.5.2
 
-  '@txnlab/use-wallet-vue@5.0.0':
-    resolution: {integrity: sha512-gRiOjM8eLYebn3rw7lBhPA2srVm7toFdWJLqrv17lkq5exSU7aOk4UJr8rnWuHOYGdRVMi3vaaOJzQLRqd60Ig==}
+  '@txnlab/use-wallet-vue@5.1.0':
+    resolution: {integrity: sha512-8v+1QoV+27b2bn7u2udrTWSS5daJI6yFme3v7np2mcOiQ2K6a7Yrrm0fhv5l1Eft9JzTrgwaJVy5fierkpmpoQ==}
     engines: {node: '>=22'}
     peerDependencies:
       algosdk: ^3.0.0
       vue: ^3.0.0
 
-  '@txnlab/use-wallet@5.0.0':
-    resolution: {integrity: sha512-GHAD3Kwq7w/HbR3I/SUnzHXIW9qaBLxf7RvS52YEZfuTji5gppVarDly8TVpAzJwGisH51burywYP0qpad/nCw==}
+  '@txnlab/use-wallet@5.1.0':
+    resolution: {integrity: sha512-sGNrNi3rrA3NCHOMHdzLCfkMa32BmHHtFYTFVVxw+OfNcu84T+RH7hVHbvJ7tgYAis3TnB2yoABHl/w7EU1xBw==}
     engines: {node: '>=22'}
     peerDependencies:
-      algosdk: ^3.0.0
+      algosdk: ^3.7.0
 
   '@types/esrecurse@4.3.1':
     resolution: {integrity: sha512-xJBAbDifo5hpffDBuHl0Y8ywswbiAp/Wi7Y/GtAgSlZyIABppyurxVueOPE8LUQOxdlgi6Zqce7uoEpqNTeiUw==}
@@ -3651,12 +3651,12 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@galaxypay/lute-connect@3.0.1': {}
+  '@galaxypay/lute-connect@3.3.2': {}
 
-  '@galaxypay/use-wallet-lute@1.0.0(@txnlab/use-wallet@5.0.0(algosdk@3.7.0))(algosdk@3.7.0)':
+  '@galaxypay/use-wallet-lute@1.1.0(@txnlab/use-wallet@5.1.0(algosdk@3.7.0))(algosdk@3.7.0)':
     dependencies:
-      '@galaxypay/lute-connect': 3.0.1
-      '@txnlab/use-wallet': 5.0.0(algosdk@3.7.0)
+      '@galaxypay/lute-connect': 3.3.2
+      '@txnlab/use-wallet': 5.1.0(algosdk@3.7.0)
       algosdk: 3.7.0
 
   '@humanfs/core@0.19.2':
@@ -3960,15 +3960,15 @@ snapshots:
       tailwindcss: 4.3.3
       vite: 8.2.2(@types/node@26.2.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.20.6)(yaml@2.9.0)
 
-  '@tanstack/store@0.9.1': {}
+  '@tanstack/store@0.11.2': {}
 
   '@tanstack/table-core@8.21.3': {}
 
   '@tanstack/virtual-core@3.17.8': {}
 
-  '@tanstack/vue-store@0.9.1(vue@3.5.41(typescript@5.9.3))':
+  '@tanstack/vue-store@0.11.2(vue@3.5.41(typescript@5.9.3))':
     dependencies:
-      '@tanstack/store': 0.9.1
+      '@tanstack/store': 0.11.2
       vue: 3.5.41(typescript@5.9.3)
       vue-demi: 0.14.10(vue@3.5.41(typescript@5.9.3))
 
@@ -3984,33 +3984,33 @@ snapshots:
 
   '@tsconfig/node22@22.0.6': {}
 
-  '@txnlab/use-wallet-defly@5.0.0(@txnlab/use-wallet@5.0.0(algosdk@3.7.0))(algosdk@3.7.0)':
+  '@txnlab/use-wallet-defly@5.0.0(@txnlab/use-wallet@5.1.0(algosdk@3.7.0))(algosdk@3.7.0)':
     dependencies:
       '@blockshake/defly-connect': 1.2.1(algosdk@3.7.0)
-      '@txnlab/use-wallet': 5.0.0(algosdk@3.7.0)
+      '@txnlab/use-wallet': 5.1.0(algosdk@3.7.0)
       algosdk: 3.7.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@txnlab/use-wallet-pera@5.0.0(@txnlab/use-wallet@5.0.0(algosdk@3.7.0))(algosdk@3.7.0)':
+  '@txnlab/use-wallet-pera@5.0.0(@txnlab/use-wallet@5.1.0(algosdk@3.7.0))(algosdk@3.7.0)':
     dependencies:
       '@perawallet/connect': 1.6.0(algosdk@3.7.0)
-      '@txnlab/use-wallet': 5.0.0(algosdk@3.7.0)
+      '@txnlab/use-wallet': 5.1.0(algosdk@3.7.0)
       algosdk: 3.7.0
 
-  '@txnlab/use-wallet-vue@5.0.0(algosdk@3.7.0)(vue@3.5.41(typescript@5.9.3))':
+  '@txnlab/use-wallet-vue@5.1.0(algosdk@3.7.0)(vue@3.5.41(typescript@5.9.3))':
     dependencies:
-      '@tanstack/vue-store': 0.9.1(vue@3.5.41(typescript@5.9.3))
-      '@txnlab/use-wallet': 5.0.0(algosdk@3.7.0)
+      '@tanstack/vue-store': 0.11.2(vue@3.5.41(typescript@5.9.3))
+      '@txnlab/use-wallet': 5.1.0(algosdk@3.7.0)
       algosdk: 3.7.0
       vue: 3.5.41(typescript@5.9.3)
     transitivePeerDependencies:
       - '@vue/composition-api'
 
-  '@txnlab/use-wallet@5.0.0(algosdk@3.7.0)':
+  '@txnlab/use-wallet@5.1.0(algosdk@3.7.0)':
     dependencies:
-      '@tanstack/store': 0.9.1
+      '@tanstack/store': 0.11.2
       algosdk: 3.7.0
       tweetnacl: 1.0.3
 
