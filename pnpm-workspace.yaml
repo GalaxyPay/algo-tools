@@ -3,11 +3,7 @@ allowBuilds:
   esbuild: true
   vue-demi: true
 minimumReleaseAge: 1440
-minimumReleaseAgeExclude:
-  - "@txnlab/use-wallet-vue@5.1.0"
-  - "@txnlab/use-wallet@5.1.0"
-  - "@galaxypay/use-wallet-lute@1.1.0"
-  - '@galaxypay/lute-connect@3.3.2'
 overrides:
   "ws": ">=7.5.10"
   "bn.js": ">=4.12.3"
+  "decode-uri-component": ">=0.5.1"
